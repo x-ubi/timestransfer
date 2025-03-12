@@ -39,16 +39,17 @@ class ResidualBlock(nn.Module):
 class Attention(nn.Module):
     def __init__(
         self,
-        input_size,
-        num_heads,
+        # hidden_size: int,
+        num_q_heads: int,
+        num_kv_heads: int,
+        dim_head: int,
     ) -> None:
         super().__init__()
 
-        assert input_size % num_heads == 0, "model_dim must be divisible by num_heads"
-        self.head_dim = input_size // num_heads
+        assert num_q_heads % num_kv_heads == 0, "num_q_heads must be divisible by num_kv_heads"
 
 
-# @TODO: look into layer initialization
+# @TODO: look into layer initialization, look into RMSNorm
 class FeedForward(nn.Module):
     def __init__(
         self,
@@ -80,13 +81,23 @@ class TransformerLayer(nn.Module):
         input_size: int,
         num_heads: int,
         hidden_size: int,
+        d_head: int,
+        rms_norm_eps: float = 1e-6,
     ) -> None:
         super().__init__()
 
         self.attention_with_residual = ResidualConnection(Attention(input_size, num_heads=num_heads))
         self.feed_forward_with_residual = ResidualConnection(FeedForward(input_size, hidden_size))
+        self.rms_norm = nn.RMSNorm(input_size, eps=rms_norm_eps)
 
     def forward(self, x) -> torch.Tensor:
+        x = self.rms_norm(x)
         x = self.attention_with_residual(x)
         x = self.feed_forward_with_residual(x)
         return x
+
+
+class Transformer(nn.Module):
+    def __init__():
+
+        super().__init__()
