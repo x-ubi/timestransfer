@@ -99,5 +99,4 @@ class TransformerLayer(nn.Module):
 
 class Transformer(nn.Module):
     def __init__():
-
         super().__init__()
