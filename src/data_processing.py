@@ -7,9 +7,16 @@ DEBUG_PADDING_VALUE = 1123581321.0
 TOLERANCE = 1e-5
 
 
+@dataclass(frozen=True)
+class DataStats:
+    mean: torch.Tensor
+    std: torch.Tensor
+
+
 class PatchedInput:
-    patched_input: torch.Tensor  # shape: (batch_size, )
-    patched_mask: torch.BoolTensor
+    data: torch.Tensor  # shape: (batch_size, )
+    mask: torch.BoolTensor
+    stats: DataStats
 
     # possible TODO: check how much (if any) performance is lost from using rearrange instead of view
     def __init__(
@@ -20,53 +27,51 @@ class PatchedInput:
         """
         self.debug_mode = debug_mode
 
-        self.patched_input = rearrange(
+        self.data = rearrange(
             input_time_series,
             "batch_size (num_patches patch_length) -> batch_size num_patches patch_length",
             p=patch_length,
         )
-        self.patched_mask = rearrange(
+        self.mask = rearrange(
             mask, "batch_size (num_patches patch_length) -> batch_size num_patches patch_length", p=patch_length
         )
 
-        self.patched_input = self.patched_input.masked_fill_(mask, 0.0)
-        self.patched_mask = self.patched_mask.masked_fill_(
-            (self.patched_input - DEBUG_PADDING_VALUE).abs() < TOLERANCE, True
-        )
+        self.data = self.data.masked_fill_(mask, 0.0)
+        self.mask = self.mask.masked_fill_((self.data - DEBUG_PADDING_VALUE).abs() < TOLERANCE, True)
 
-        self.mean, self.std = self._first_valid_patch_mean_std()
+        self.stats = self._first_valid_patch_mean_std()
 
-        self.patched_input = self._normalize_input()
-        self.patched_input = self.patched_input.masked_fill(self.patched_mask, 0.0)
+        self.data = self._normalize_input()
+        self.data = self.data.masked_fill(self.mask, 0.0)
 
     def _normalize_input(
         self,
     ) -> tuple[torch.Tensor, tuple[torch.Tensor, torch.Tensor]] | None:
-        normalized_input = (self.patched_input - self.mean[:, None, None]) / self.std[:, None, None]
+        normalized_input = (self.data - self.mean[:, None, None]) / self.std[:, None, None]
 
         if self.debug_mode:
             normalized_input = normalized_input.masked_fill(
-                (self.patched_input - DEBUG_PADDING_VALUE).abs() < TOLERANCE, DEBUG_PADDING_VALUE
+                (self.data - DEBUG_PADDING_VALUE).abs() < TOLERANCE, DEBUG_PADDING_VALUE
             )
 
         return normalized_input
 
-    def _first_valid_patch_mean_std(self) -> tuple[torch.Tensor, torch.Tensor]:
+    def _first_valid_patch_mean_std(self) -> DataStats:
         """
         A patch is valid if it has at least three non-masked values.
         """
 
-        non_masked_count = (1 - self.patched_mask).sum(dim=-1)
+        non_masked_count = (1 - self.mask).sum(dim=-1)
         is_patch_valid = non_masked_count >= 3
         chosen_patches = torch.argmax(is_patch_valid.to(torch.int32), dim=-1)
 
         no_valid_patches = ~is_patch_valid.any(dim=1)
         chosen_patches[no_valid_patches] = -1
 
-        batch_indices = torch.arange(self.patched_input.shape[0], device=self.patched_input.device)
+        batch_indices = torch.arange(self.data.shape[0], device=self.data.device)
 
-        chosen_input = self.patched_input[batch_indices, chosen_patches, :]
-        chosen_mask = self.patched_mask[batch_indices, chosen_patches, :]
+        chosen_input = self.data[batch_indices, chosen_patches, :]
+        chosen_mask = self.mask[batch_indices, chosen_patches, :]
 
         chosen_input = chosen_input.masked_fill(chosen_mask, float("nan"))
 
@@ -78,4 +83,11 @@ class PatchedInput:
         std = torch.where(std.isnan(), torch.zeros_like(std), std)
         std = torch.where(std < TOLERANCE, torch.ones_like(std), std)
 
-        return mean, std
+        return DataStats(mean=mean, std=std)
+
+
+class PatchedOutput:
+    stats: DataStats
+
+    def reverse_normalization(self, output: torch.Tensor) -> torch.Tensor:
+        return output * self.stats.std[:, None, None, None] + self.stats.mean[:, None, None, None]
