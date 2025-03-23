@@ -97,6 +97,6 @@ class TransformerLayer(nn.Module):
         return x
 
 
-class Transformer(nn.Module):
+class TimesFMLayer(nn.Module):
     def __init__():
         super().__init__()
