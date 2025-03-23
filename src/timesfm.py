@@ -24,4 +24,10 @@ class TimesFM(nn.Module):
         super().__init__()
 
         self.config = config
-        self.input_layer = ResidualBlock
+        self.input_layer = ResidualBlock(
+            input_size=config.hidden_size,
+            hidden_size=config.hidden_size,
+            output_size=config.hidden_size,
+        )
+        self.frequency_embedding = nn.Embedding(num_embeddings=3, embedding_dim=config.hidden_size)
+        # self.transformer =
