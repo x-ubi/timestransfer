@@ -75,6 +75,15 @@ class FeedForward(nn.Module):
         return x
 
 
+# TODO: finish this
+class PositionalEmbedding(nn.Module):
+    def __init__(self, input_size: int) -> None:
+        super().__init__()
+
+    def forward(self, sequence_length: int) -> torch.Tensor:
+        pass
+
+
 class TransformerLayer(nn.Module):
     def __init__(
         self,
@@ -98,5 +107,11 @@ class TransformerLayer(nn.Module):
 
 
 class TimesFMLayer(nn.Module):
-    def __init__():
+    def __init__(
+        self,
+        input_size: int,
+        hidden_size: int,
+        num_heads: int,
+        rms_norm_eps: float,
+    ):
         super().__init__()
