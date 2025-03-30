@@ -16,6 +16,7 @@ class DataStats:
 class PatchedInput:
     data: torch.Tensor  # shape: (batch_size, )
     mask: torch.BoolTensor
+    patch_valid: torch.BoolTensor
     stats: DataStats
 
     # possible TODO: check how much (if any) performance is lost from using rearrange instead of view
@@ -38,6 +39,8 @@ class PatchedInput:
 
         self.data = self.data.masked_fill_(mask, 0.0)
         self.mask = self.mask.masked_fill_((self.data - DEBUG_PADDING_VALUE).abs() < TOLERANCE, True)
+
+        self.patch_valid = (~self.mask).any(dim=-1)
 
         self.stats = self._first_valid_patch_mean_std()
 
@@ -79,11 +82,22 @@ class PatchedInput:
         variance = torch.nanmean((chosen_input - mean.unsqueeze(-1)) ** 2, dim=-1)
         std = variance.sqrt()
 
-        mean = torch.where(mean.isnan(), torch.zeros_like(mean), mean)
-        std = torch.where(std.isnan(), torch.zeros_like(std), std)
-        std = torch.where(std < TOLERANCE, torch.ones_like(std), std)
+        mean = torch.where(mean.isnan(), torch.zeros_like(mean, device=mean.device), mean)
+        std = torch.where(std.isnan(), torch.zeros_like(std, device=std.device), std)
+        std = torch.where(std < TOLERANCE, torch.ones_like(std, device=std.device), std)
 
         return DataStats(mean=mean, std=std)
+
+    def shift_sequence_by_valid_patches(self, sequence: torch.Tensor) -> torch.Tensor:
+        assert sequence.shape == self.data.shape, "Shape mismatch between sequence and data"
+
+        batch_size, num_patches, patch_length = sequence.shape
+
+        first_valid_patches = self.patch_valid.to(torch.int32).argmax(dim=1)
+
+        idx_ranges = torch.arange(num_patches, device=sequence.device).unsqueeze(0).expand(batch_size, num_patches)
+        shifted_idx = (idx_ranges - first_valid_patches.unsqueeze(1)) % num_patches
+        return sequence.gather(1, shifted_idx.unsqueeze(-1).expand(batch_size, num_patches, patch_length))
 
 
 class PatchedOutput:
