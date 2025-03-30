@@ -1,6 +1,8 @@
 from dataclasses import dataclass
-from einops import rearrange
+import einops
 import torch
+
+from timesfm import Config
 
 
 DEBUG_PADDING_VALUE = 1123581321.0
@@ -28,14 +30,12 @@ class PatchedInput:
         """
         self.debug_mode = debug_mode
 
-        self.data = rearrange(
+        self.data = einops.rearrange(
             input_time_series,
-            "batch_size (num_patches patch_length) -> batch_size num_patches patch_length",
+            "b (n p) -> b n p",
             p=patch_length,
         )
-        self.mask = rearrange(
-            mask, "batch_size (num_patches patch_length) -> batch_size num_patches patch_length", p=patch_length
-        )
+        self.mask = einops.rearrange(mask, "b (n p) -> b n p", p=patch_length)
 
         self.data = self.data.masked_fill_(mask, 0.0)
         self.mask = self.mask.masked_fill_((self.data - DEBUG_PADDING_VALUE).abs() < TOLERANCE, True)
@@ -100,8 +100,17 @@ class PatchedInput:
         return sequence.gather(1, shifted_idx.unsqueeze(-1).expand(batch_size, num_patches, patch_length))
 
 
+@dataclass
 class PatchedOutput:
+    output: torch.Tensor
+    config: Config
     stats: DataStats
 
-    def reverse_normalization(self, output: torch.Tensor) -> torch.Tensor:
-        return output * self.stats.std[:, None, None, None] + self.stats.mean[:, None, None, None]
+    def postprocess(self):
+        self.output = einops.rearrange(
+            self.output, "b n (h q) -> b n h q", h=self.config.forecast_length, q=self.config.num_outputs
+        )
+        self._reverse_normalization()
+
+    def _reverse_normalization(self) -> torch.Tensor:
+        self.output = self.output * self.stats.std[:, None, None, None] + self.stats.mean[:, None, None, None]
