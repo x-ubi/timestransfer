@@ -57,8 +57,7 @@ class TimesFM(nn.Module):
                 for _ in range(config.num_layers)
             ]
         )
-        self.positional_embedding = PositionalEmbedding(  # TODO: finish this
-        )
+        self.positional_embedding = PositionalEmbedding()  # TODO: finish this
 
         self.output_mlp = ResidualBlock(
             input_size=config.hidden_size,
@@ -66,9 +65,30 @@ class TimesFM(nn.Module):
             output_size=config.num_outputs * config.forecast_length,
         )
 
-    def forward(self, input: PatchedInput) -> PatchedOutput:
+    def forward(self, input: PatchedInput) -> torch.Tensor:
         x = input.data
         positional_mask = input.mask
+        stats = input.stats
 
         input_data = torch.cat([x, positional_mask], dim=-1)
-        model_input = self.input_mlp(input_data)
+        model_input: torch.Tensor = self.input_mlp(input_data)
+
+        batch_size = model_input.shape[0]
+        sequence_length = model_input.shape[1]
+        positional_embedding: torch.Tensor = self.positional_embedding(sequence_length).to(model_input.device)
+        positional_embedding = input.shift_sequence_by_valid_patches(
+            positional_embedding.expand(batch_size, sequence_length, -1)
+        )
+        model_input += positional_embedding
+        model_input += self.frequency_embedding(model_input)
+
+        model_output = self.transformer_layers(model_input)
+
+        model_output = PatchedOutput(
+            self.output_mlp(model_output),
+            self.config,
+            stats,
+        )
+        model_output.postprocess()
+
+        return model_output.output
