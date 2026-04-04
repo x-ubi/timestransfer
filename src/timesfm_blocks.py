@@ -47,6 +47,7 @@ class Attention(nn.Module):
         dim_head: int,
         use_qk_norm: bool,
         sequence_length: int,
+        d_k: int,
     ) -> None:
         super().__init__()
 
@@ -81,7 +82,6 @@ class Attention(nn.Module):
             self.scale = nn.Parameter(torch.tensor(np.log2(scale**2 - scale) / num_heads))
 
     def forward(self, x: torch.Tensor, attn_mask: torch.BoolTensor) -> torch.Tensor:
-
         q = self.q(x)
         k = self.k(x)
         v = self.v(x)
@@ -134,7 +134,6 @@ class PositionalEmbedding(nn.Module):
         self.d_model = float(d_model)
 
     def forward(self, sequence_length: int) -> torch.Tensor:
-
         num_timescales = self.d_model // 2
         position = torch.arange(sequence_length, dtype=torch.float32).unsqueeze(0).unsqueeze(2)
         log_timescale_increment = math.log(10000.0) / max(1, num_timescales - 1)
@@ -147,6 +146,98 @@ class PositionalEmbedding(nn.Module):
         positional_encoding[:, :, 1::2] = torch.cos(scaled_time)
 
         return positional_encoding
+
+
+def build_rope_positions(
+    padding_mask: torch.Tensor | None,
+    sequence_length: int,
+    device: torch.device,
+    shift: int | torch.Tensor = 0,
+) -> torch.Tensor:
+    """
+    Returns positions with shape [batch, sequence_length].
+
+    Assumes `padding_mask` is True for padded tokens and False for valid tokens.
+    If there is left padding, valid tokens are renumbered so the first real token
+    starts at position 0, which is closer to TimesFM behavior.
+    """
+    if padding_mask is None:
+        positions = torch.arange(sequence_length, device=device, dtype=torch.float32)
+        return positions.unsqueeze(0)
+
+    valid = (~padding_mask).to(torch.int64)
+    positions = torch.cumsum(valid, dim=1) - 1
+    positions = positions.clamp_min(0).to(torch.float32)
+
+    if isinstance(shift, int):
+        positions = positions + float(shift)
+    else:
+        positions = positions + shift[:, None].to(device=device, dtype=torch.float32)
+
+    return positions
+
+
+class RotaryPositionalEmbedding(nn.Module):
+    """
+    RoPE for tensors shaped [batch, sequence_length, num_heads, head_dim].
+    """
+
+    def __init__(self, head_dim: int, base: float = 10000.0) -> None:
+        super().__init__()
+        if head_dim % 2 != 0:
+            raise ValueError(f"RoPE requires an even head_dim, got {head_dim}.")
+
+        self.head_dim = head_dim
+        self.base = float(base)
+
+        inverse_frequencies = torch.exp(
+            torch.arange(0, head_dim, 2, dtype=torch.float32) * (-math.log(self.base) / head_dim)
+        )
+        self.register_buffer("inverse_frequencies", inverse_frequencies, persistent=False)
+
+    def _rotate_half(self, x: torch.Tensor) -> torch.Tensor:
+        x_even = x[..., 0::2]
+        x_odd = x[..., 1::2]
+        return torch.stack((-x_odd, x_even), dim=-1).flatten(-2)
+
+    def forward(
+        self,
+        x: torch.Tensor,
+        positions: torch.Tensor | None = None,
+        shift: int | torch.Tensor = 0,
+    ) -> torch.Tensor:
+        if x.ndim != 4:
+            raise ValueError(
+                f"Expected x with shape [batch, sequence_length, num_heads, head_dim], got {tuple(x.shape)}."
+            )
+        if x.shape[-1] != self.head_dim:
+            raise ValueError(f"Expected head_dim={self.head_dim}, got x.shape[-1]={x.shape[-1]}.")
+
+        batch_size, sequence_length, _, _ = x.shape
+
+        if positions is None:
+            positions = build_rope_positions(
+                padding_mask=None,
+                sequence_length=sequence_length,
+                device=x.device,
+                shift=shift,
+            )
+
+        if positions.ndim == 1:
+            positions = positions.unsqueeze(0)
+        if positions.shape[0] == 1 and batch_size > 1:
+            positions = positions.expand(batch_size, -1)
+
+        angles = positions.to(device=x.device, dtype=torch.float32)[..., None]
+        angles = angles * self.inverse_frequencies[None, None, :]
+
+        cos = torch.repeat_interleave(torch.cos(angles), repeats=2, dim=-1)
+        sin = torch.repeat_interleave(torch.sin(angles), repeats=2, dim=-1)
+
+        cos = cos.unsqueeze(2).to(dtype=x.dtype)
+        sin = sin.unsqueeze(2).to(dtype=x.dtype)
+
+        return x * cos + self._rotate_half(x) * sin
 
 
 class TransformerLayer(nn.Module):
