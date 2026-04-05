@@ -1,94 +1,92 @@
 from dataclasses import dataclass
 
-import torch.nn as nn
 import torch
-
-from timesfm_blocks import (
-    ResidualBlock,
-    Attention,
-    FeedForward,
-    PositionalEmbedding,
-    ResidualConnection,
-    TransformerLayer,
-)
+from torch import nn
 
 from data_processing import PatchedInput, PatchedOutput
+from timesfm_blocks import TransformerLayer
 
 
 @dataclass(frozen=True)
 class Config:
+    patch_length: int = 32
     num_layers: int = 20
-
     num_heads: int = 16
-
-    num_kv_heads: int = 16
-
     hidden_size: int = 1280
-
     intermediate_size: int = 1280
-
-    # futureproofing if i decide to add quantiles
     num_outputs: int = 1
-
     forecast_length: int = 128
+    attention_norm: str = "rmsnorm"
+    attention_qk_norm: str = "rmsnorm"
+    ff_norm: str = "rmsnorm"
+    ff_activation: str = "silu"
+    use_rotary_position_embeddings: bool = True
+    use_per_dim_scale: bool = True
+    sdp_backend: str | None = None
+    attention_probs_dropout_rate: float = 0.0
+    attention_out_dropout_rate: float = 0.0
+    rms_norm_eps: float = 1e-6
 
 
 class TimesFM(nn.Module):
     def __init__(self, config: Config) -> None:
         super().__init__()
-
         self.config = config
 
-        self.num_outputs = config.num_outputs
+        tokenizer_input_size = 2 * config.patch_length
+        head_dim = config.hidden_size // config.num_heads
+        if config.hidden_size % config.num_heads != 0:
+            raise ValueError(
+                f"hidden_size={config.hidden_size} must be divisible by num_heads={config.num_heads}."
+            )
 
-        self.input_mlp = ResidualBlock(
-            input_size=config.hidden_size,
-            hidden_size=config.hidden_size,
-            output_size=config.hidden_size,
-        )
-        self.frequency_embedding = nn.Embedding(num_embeddings=3, embedding_dim=config.hidden_size)
-        # self.transformer =
-
-        self.transformer_layers = nn.Sequential(
-            *[
+        self.input_projection = nn.Linear(tokenizer_input_size, config.hidden_size)
+        self.transformer_layers = nn.ModuleList(
+            [
                 TransformerLayer(
-                    # TODO: fill it in with params once i figure that mess out
+                    input_size=config.hidden_size,
+                    num_heads=config.num_heads,
+                    hidden_size=config.intermediate_size,
+                    d_head=head_dim,
+                    attention_norm=config.attention_norm,
+                    attention_qk_norm=config.attention_qk_norm,
+                    use_rotary_position_embeddings=config.use_rotary_position_embeddings,
+                    use_per_dim_scale=config.use_per_dim_scale,
+                    sdp_backend=config.sdp_backend,
+                    attention_probs_dropout_rate=config.attention_probs_dropout_rate,
+                    attention_out_dropout_rate=config.attention_out_dropout_rate,
+                    ff_norm=config.ff_norm,
+                    ff_activation=config.ff_activation,
+                    rms_norm_eps=config.rms_norm_eps,
                 )
                 for _ in range(config.num_layers)
             ]
         )
-        self.positional_embedding = PositionalEmbedding()  # TODO: finish this
-
-        self.output_mlp = ResidualBlock(
-            input_size=config.hidden_size,
-            hidden_size=config.hidden_size,
-            output_size=config.num_outputs * config.forecast_length,
+        self.output_projection = nn.Linear(
+            config.hidden_size,
+            config.num_outputs * config.forecast_length,
         )
 
     def forward(self, input: PatchedInput) -> torch.Tensor:
-        x = input.data
-        positional_mask = input.mask
-        stats = input.stats
+        if input.data.shape[-1] != self.config.patch_length:
+            raise ValueError(
+                f"Patched input patch_length={input.data.shape[-1]} does not match"
+                f" model patch_length={self.config.patch_length}."
+            )
 
-        input_data = torch.cat([x, positional_mask], dim=-1)
-        model_input: torch.Tensor = self.input_mlp(input_data)
+        patched_values = input.data.masked_fill(input.mask, 0.0)
+        patch_padding_mask = input.mask
+        tokenizer_inputs = torch.cat([patched_values, patch_padding_mask.to(patched_values.dtype)], dim=-1)
 
-        batch_size = model_input.shape[0]
-        sequence_length = model_input.shape[1]
-        positional_embedding: torch.Tensor = self.positional_embedding(sequence_length).to(model_input.device)
-        positional_embedding = input.shift_sequence_by_valid_patches(
-            positional_embedding.expand(batch_size, sequence_length, -1)
-        )
-        model_input += positional_embedding
-        model_input += self.frequency_embedding(model_input)
+        hidden_states = self.input_projection(tokenizer_inputs)
 
-        model_output = self.transformer_layers(model_input)
+        for layer in self.transformer_layers:
+            hidden_states = layer(hidden_states, padding_mask=patch_padding_mask)
 
         model_output = PatchedOutput(
-            self.output_mlp(model_output),
-            self.config,
-            stats,
+            output=self.output_projection(hidden_states),
+            config=self.config,
+            stats=input.stats,
         )
         model_output.postprocess()
-
         return model_output.output

@@ -1,6 +1,6 @@
 import math
-import numpy as np
 import torch
+import torch.nn.functional as F
 from torch import nn
 
 from einmix import EinMix
@@ -11,8 +11,8 @@ class ResidualConnection(nn.Module):
         super().__init__()
         self.layer = layer
 
-    def forward(self, x):
-        return x + self.layer(x)
+    def forward(self, x, *args, **kwargs):
+        return x + self.layer(x, *args, **kwargs)
 
 
 # possible TODO: Experiment with other activation functions
@@ -27,106 +27,271 @@ class ResidualBlock(nn.Module):
 
         self.hidden_layer = nn.Sequential(nn.Linear(input_size, hidden_size), nn.SiLU())
         self.output_layer = nn.Linear(hidden_size, output_size)
-
-        self.residual_layer = ResidualConnection(nn.Linear(input_size, output_size))
+        self.skip = nn.Identity() if input_size == output_size else nn.Linear(input_size, output_size)
 
     def forward(self, x):
+        residual = self.skip(x)
         hidden = self.hidden_layer(x)
         output = self.output_layer(hidden)
 
-        return self.residual_layer(output)
+        return residual + output
 
 
-# @TODO: attention block
+def _available_sdpa_backends() -> dict[str, torch.nn.attention.SDPBackend]:
+    backend_names = {
+        "math": "MATH",
+        "flash": "FLASH_ATTENTION",
+        "efficient": "EFFICIENT_ATTENTION",
+    }
+    return {
+        key: getattr(torch.nn.attention.SDPBackend, value)
+        for key, value in backend_names.items()
+        if hasattr(torch.nn.attention.SDPBackend, value)
+    }
+
+
+class PerDimScale(nn.Module):
+    def __init__(self, head_dim: int) -> None:
+        super().__init__()
+        self.head_dim = head_dim
+        self.per_dim_scale = nn.Parameter(torch.zeros(head_dim))
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        scale = 1.442695041 / math.sqrt(self.head_dim) * F.softplus(self.per_dim_scale)
+        return x * scale
+
+
 class Attention(nn.Module):
     def __init__(
         self,
-        # hidden_size: int,
-        dim_model: int,
-        num_heads: int,
-        dim_head: int,
-        use_qk_norm: bool,
-        sequence_length: int,
-        d_k: int,
+        d_model: int,
+        n_heads: int,
+        *,
+        qk_norm: str = "rms",
+        use_rope: bool = True,
+        use_per_dim_scale: bool = True,
+        sdp_backend: str | None = None,
+        attention_probs_dropout_rate: float = 0.0,
+        out_dropout_rate: float = 0.0,
+        norm_eps: float = 1e-6,
     ) -> None:
+        if d_model % n_heads != 0:
+            raise ValueError(f"d_model={d_model} must be divisible by n_heads={n_heads}.")
+
         super().__init__()
 
-        assert dim_model % num_heads == 0, "num_q_heads must be divisible by num_kv_heads"
+        available_backends = _available_sdpa_backends()
+        if sdp_backend not in (None, "auto", *available_backends.keys()):
+            raise ValueError(
+                f"Invalid sdp_backend '{sdp_backend}'."
+                f" Expected one of {['auto', *available_backends.keys()]}."
+            )
 
-        def generate_einmix(
-            signature: str = "... seq_len dim_model ->... n_heads seq_len d_k",
-            weight_shape: str = "dim_model n_heads d_k",
+        self.d_model = d_model
+        self.n_heads = n_heads
+        self.d_k = d_model // n_heads
+        self.qk_norm = qk_norm.lower()
+        self.use_rope = use_rope
+        self.use_per_dim_scale = use_per_dim_scale
+        self.attention_probs_dropout_rate = attention_probs_dropout_rate
+        self.out_dropout = nn.Dropout(out_dropout_rate)
+        self.sdp_backends = (
+            list(available_backends.values())
+            if sdp_backend in (None, "auto")
+            else [available_backends[sdp_backend]]
+        )
+
+        def make_projection(
+            signature: str = "... seq_len d_model -> ... seq_len n_heads d_k",
+            weight_shape: str = "d_model n_heads d_k",
         ) -> EinMix:
             return EinMix(
                 signature=signature,
                 weight_shape=weight_shape,
-                dim_model=dim_model,
-                n_heads=num_heads,
-                d_k=d_k,
+                d_model=d_model,
+                n_heads=n_heads,
+                d_k=self.d_k,
             )
 
-        self.q = generate_einmix()
-        self.k = generate_einmix()
-        self.v = generate_einmix()
-
-        self.output = generate_einmix(
-            signature=".. n_heads seq_len d_k -> ... seq_len dim_model",
-            weight_shape="n_heads d_k dim_model",
+        self.q = make_projection()
+        self.k = make_projection()
+        self.v = make_projection()
+        self.output = make_projection(
+            signature="... seq_len n_heads d_k -> ... seq_len d_model",
+            weight_shape="n_heads d_k d_model",
         )
 
-        self.use_qk_norm = use_qk_norm
+        if self.qk_norm == "rms":
+            self.q_norm = nn.RMSNorm(self.d_k, eps=norm_eps)
+            self.k_norm = nn.RMSNorm(self.d_k, eps=norm_eps)
+        elif self.qk_norm in ("none", "l2"):
+            self.q_norm = nn.Identity()
+            self.k_norm = nn.Identity()
+        else:
+            raise ValueError(f"Unsupported qk_norm '{qk_norm}'.")
 
-        if use_qk_norm:
-            # TODO: look into why its like this, maybe change this later
-            scale = 0.75 * sequence_length
-            self.scale = nn.Parameter(torch.tensor(np.log2(scale**2 - scale) / num_heads))
+        if self.use_per_dim_scale:
+            self.query_scale = PerDimScale(self.d_k)
+        else:
+            self.query_scale = nn.Identity()
 
-    def forward(self, x: torch.Tensor, attn_mask: torch.BoolTensor) -> torch.Tensor:
+        if self.use_rope:
+            self.rope = RotaryPositionalEmbedding(self.d_k)
+
+    def _qkv_and_transform(
+        self,
+        x: torch.Tensor,
+        patch_padding_mask: torch.BoolTensor | None,
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         q = self.q(x)
         k = self.k(x)
         v = self.v(x)
 
-        if self.use_qk_norm:
-            q = q / torch.linalg.norm(q, dim=-1, keepdim=True)
-            k = k / torch.linalg.norm(k, dim=-1, keepdim=True)
+        if self.use_rope:
+            positions = build_rope_positions(patch_padding_mask, x.shape[1], x.device)
+            q = self.rope(q, positions=positions)
+            k = self.rope(k, positions=positions)
 
-        with torch.nn.attention.sdpa_kernel(torch.nn.attention.SDPBackend.MATH):
-            if self.use_qk_norm:
-                q = self.scale * q
-                k = self.scale * k
-            sdp_scale = 1.0 if self.use_qk_norm else None
+        q = self.q_norm(q)
+        k = self.k_norm(k)
+
+        if self.qk_norm == "l2":
+            q = F.normalize(q, p=2, dim=-1)
+            k = F.normalize(k, p=2, dim=-1)
+
+        q = self.query_scale(q)
+        return q, k, v
+
+    def _build_attention_mask(
+        self,
+        patch_padding_mask: torch.BoolTensor | None,
+        sequence_length: int,
+        device: torch.device,
+    ) -> torch.BoolTensor:
+        causal = torch.tril(torch.ones(sequence_length, sequence_length, dtype=torch.bool, device=device))
+        attn_mask = causal[None, None, :, :]
+
+        if patch_padding_mask is None:
+            return attn_mask
+
+        valid = ~patch_padding_mask
+        valid_queries = valid[:, None, :, None]
+        valid_keys = valid[:, None, None, :]
+        return attn_mask & valid_queries & valid_keys
+
+    def forward(self, x: torch.Tensor, padding_mask: torch.Tensor | None = None) -> torch.Tensor:
+        patch_padding_mask = _coerce_patch_padding_mask(padding_mask, x)
+        q, k, v = self._qkv_and_transform(x, patch_padding_mask)
+
+        q = q.transpose(1, 2)
+        k = k.transpose(1, 2)
+        v = v.transpose(1, 2)
+        attn_mask = self._build_attention_mask(patch_padding_mask, x.shape[1], x.device)
+
+        with torch.nn.attention.sdpa_kernel(backends=self.sdp_backends):
             sdp = torch.nn.functional.scaled_dot_product_attention(
-                q, k, v, is_causal=True, attn_mask=~attn_mask, scale=sdp_scale
+                q,
+                k,
+                v,
+                attn_mask=attn_mask,
+                is_causal=False,
+                dropout_p=self.attention_probs_dropout_rate if self.training else 0.0,
+                scale=1.0,
             )
-        output = self.output(sdp)
+
+        sdp = sdp.transpose(1, 2)
+        output = self.out_dropout(self.output(sdp))
+
+        if patch_padding_mask is not None:
+            output = output.masked_fill(patch_padding_mask[:, :, None], 0.0)
+
+        return output
+
+def _make_activation(name: str) -> nn.Module:
+    activation_name = name.lower()
+
+    if activation_name == "relu":
+        return nn.ReLU()
+    if activation_name == "gelu":
+        return nn.GELU()
+    if activation_name == "silu":
+        return nn.SiLU()
+
+    raise ValueError(f"Unsupported activation '{name}'.")
 
 
-# @TODO: look into RMSNorm
-class MaskedFeedForward(nn.Module):
+def _make_norm(name: str, hidden_size: int, eps: float) -> nn.Module:
+    norm_name = name.lower()
+
+    if norm_name == "none":
+        return nn.Identity()
+    if norm_name == "layernorm":
+        return nn.LayerNorm(hidden_size, eps=eps)
+    if norm_name == "rmsnorm":
+        return nn.RMSNorm(hidden_size, eps=eps)
+
+    raise ValueError(f"Unsupported norm '{name}'.")
+
+
+def _coerce_patch_padding_mask(
+    padding_mask: torch.Tensor | None,
+    x: torch.Tensor,
+) -> torch.BoolTensor | None:
+    if padding_mask is None:
+        return None
+
+    if padding_mask.shape[:2] != x.shape[:2]:
+        raise ValueError(
+            "padding_mask must start with [batch_size, num_patches]."
+            f" Got {tuple(padding_mask.shape)} for x with shape {tuple(x.shape)}."
+        )
+
+    patch_padding_mask = padding_mask.to(dtype=torch.bool, device=x.device)
+    while patch_padding_mask.ndim > 2:
+        patch_padding_mask = patch_padding_mask.all(dim=-1)
+
+    return patch_padding_mask
+
+
+class FeedForward(nn.Module):
     def __init__(
         self,
         input_size: int,
         hidden_size: int,
+        norm: str = "rmsnorm",
+        activation: str = "silu",
+        norm_eps: float = 1e-6,
+        zero_init_output: bool = True,
     ) -> None:
         super().__init__()
 
-        self.layer_norm = nn.LayerNorm(input_size, eps=1e-6)
-
-        self.input_layer = nn.Sequential(nn.Linear(input_size, hidden_size), nn.ReLU())
-        nn.init.normal_(self.input_layer[0].weight, mean=0.0, std=(2 / input_size) ** 0.5)
-        self.input_layer[0].bias.data.zero_()
+        self.norm = _make_norm(norm, input_size, eps=norm_eps)
+        self.input_layer = nn.Linear(input_size, hidden_size)
+        self.activation = _make_activation(activation)
         self.output_layer = nn.Linear(hidden_size, input_size)
-        self.output_layer.weight.data.zero_()
-        self.output_layer.bias.data.zero_()
 
-    # @TODO: Possibly missing paddings
-    def forward(self, x: torch.Tensor, mask: torch.BoolTensor) -> torch.Tensor:
-        x = self.layer_norm(x)
+        nn.init.normal_(self.input_layer.weight, mean=0.0, std=(2 / input_size) ** 0.5)
+        nn.init.zeros_(self.input_layer.bias)
+
+        if zero_init_output:
+            nn.init.zeros_(self.output_layer.weight)
+            nn.init.zeros_(self.output_layer.bias)
+
+    def forward(self, x: torch.Tensor, padding_mask: torch.Tensor | None = None) -> torch.Tensor:
+        patch_padding_mask = _coerce_patch_padding_mask(padding_mask, x)
+
+        if patch_padding_mask is not None:
+            x = x.masked_fill(patch_padding_mask[:, :, None], 0.0)
+
+        x = self.norm(x)
         x = self.input_layer(x)
+        x = self.activation(x)
         x = self.output_layer(x)
-        x *= (~mask)[:, :, None]
-        return x
 
+        if patch_padding_mask is not None:
+            x = x.masked_fill(patch_padding_mask[:, :, None], 0.0)
+
+        return x
 
 class PositionalEmbedding(nn.Module):
     def __init__(self, d_model: int) -> None:
@@ -247,16 +412,63 @@ class TransformerLayer(nn.Module):
         num_heads: int,
         hidden_size: int,
         d_head: int,
+        attention_norm: str = "rmsnorm",
+        attention_qk_norm: str = "rmsnorm",
+        use_rotary_position_embeddings: bool = True,
+        use_per_dim_scale: bool = True,
+        sdp_backend: str | None = None,
+        attention_probs_dropout_rate: float = 0.0,
+        attention_out_dropout_rate: float = 0.0,
+        ff_norm: str = "rmsnorm",
+        ff_activation: str = "silu",
         rms_norm_eps: float = 1e-6,
     ) -> None:
         super().__init__()
 
-        self.attention_with_residual = ResidualConnection(Attention(input_size, num_heads=num_heads))
-        self.feed_forward_with_residual = ResidualConnection(MaskedFeedForward(input_size, hidden_size))
-        self.rms_norm = nn.RMSNorm(input_size, eps=rms_norm_eps)
+        expected_d_head = input_size // num_heads
+        if d_head != expected_d_head:
+            raise ValueError(
+                f"d_head={d_head} must equal input_size // num_heads={expected_d_head}."
+            )
 
-    def forward(self, x) -> torch.Tensor:
-        x = self.rms_norm(x)
-        x = self.attention_with_residual(x)
-        x = self.feed_forward_with_residual(x)
+        qk_norm = attention_qk_norm.lower()
+        if qk_norm == "rmsnorm":
+            qk_norm = "rms"
+
+        self.pre_attention_norm = _make_norm(attention_norm, input_size, eps=rms_norm_eps)
+        self.post_attention_norm = _make_norm(attention_norm, input_size, eps=rms_norm_eps)
+        self.attention = Attention(
+            d_model=input_size,
+            n_heads=num_heads,
+            qk_norm=qk_norm,
+            use_rope=use_rotary_position_embeddings,
+            use_per_dim_scale=use_per_dim_scale,
+            sdp_backend=sdp_backend,
+            attention_probs_dropout_rate=attention_probs_dropout_rate,
+            out_dropout_rate=attention_out_dropout_rate,
+            norm_eps=rms_norm_eps,
+        )
+
+        self.pre_feed_forward_norm = _make_norm(ff_norm, input_size, eps=rms_norm_eps)
+        self.post_feed_forward_norm = _make_norm(ff_norm, input_size, eps=rms_norm_eps)
+        self.feed_forward = FeedForward(
+            input_size,
+            hidden_size,
+            norm="none",
+            activation=ff_activation,
+            norm_eps=rms_norm_eps,
+        )
+
+    def forward(self, x, padding_mask: torch.Tensor | None = None) -> torch.Tensor:
+        attn_output = self.attention(
+            self.pre_attention_norm(x),
+            padding_mask=padding_mask,
+        )
+        x = x + self.post_attention_norm(attn_output)
+
+        ff_output = self.feed_forward(
+            self.pre_feed_forward_norm(x),
+            padding_mask=padding_mask,
+        )
+        x = x + self.post_feed_forward_norm(ff_output)
         return x
