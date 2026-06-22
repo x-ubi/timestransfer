@@ -22,6 +22,7 @@ def test_compute_metric_rows_overall_and_horizon():
     assert overall["mae"] == 2.0
     assert overall["rmse"] == 2.0
     assert overall["n_obs"] == 2
+    assert overall["forecast_horizon"] == 2
     assert set(rows["scope"]) == {"overall", "horizon"}
 
 

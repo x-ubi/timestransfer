@@ -18,9 +18,11 @@ PACKAGE_NAMES = [
     "pyarrow",
     "pyyaml",
     "scikit-learn",
+    "statsforecast",
     "tabpfn",
     "timesfm",
     "torch",
+    "matplotlib",
 ]
 
 
@@ -41,13 +43,26 @@ TIMESFM_M4_CONTAMINATION = {
     ],
 }
 
+DATASET_CONTAMINATION_NOTES = {
+    "m4_hourly": TIMESFM_M4_CONTAMINATION,
+    "ett_h1_h48": {
+        "status": "unknown_pretraining_overlap",
+        "summary": (
+            "ETTh1 reduces dependence on the known M4/TimesFM contamination concern, but public "
+            "metadata is not sufficient to prove exclusion from TimesFM 2.5 pretraining."
+        ),
+        "sources": ["https://github.com/zhouhaoyi/ETDataset"],
+    },
+}
+
 
 def build_environment_metadata(
     *,
     config: dict[str, Any],
-    dataset_summary: dict[str, Any],
+    dataset_summary: dict[str, Any] | list[dict[str, Any]],
     model_statuses: dict[str, dict[str, Any]],
 ) -> dict[str, Any]:
+    dataset_summaries = dataset_summary if isinstance(dataset_summary, list) else [dataset_summary]
     return {
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "python": {
@@ -64,8 +79,10 @@ def build_environment_metadata(
         "git": _git_metadata(),
         "config": config,
         "dataset": dataset_summary,
+        "datasets": dataset_summaries,
         "model_statuses": model_statuses,
         "timesfm_m4_contamination": TIMESFM_M4_CONTAMINATION,
+        "dataset_contamination_notes": DATASET_CONTAMINATION_NOTES,
     }
 
 

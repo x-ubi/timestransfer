@@ -14,8 +14,10 @@ dependencies = [
   "pyarrow>=15.0,<23.0",
   "pyyaml>=6.0.1,<7.0",
   "scikit-learn>=1.4,<2.0",
+  "statsforecast>=2.0,<3.0",
   "tabpfn>=8.0.8",
   "timesfm[torch]>=2.0.1",
+  "matplotlib>=3.8,<4.0",
 ]
 
 [project.optional-dependencies]

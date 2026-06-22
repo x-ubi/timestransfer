@@ -25,6 +25,7 @@ class _SeriesArrays:
     unique_id: str
     values: np.ndarray
     ds: np.ndarray
+    time_idx: np.ndarray
     scale: float
     nonnegative: bool
 
@@ -75,7 +76,7 @@ def build_lag_feature_bundle(
                 _make_feature_row(
                     values=item.values,
                     cutoff=cutoff,
-                    target_ds=int(item.ds[target_pos]),
+                    target_time_idx=int(item.time_idx[target_pos]),
                     horizon_step=h,
                     max_horizon=horizon,
                     seasonality=seasonality,
@@ -87,8 +88,10 @@ def build_lag_feature_bundle(
             train_index_rows.append(
                 {
                     "unique_id": item.unique_id,
-                    "cutoff_ds": int(item.ds[cutoff]),
-                    "target_ds": int(item.ds[target_pos]),
+                    "cutoff_ds": item.ds[cutoff],
+                    "target_ds": item.ds[target_pos],
+                    "cutoff_time_idx": int(item.time_idx[cutoff]),
+                    "target_time_idx": int(item.time_idx[target_pos]),
                     "horizon": h,
                     "target_y": float(item.values[target_pos]),
                 }
@@ -124,7 +127,7 @@ def build_lag_feature_bundle(
                 _make_feature_row(
                     values=item.values,
                     cutoff=cutoff,
-                    target_ds=int(test_row["ds"]),
+                    target_time_idx=int(item.time_idx[-1] + h),
                     horizon_step=h,
                     max_horizon=horizon,
                     seasonality=seasonality,
@@ -136,7 +139,7 @@ def build_lag_feature_bundle(
                 {
                     "unique_id": item.unique_id,
                     "horizon": h,
-                    "ds": int(test_row["ds"]),
+                    "ds": test_row["ds"],
                     "y_true": float(test_row["y"]),
                     "scale": item.scale,
                     "train_nonnegative": item.nonnegative,
@@ -172,13 +175,15 @@ def _series_arrays(train_df: pd.DataFrame) -> list[_SeriesArrays]:
     arrays: list[_SeriesArrays] = []
     for unique_id, group in train_df.sort_values(["unique_id", "ds"]).groupby("unique_id", sort=True):
         values = group["y"].to_numpy(dtype=float)
-        ds = group["ds"].to_numpy(dtype=int)
+        ds = group["ds"].to_numpy()
+        time_idx = np.arange(1, len(group) + 1, dtype=int)
         scale = float(np.mean(np.abs(values)) + EPSILON)
         arrays.append(
             _SeriesArrays(
                 unique_id=str(unique_id),
                 values=values,
                 ds=ds,
+                time_idx=time_idx,
                 scale=scale,
                 nonnegative=bool(np.nanmin(values) >= 0),
             )
@@ -201,14 +206,14 @@ def _make_feature_row(
     *,
     values: np.ndarray,
     cutoff: int,
-    target_ds: int,
+    target_time_idx: int,
     horizon_step: int,
     max_horizon: int,
     seasonality: int,
     lags: list[int],
     scale: float,
 ) -> dict[str, float]:
-    phase = ((target_ds - 1) % seasonality) / seasonality
+    phase = ((target_time_idx - 1) % seasonality) / seasonality
     row = {
         "horizon": float(horizon_step),
         "horizon_frac": float(horizon_step / max_horizon),

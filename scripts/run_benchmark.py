@@ -7,13 +7,18 @@ from timestransfer.runner import run_benchmark
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run the Phase 1 M4 Hourly benchmark.")
+    parser = argparse.ArgumentParser(description="Run the time-series benchmark.")
     parser.add_argument("--config", default="configs/experiment.yaml", help="Path to YAML config.")
     parser.add_argument(
         "--models",
         nargs="+",
-        choices=["linear_regression", "tabpfn", "timesfm_2p5"],
+        choices=["linear_regression", "tabpfn", "timesfm_2p5", "auto_arima"],
         help="Optional subset of models to run.",
+    )
+    parser.add_argument(
+        "--datasets",
+        nargs="+",
+        help="Optional subset of configured dataset names to run.",
     )
     parser.add_argument(
         "--series-limit",
@@ -35,6 +40,7 @@ def main() -> None:
         config_path=Path(args.config),
         model_names=args.models,
         series_limit=args.series_limit,
+        dataset_names=args.datasets,
     )
     print(f"metrics: {paths['metrics']}")
     print(f"metadata: {paths['metadata']}")

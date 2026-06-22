@@ -62,3 +62,28 @@ def test_lag_feature_targets_do_not_use_holdout_values():
         uid = row["unique_id"]
         assert row["target_ds"] <= max_train_ds[uid]
         assert row["target_ds"] < min_test_ds[uid]
+
+
+def test_lag_features_support_datetime_ds_without_test_y_leakage():
+    df = pd.DataFrame(
+        {
+            "unique_id": ["a"] * 10,
+            "ds": pd.date_range("2020-01-01", periods=10, freq="h"),
+            "y": range(10),
+        }
+    )
+    split = fixed_train_test_split(df, horizon=2)
+
+    bundle = build_lag_feature_bundle(
+        split.train,
+        split.test.assign(y=[9999.0, 9999.0]),
+        horizon=2,
+        seasonality=24,
+        lags=[1, 2],
+        train_row_cap=None,
+        seed=123,
+    )
+
+    assert bundle.train_index["target_ds"].max() < split.test["ds"].min()
+    assert bundle.test_index["ds"].tolist() == split.test["ds"].tolist()
+    assert bundle.X_test["lag_1"].iloc[0] != 9999.0

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any
+import warnings
 
 import numpy as np
 import pandas as pd
@@ -143,7 +144,7 @@ def run_timesfm_2p5(
                         "model": "timesfm_2p5",
                         "unique_id": unique_id,
                         "horizon": h,
-                        "ds": int(test_row["ds"]),
+                        "ds": test_row["ds"],
                         "y_true": float(test_row["y"]),
                         "y_pred": y_pred,
                     }
@@ -162,6 +163,91 @@ def run_timesfm_2p5(
         )
     except Exception as exc:
         return _failed_result("timesfm_2p5", exc, "TimesFM load/forecast failed.")
+
+
+def run_auto_arima(
+    train_df: pd.DataFrame,
+    test_df: pd.DataFrame,
+    dataset_name: str,
+    *,
+    horizon: int,
+    seasonality: int,
+    freq: str | int,
+    n_jobs: int,
+    model_kwargs: dict[str, Any] | None = None,
+) -> ModelRunResult:
+    try:
+        import statsforecast
+        from statsforecast import StatsForecast
+        from statsforecast.models import AutoARIMA
+    except Exception as exc:
+        return _failed_result("auto_arima", exc, "StatsForecast/AutoARIMA import failed.")
+
+    try:
+        auto_arima_kwargs = {"season_length": seasonality}
+        auto_arima_kwargs.update(model_kwargs or {})
+        model = AutoARIMA(**auto_arima_kwargs)
+        sf = StatsForecast(models=[model], freq=freq, n_jobs=n_jobs)
+        train = train_df.loc[:, ["unique_id", "ds", "y"]].copy()
+        train["unique_id"] = train["unique_id"].astype(str)
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", category=UserWarning, module="statsforecast")
+            forecast_df = sf.forecast(df=train, h=horizon)
+        prediction_columns = [col for col in forecast_df.columns if col not in {"unique_id", "ds"}]
+        if not prediction_columns:
+            raise ValueError("StatsForecast returned no prediction column.")
+        prediction_column = prediction_columns[0]
+
+        test = test_df.sort_values(["unique_id", "ds"]).reset_index(drop=True).copy()
+        forecast_df = forecast_df.sort_values(["unique_id", "ds"]).reset_index(drop=True)
+        if len(test) != len(forecast_df):
+            raise ValueError(
+                f"AutoARIMA returned {len(forecast_df)} rows; expected {len(test)} test rows."
+            )
+        if test["unique_id"].astype(str).tolist() != forecast_df["unique_id"].astype(str).tolist():
+            raise ValueError("AutoARIMA forecast unique_id order does not match test order.")
+
+        y_pred = forecast_df[prediction_column].to_numpy(dtype=float)
+        train_nonnegative = (
+            train_df.groupby("unique_id", sort=True)["y"].min().astype(float).ge(0.0).to_dict()
+        )
+        rows: list[dict[str, object]] = []
+        for row, pred in zip(test.to_dict("records"), y_pred, strict=True):
+            unique_id = str(row["unique_id"])
+            y_hat = float(pred)
+            if train_nonnegative.get(unique_id, False):
+                y_hat = max(0.0, y_hat)
+            rows.append(
+                {
+                    "dataset": dataset_name,
+                    "model": "auto_arima",
+                    "unique_id": unique_id,
+                    "horizon": int(row.get("horizon", 0)) if "horizon" in row else None,
+                    "ds": row["ds"],
+                    "y_true": float(row["y"]),
+                    "y_pred": y_hat,
+                }
+            )
+
+        forecasts = pd.DataFrame(rows)
+        forecasts["horizon"] = forecasts.groupby("unique_id").cumcount() + 1
+        return ModelRunResult(
+            model="auto_arima",
+            status="ok",
+            forecasts=forecasts.loc[
+                :, ["dataset", "model", "unique_id", "horizon", "ds", "y_true", "y_pred"]
+            ],
+            details={
+                "estimator": "statsforecast.models.AutoARIMA",
+                "statsforecast_version": getattr(statsforecast, "__version__", "unknown"),
+                "season_length": seasonality,
+                "freq": freq,
+                "n_jobs": n_jobs,
+                "model_kwargs": auto_arima_kwargs,
+            },
+        )
+    except Exception as exc:
+        return _failed_result("auto_arima", exc, "AutoARIMA fit/forecast failed.")
 
 
 def _make_timesfm_forecast_config(timesfm_module: Any, *, max_context: int, max_horizon: int) -> Any:
