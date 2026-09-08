@@ -23,6 +23,10 @@ PACKAGE_NAMES = [
     "timesfm",
     "torch",
     "matplotlib",
+    "prophet",
+    "chronos-forecasting",
+    "transformers",
+    "statsmodels",
 ]
 
 
@@ -40,6 +44,21 @@ TIMESFM_M4_CONTAMINATION = {
         "https://huggingface.co/google/timesfm-2.5-200m-pytorch",
         "https://github.com/google-research/timesfm",
         "https://arxiv.org/abs/2310.10688",
+        "https://arxiv.org/abs/2403.07815",
+    ],
+}
+
+LONG_HORIZON2_CONTAMINATION = {
+    "status": "possibly_or_likely_contaminated",
+    "summary": (
+        "The ETT/ECL/Traffic/Weather panels appear in the Chronos training corpus (Chronos "
+        "paper appendix) and are ubiquitous long-horizon benchmarks; overlap with TimesFM 2.5 "
+        "pretraining cannot be audited from public metadata. Zero-shot foundation-model "
+        "results on these panels are comparability numbers, not clean generalization evidence."
+    ),
+    "sources": [
+        "https://arxiv.org/abs/2403.07815",
+        "https://github.com/zhouhaoyi/ETDataset",
     ],
 }
 
@@ -49,9 +68,24 @@ DATASET_CONTAMINATION_NOTES = {
         "status": "unknown_pretraining_overlap",
         "summary": (
             "ETTh1 reduces dependence on the known M4/TimesFM contamination concern, but public "
-            "metadata is not sufficient to prove exclusion from TimesFM 2.5 pretraining."
+            "metadata is not sufficient to prove exclusion from TimesFM 2.5 pretraining; ETT is "
+            "also part of the Chronos training corpus."
         ),
         "sources": ["https://github.com/zhouhaoyi/ETDataset"],
+    },
+    **{
+        name: LONG_HORIZON2_CONTAMINATION
+        for name in (
+            "ett_h1_h96",
+            "ett_h2_h48",
+            "ett_m1_h48",
+            "ett_m2_h48",
+            "ecl_h48",
+            "traffic_h48",
+            "weather_h48",
+            "exchange_h48",
+            "ili_h48",
+        )
     },
 }
 

@@ -1,17 +1,179 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 import pandas as pd
 
-from timestransfer.config import dataset_configs, load_config, model_enabled
-from timestransfer.data import fixed_train_test_split, load_dataset, select_series
-from timestransfer.features import build_lag_feature_bundle
+from timestransfer.config import dataset_configs, enabled_model_names, load_config
+from timestransfer.data import DatasetSplit, fixed_train_test_split, load_dataset, select_series
+from timestransfer.features import FeatureBundle, build_lag_feature_bundle
 from timestransfer.metadata import build_environment_metadata, write_json
-from timestransfer.metrics import compute_metric_rows, failure_metric_row
-from timestransfer.models import run_auto_arima, run_linear_regression, run_tabpfn, run_timesfm_2p5
+from timestransfer.metrics import compute_metric_rows, failure_metric_row, seasonal_naive_scales
+from timestransfer.models import (
+    ModelRunResult,
+    run_chronos_bolt,
+    run_linear_regression,
+    run_prophet,
+    run_statsforecast_model,
+    run_tabpfn,
+    run_timesfm_2p5,
+)
 from timestransfer.reporting import write_reporting_outputs
+
+
+@dataclass(frozen=True)
+class DatasetRunContext:
+    dataset_name: str
+    dataset_config: dict[str, Any]
+    horizon: int
+    seasonality: int
+    freq: str | int
+    split: DatasetSplit
+    bundle: FeatureBundle
+    seed: int
+
+
+ModelEntryRunner = Callable[[str, dict[str, Any], DatasetRunContext], ModelRunResult]
+
+_TIMESFM_FLAG_KEYS = (
+    "normalize_inputs",
+    "use_continuous_quantile_head",
+    "force_flip_invariance",
+    "infer_is_positive",
+    "fix_quantile_crossing",
+)
+
+_STATSFORECAST_RESERVED_KEYS = {
+    "enabled",
+    "runner",
+    "estimator",
+    "n_jobs",
+    "season_length",
+    "max_train_length",
+}
+
+
+def _run_linear_regression_entry(
+    model_name: str, model_cfg: dict[str, Any], ctx: DatasetRunContext
+) -> ModelRunResult:
+    return run_linear_regression(ctx.bundle, ctx.dataset_name, model_name=model_name)
+
+
+def _run_tabpfn_entry(
+    model_name: str, model_cfg: dict[str, Any], ctx: DatasetRunContext
+) -> ModelRunResult:
+    return run_tabpfn(
+        ctx.bundle,
+        ctx.dataset_name,
+        model_name=model_name,
+        prediction_batch_size=int(model_cfg.get("prediction_batch_size", 1024)),
+    )
+
+
+def _run_timesfm_entry(
+    model_name: str, model_cfg: dict[str, Any], ctx: DatasetRunContext
+) -> ModelRunResult:
+    overrides = {key: bool(model_cfg[key]) for key in _TIMESFM_FLAG_KEYS if key in model_cfg}
+    return run_timesfm_2p5(
+        ctx.split.train,
+        ctx.split.test,
+        ctx.dataset_name,
+        model_name=model_name,
+        model_id=str(model_cfg.get("model_id", "google/timesfm-2.5-200m-pytorch")),
+        max_context=int(model_cfg.get("max_context", 1024)),
+        max_horizon=int(model_cfg.get("max_horizon", ctx.horizon)),
+        horizon=ctx.horizon,
+        forecast_config_overrides=overrides or None,
+    )
+
+
+_PROPHET_RESERVED_KEYS = {"enabled", "runner", "n_jobs", "max_train_length"}
+
+
+def _run_prophet_entry(
+    model_name: str, model_cfg: dict[str, Any], ctx: DatasetRunContext
+) -> ModelRunResult:
+    max_train_length = model_cfg.get("max_train_length", 4320)
+    return run_prophet(
+        ctx.split.train,
+        ctx.split.test,
+        ctx.dataset_name,
+        model_name=model_name,
+        horizon=ctx.horizon,
+        time_freq=str(ctx.dataset_config.get("time_freq", ctx.freq)),
+        max_train_length=int(max_train_length) if max_train_length is not None else None,
+        n_jobs=int(model_cfg.get("n_jobs", 1)),
+        model_kwargs={
+            key: value for key, value in model_cfg.items() if key not in _PROPHET_RESERVED_KEYS
+        },
+    )
+
+
+def _run_chronos_entry(
+    model_name: str, model_cfg: dict[str, Any], ctx: DatasetRunContext
+) -> ModelRunResult:
+    return run_chronos_bolt(
+        ctx.split.train,
+        ctx.split.test,
+        ctx.dataset_name,
+        model_name=model_name,
+        horizon=ctx.horizon,
+        model_id=str(model_cfg.get("model_id", "amazon/chronos-bolt-base")),
+        context_length=int(model_cfg.get("context_length", 2048)),
+        batch_size=int(model_cfg.get("batch_size", 64)),
+        device_map=str(model_cfg.get("device_map", "cuda")),
+    )
+
+
+def _make_statsforecast_entry(estimator: str) -> ModelEntryRunner:
+    def _entry(model_name: str, model_cfg: dict[str, Any], ctx: DatasetRunContext) -> ModelRunResult:
+        max_train_length = model_cfg.get("max_train_length")
+        return run_statsforecast_model(
+            ctx.split.train,
+            ctx.split.test,
+            ctx.dataset_name,
+            model_name=model_name,
+            estimator=estimator,
+            horizon=ctx.horizon,
+            seasonality=int(model_cfg.get("season_length", ctx.seasonality)),
+            freq=ctx.freq,
+            n_jobs=int(model_cfg.get("n_jobs", -1)),
+            max_train_length=int(max_train_length) if max_train_length is not None else None,
+            model_kwargs={
+                key: value
+                for key, value in model_cfg.items()
+                if key not in _STATSFORECAST_RESERVED_KEYS
+            },
+        )
+
+    return _entry
+
+
+MODEL_RUNNERS: dict[str, ModelEntryRunner] = {
+    "linear_regression": _run_linear_regression_entry,
+    "tabpfn": _run_tabpfn_entry,
+    "timesfm_2p5": _run_timesfm_entry,
+    "auto_arima": _make_statsforecast_entry("AutoARIMA"),
+    "seasonal_naive": _make_statsforecast_entry("SeasonalNaive"),
+    "auto_ets": _make_statsforecast_entry("AutoETS"),
+    "auto_theta": _make_statsforecast_entry("AutoTheta"),
+    "prophet": _run_prophet_entry,
+    "chronos_bolt": _run_chronos_entry,
+}
+
+
+def _dispatch_model(
+    model_name: str, model_cfg: dict[str, Any], ctx: DatasetRunContext
+) -> ModelRunResult:
+    runner_key = str(model_cfg.get("runner", model_name))
+    if runner_key not in MODEL_RUNNERS:
+        raise ValueError(
+            f"Unknown model runner {runner_key!r} for model {model_name!r}. "
+            f"Known runners: {sorted(MODEL_RUNNERS)}"
+        )
+    return MODEL_RUNNERS[runner_key](model_name, model_cfg, ctx)
 
 
 def run_benchmark(
@@ -44,14 +206,17 @@ def run_benchmark(
         if missing:
             raise ValueError(f"Unknown dataset name(s): {sorted(missing)}")
 
-    requested_models = model_names or [
-        name
-        for name in ("linear_regression", "tabpfn", "timesfm_2p5", "auto_arima")
-        if model_enabled(config, name)
-    ]
+    requested_models = model_names or enabled_model_names(config)
+    unknown_models = [name for name in requested_models if name not in model_config]
+    if unknown_models:
+        raise ValueError(
+            f"Unknown model name(s): {sorted(unknown_models)}. "
+            f"Configured models: {sorted(model_config)}"
+        )
 
     forecast_frames: list[pd.DataFrame] = []
     metric_frames: list[pd.DataFrame] = []
+    mase_scale_frames: list[pd.DataFrame] = []
     model_statuses: dict[str, dict[str, dict[str, Any]]] = {}
     dataset_summaries: list[dict[str, Any]] = []
 
@@ -67,6 +232,11 @@ def run_benchmark(
         df = select_series(full_df, effective_series_limit)
         split = fixed_train_test_split(df, horizon=horizon)
 
+        mase_seasonality = int(dataset_config.get("mase_seasonality", seasonality))
+        dataset_mase_scales = seasonal_naive_scales(split.train, mase_seasonality)
+        dataset_mase_scales.insert(0, "dataset", dataset_name)
+        mase_scale_frames.append(dataset_mase_scales)
+
         bundle = build_lag_feature_bundle(
             split.train,
             split.test,
@@ -77,53 +247,20 @@ def run_benchmark(
             seed=seed,
         )
 
-        model_results = []
-        for model_name in requested_models:
-            if model_name == "linear_regression":
-                model_results.append(run_linear_regression(bundle, dataset_name))
-            elif model_name == "tabpfn":
-                tabpfn_config = model_config.get("tabpfn", {})
-                model_results.append(
-                    run_tabpfn(
-                        bundle,
-                        dataset_name,
-                        prediction_batch_size=int(tabpfn_config.get("prediction_batch_size", 1024)),
-                    )
-                )
-            elif model_name == "timesfm_2p5":
-                timesfm_config = model_config.get("timesfm_2p5", {})
-                model_results.append(
-                    run_timesfm_2p5(
-                        split.train,
-                        split.test,
-                        dataset_name,
-                        model_id=str(timesfm_config.get("model_id", "google/timesfm-2.5-200m-pytorch")),
-                        max_context=int(timesfm_config.get("max_context", 1024)),
-                        max_horizon=int(timesfm_config.get("max_horizon", horizon)),
-                        horizon=horizon,
-                    )
-                )
-            elif model_name == "auto_arima":
-                auto_arima_config = model_config.get("auto_arima", {})
-                auto_arima_kwargs = {
-                    key: value
-                    for key, value in auto_arima_config.items()
-                    if key not in {"enabled", "n_jobs", "season_length"}
-                }
-                model_results.append(
-                    run_auto_arima(
-                        split.train,
-                        split.test,
-                        dataset_name,
-                        horizon=horizon,
-                        seasonality=int(auto_arima_config.get("season_length", seasonality)),
-                        freq=dataset_config.get("freq", 1),
-                        n_jobs=int(auto_arima_config.get("n_jobs", -1)),
-                        model_kwargs=auto_arima_kwargs,
-                    )
-                )
-            else:
-                raise ValueError(f"Unknown model name: {model_name}")
+        ctx = DatasetRunContext(
+            dataset_name=dataset_name,
+            dataset_config=dataset_config,
+            horizon=horizon,
+            seasonality=seasonality,
+            freq=dataset_config.get("freq", 1),
+            split=split,
+            bundle=bundle,
+            seed=seed,
+        )
+        model_results = [
+            _dispatch_model(model_name, model_config.get(model_name, {}), ctx)
+            for model_name in requested_models
+        ]
 
         model_statuses[dataset_name] = {}
         for result in model_results:
@@ -166,6 +303,12 @@ def run_benchmark(
             }
         )
 
+    mase_scales = (
+        pd.concat(mase_scale_frames, ignore_index=True) if mase_scale_frames else None
+    )
+    if mase_scales is not None:
+        mase_scales.to_csv(metrics_dir / "mase_scales.csv", index=False)
+
     if forecast_frames:
         all_forecasts = pd.concat(forecast_frames, ignore_index=True)
         all_forecasts_for_write = all_forecasts.copy()
@@ -174,7 +317,7 @@ def run_benchmark(
             forecasts_dir / "all_datasets_all_models.parquet",
             index=False,
         )
-        metric_frames.insert(0, compute_metric_rows(all_forecasts))
+        metric_frames.insert(0, compute_metric_rows(all_forecasts, mase_scales=mase_scales))
 
     metrics = pd.concat(metric_frames, ignore_index=True) if metric_frames else pd.DataFrame()
     metrics_path = metrics_dir / "metrics.csv"

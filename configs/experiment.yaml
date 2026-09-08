@@ -3,6 +3,35 @@ project:
   data_dir: data
   outputs_dir: outputs
 
+# Lag presets shared across datasets (resolved by YAML anchors; not read directly).
+lag_presets:
+  m4_hourly: &m4_hourly_lags [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+    25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,
+    72, 96, 120, 144, 168,
+  ]
+  hourly: &hourly_lags [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+    25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,
+    72, 96, 168, 336, 720,
+  ]
+  quarter_hourly: &quarter_hourly_lags [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+    48, 72, 96, 192, 288, 672, 1344,
+  ]
+  ten_minutely: &ten_minutely_lags [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+    36, 48, 72, 144, 288, 1008,
+  ]
+  daily: &daily_lags [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
+    21, 28, 30, 60, 90, 180, 365,
+  ]
+  weekly: &weekly_lags [1, 2, 3, 4, 5, 6, 7, 8, 13, 26, 52, 104]
+
+# All datasets evaluate the full panel (series_limit: null). If the per-series models
+# (prophet, auto_arima, auto_ets, auto_theta) make the full run too slow, the documented
+# fallback is series_limit: 100 for ecl_h48 and traffic_h48 (deterministic first-100 ids).
 datasets:
   - name: m4_hourly
     loader: m4_hourly
@@ -10,144 +39,153 @@ datasets:
     horizon: 48
     seasonality: 24
     freq: 1
+    time_freq: h
     expected_n_series: 414
     series_limit: null
     features:
-      lags:
-        - 1
-        - 2
-        - 3
-        - 4
-        - 5
-        - 6
-        - 7
-        - 8
-        - 9
-        - 10
-        - 11
-        - 12
-        - 13
-        - 14
-        - 15
-        - 16
-        - 17
-        - 18
-        - 19
-        - 20
-        - 21
-        - 22
-        - 23
-        - 24
-        - 25
-        - 26
-        - 27
-        - 28
-        - 29
-        - 30
-        - 31
-        - 32
-        - 33
-        - 34
-        - 35
-        - 36
-        - 37
-        - 38
-        - 39
-        - 40
-        - 41
-        - 42
-        - 43
-        - 44
-        - 45
-        - 46
-        - 47
-        - 48
-        - 72
-        - 96
-        - 120
-        - 144
-        - 168
+      lags: *m4_hourly_lags
       train_row_cap: 10000
   - name: ett_h1_h48
-    loader: ett_h1
+    loader: long_horizon2
     group: ETTh1
     horizon: 48
     seasonality: 24
     freq: h
+    time_freq: h
     expected_n_series: 7
     series_limit: null
     features:
-      lags:
-        - 1
-        - 2
-        - 3
-        - 4
-        - 5
-        - 6
-        - 7
-        - 8
-        - 9
-        - 10
-        - 11
-        - 12
-        - 13
-        - 14
-        - 15
-        - 16
-        - 17
-        - 18
-        - 19
-        - 20
-        - 21
-        - 22
-        - 23
-        - 24
-        - 25
-        - 26
-        - 27
-        - 28
-        - 29
-        - 30
-        - 31
-        - 32
-        - 33
-        - 34
-        - 35
-        - 36
-        - 37
-        - 38
-        - 39
-        - 40
-        - 41
-        - 42
-        - 43
-        - 44
-        - 45
-        - 46
-        - 47
-        - 48
-        - 72
-        - 96
-        - 168
-        - 336
-        - 720
+      lags: *hourly_lags
+      train_row_cap: 10000
+  - name: ett_h1_h96
+    loader: long_horizon2
+    group: ETTh1
+    horizon: 96
+    seasonality: 24
+    freq: h
+    time_freq: h
+    expected_n_series: 7
+    series_limit: null
+    features:
+      lags: *hourly_lags
+      train_row_cap: 10000
+  - name: ett_h2_h48
+    loader: long_horizon2
+    group: ETTh2
+    horizon: 48
+    seasonality: 24
+    freq: h
+    time_freq: h
+    expected_n_series: 7
+    series_limit: null
+    features:
+      lags: *hourly_lags
+      train_row_cap: 10000
+  - name: ett_m1_h48
+    loader: long_horizon2
+    group: ETTm1
+    horizon: 48
+    seasonality: 96
+    freq: 15min
+    time_freq: 15min
+    expected_n_series: 7
+    series_limit: null
+    features:
+      lags: *quarter_hourly_lags
+      train_row_cap: 10000
+  - name: ett_m2_h48
+    loader: long_horizon2
+    group: ETTm2
+    horizon: 48
+    seasonality: 96
+    freq: 15min
+    time_freq: 15min
+    expected_n_series: 7
+    series_limit: null
+    features:
+      lags: *quarter_hourly_lags
+      train_row_cap: 10000
+  - name: ecl_h48
+    loader: long_horizon2
+    group: ECL
+    horizon: 48
+    seasonality: 24
+    freq: h
+    time_freq: h
+    expected_n_series: 321
+    series_limit: null
+    features:
+      lags: *hourly_lags
+      train_row_cap: 10000
+  - name: traffic_h48
+    loader: long_horizon2
+    group: TrafficL
+    horizon: 48
+    seasonality: 24
+    freq: h
+    time_freq: h
+    expected_n_series: 862
+    series_limit: null
+    features:
+      lags: *hourly_lags
+      train_row_cap: 10000
+  - name: weather_h48
+    loader: long_horizon2
+    group: Weather
+    horizon: 48
+    seasonality: 144
+    freq: 10min
+    time_freq: 10min
+    expected_n_series: 21
+    series_limit: null
+    features:
+      lags: *ten_minutely_lags
+      train_row_cap: 10000
+  - name: exchange_h48
+    loader: long_horizon2
+    group: Exchange
+    horizon: 48
+    seasonality: 7
+    # FX is non-seasonal in the M4/MASE convention; a weekly scale would understate errors.
+    mase_seasonality: 1
+    freq: D
+    time_freq: D
+    expected_n_series: 8
+    series_limit: null
+    features:
+      lags: *daily_lags
+      train_row_cap: 10000
+  - name: ili_h48
+    loader: long_horizon2
+    group: ILI
+    horizon: 48
+    seasonality: 52
+    freq: W-TUE
+    time_freq: W-TUE
+    expected_n_series: 7
+    series_limit: null
+    features:
+      lags: *weekly_lags
       train_row_cap: 10000
 
 models:
   linear_regression:
     enabled: true
-  tabpfn:
+  seasonal_naive:
     enabled: true
-    prediction_batch_size: 1024
-  timesfm_2p5:
+    n_jobs: 4
+  auto_ets:
     enabled: true
-    model_id: google/timesfm-2.5-200m-pytorch
-    max_context: 1024
-    max_horizon: 48
-    allow_failure: true
+    n_jobs: 4
+    max_train_length: 5000
+  auto_theta:
+    enabled: true
+    n_jobs: 4
+    max_train_length: 5000
   auto_arima:
     enabled: true
-    n_jobs: 1
+    n_jobs: 4
+    max_train_length: 5000
     approximation: true
     seasonal: false
     nmodels: 5
@@ -163,3 +201,19 @@ models:
     max_d: 1
     max_D: 0
     allowdrift: false
+  prophet:
+    enabled: true
+    n_jobs: 4
+    max_train_length: 4320
+  tabpfn:
+    enabled: true
+    prediction_batch_size: 1024
+  timesfm_2p5:
+    enabled: true
+    model_id: google/timesfm-2.5-200m-pytorch
+    max_context: 1024
+  chronos_bolt:
+    enabled: true
+    model_id: amazon/chronos-bolt-base
+    context_length: 2048
+    batch_size: 64

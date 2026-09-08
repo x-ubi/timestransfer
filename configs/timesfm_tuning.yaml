@@ -1,0 +1,152 @@
+# TimesFM 2.5 inference-tuning experiment: context-length sweep + ForecastConfig flag
+# ablation. Kept separate from configs/experiment.yaml so the variants do not pollute
+# the main benchmark's combined outputs; results land in outputs/timesfm_tuning/.
+#
+# Context grid notes:
+# - contexts must be multiples of the 32-point input patch;
+# - compile() rounds max_horizon up to the 128-point output patch and requires
+#   max_context + max_horizon <= 16384, so 16256 is the largest legal context;
+# - m4_hourly trains are <= 960 points (contexts > 1024 are identical there, padding);
+#   ETTh1 train is 14,352 points; only ETTm1 (57k) and Weather (52k) exercise the
+#   full grid.
+# Flag ablation notes: use_continuous_quantile_head and fix_quantile_crossing mainly
+# affect quantile outputs; with point-forecast scoring expect small/no deltas.
+
+project:
+  seed: 42
+  data_dir: data
+  outputs_dir: outputs/timesfm_tuning
+
+lag_presets:
+  m4_hourly: &m4_hourly_lags [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+    25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,
+    72, 96, 120, 144, 168,
+  ]
+  hourly: &hourly_lags [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+    25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,
+    72, 96, 168, 336, 720,
+  ]
+  quarter_hourly: &quarter_hourly_lags [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+    48, 72, 96, 192, 288, 672, 1344,
+  ]
+  ten_minutely: &ten_minutely_lags [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+    36, 48, 72, 144, 288, 1008,
+  ]
+
+datasets:
+  - name: ett_h1_h48
+    loader: long_horizon2
+    group: ETTh1
+    horizon: 48
+    seasonality: 24
+    freq: h
+    time_freq: h
+    expected_n_series: 7
+    series_limit: null
+    features:
+      lags: *hourly_lags
+      train_row_cap: 10000
+  - name: ett_m1_h48
+    loader: long_horizon2
+    group: ETTm1
+    horizon: 48
+    seasonality: 96
+    freq: 15min
+    time_freq: 15min
+    expected_n_series: 7
+    series_limit: null
+    features:
+      lags: *quarter_hourly_lags
+      train_row_cap: 10000
+  - name: weather_h48
+    loader: long_horizon2
+    group: Weather
+    horizon: 48
+    seasonality: 144
+    freq: 10min
+    time_freq: 10min
+    expected_n_series: 21
+    series_limit: null
+    features:
+      lags: *ten_minutely_lags
+      train_row_cap: 10000
+  - name: m4_hourly
+    loader: m4_hourly
+    group: Hourly
+    horizon: 48
+    seasonality: 24
+    freq: 1
+    time_freq: h
+    expected_n_series: 414
+    series_limit: null
+    features:
+      lags: *m4_hourly_lags
+      train_row_cap: 10000
+
+models:
+  # --- context-length sweep (all flags at their defaults) ---
+  timesfm_2p5_ctx512:
+    enabled: true
+    runner: timesfm_2p5
+    model_id: google/timesfm-2.5-200m-pytorch
+    max_context: 512
+  timesfm_2p5_ctx1024:  # baseline for both the sweep and the flag ablation
+    enabled: true
+    runner: timesfm_2p5
+    model_id: google/timesfm-2.5-200m-pytorch
+    max_context: 1024
+  timesfm_2p5_ctx2048:
+    enabled: true
+    runner: timesfm_2p5
+    model_id: google/timesfm-2.5-200m-pytorch
+    max_context: 2048
+  timesfm_2p5_ctx4096:
+    enabled: true
+    runner: timesfm_2p5
+    model_id: google/timesfm-2.5-200m-pytorch
+    max_context: 4096
+  timesfm_2p5_ctx8192:
+    enabled: true
+    runner: timesfm_2p5
+    model_id: google/timesfm-2.5-200m-pytorch
+    max_context: 8192
+  timesfm_2p5_ctx16256:
+    enabled: true
+    runner: timesfm_2p5
+    model_id: google/timesfm-2.5-200m-pytorch
+    max_context: 16256
+  # --- flag ablation (one flag flipped vs the ctx1024 baseline) ---
+  timesfm_2p5_no_normalize:
+    enabled: true
+    runner: timesfm_2p5
+    model_id: google/timesfm-2.5-200m-pytorch
+    max_context: 1024
+    normalize_inputs: false
+  timesfm_2p5_no_quantile_head:
+    enabled: true
+    runner: timesfm_2p5
+    model_id: google/timesfm-2.5-200m-pytorch
+    max_context: 1024
+    use_continuous_quantile_head: false
+  timesfm_2p5_no_flip_invariance:
+    enabled: true
+    runner: timesfm_2p5
+    model_id: google/timesfm-2.5-200m-pytorch
+    max_context: 1024
+    force_flip_invariance: false
+  timesfm_2p5_no_infer_positive:
+    enabled: true
+    runner: timesfm_2p5
+    model_id: google/timesfm-2.5-200m-pytorch
+    max_context: 1024
+    infer_is_positive: false
+  timesfm_2p5_no_fix_crossing:
+    enabled: true
+    runner: timesfm_2p5
+    model_id: google/timesfm-2.5-200m-pytorch
+    max_context: 1024
+    fix_quantile_crossing: false

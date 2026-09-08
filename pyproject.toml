@@ -18,17 +18,20 @@ dependencies = [
   "tabpfn>=8.0.8",
   "timesfm[torch]>=2.0.1",
   "matplotlib>=3.8,<4.0",
+  "prophet>=1.1.6,<2.0",
+  "chronos-forecasting>=1.4,<2.0",
+  "statsmodels>=0.14,<0.15",
 ]
 
 [project.optional-dependencies]
 tabpfn = [
-  "tabpfn>=2.5",
+  "tabpfn>=8.0.8",
 ]
 timesfm = [
   "timesfm[torch]>=2.0",
 ]
 all = [
-  "tabpfn>=2.5",
+  "tabpfn>=8.0.8",
   "timesfm[torch]>=2.0",
 ]
 

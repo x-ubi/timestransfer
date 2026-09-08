@@ -1,4 +1,4 @@
-from timestransfer.config import dataset_configs
+from timestransfer.config import dataset_configs, enabled_model_names
 
 
 def test_dataset_configs_supports_old_single_dataset_shape():
@@ -30,3 +30,15 @@ def test_dataset_configs_supports_multi_dataset_shape():
     assert datasets[0]["features"]["lags"] == [1, 24]
     assert datasets[1]["features"]["lags"] == [1, 48]
     assert datasets[1]["features"]["train_row_cap"] == 10
+
+
+def test_enabled_model_names_preserves_config_order():
+    config = {
+        "models": {
+            "seasonal_naive": {"enabled": True},
+            "tabpfn": {"enabled": False},
+            "timesfm_2p5_ctx4096": {"enabled": True, "runner": "timesfm_2p5"},
+        }
+    }
+
+    assert enabled_model_names(config) == ["seasonal_naive", "timesfm_2p5_ctx4096"]

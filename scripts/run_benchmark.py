@@ -12,8 +12,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--models",
         nargs="+",
-        choices=["linear_regression", "tabpfn", "timesfm_2p5", "auto_arima"],
-        help="Optional subset of models to run.",
+        help="Optional subset of configured model entry names to run.",
     )
     parser.add_argument(
         "--datasets",

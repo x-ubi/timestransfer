@@ -21,6 +21,18 @@ def model_enabled(config: dict[str, Any], model_name: str) -> bool:
     return bool(model_config.get("enabled", False))
 
 
+def enabled_model_names(config: dict[str, Any]) -> list[str]:
+    """Names of model entries with enabled: true, in config order."""
+    models = config.get("models", {})
+    if not isinstance(models, dict):
+        raise ValueError("config['models'] must be a mapping of model entries.")
+    return [
+        name
+        for name, model_config in models.items()
+        if isinstance(model_config, dict) and bool(model_config.get("enabled", False))
+    ]
+
+
 def dataset_configs(config: dict[str, Any]) -> list[dict[str, Any]]:
     """Normalize old single-dataset and new multi-dataset config shapes."""
     if "datasets" in config:
