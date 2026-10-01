@@ -27,7 +27,9 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Directory for analysis outputs (default: <outputs_dir>/analysis).",
     )
-    parser.add_argument("--datasets", nargs="+", help="Optional subset of configured dataset names.")
+    parser.add_argument(
+        "--datasets", nargs="+", help="Optional subset of configured dataset names."
+    )
     parser.add_argument(
         "--metric",
         default="smape",
@@ -61,9 +63,7 @@ def main() -> None:
     output_dir = Path(args.output_dir) if args.output_dir else outputs_dir / "analysis"
 
     metrics = pd.read_csv(metrics_csv, keep_default_na=True)
-    series_metrics = metrics[
-        (metrics["scope"] == "series") & (metrics["status"] == "ok")
-    ].copy()
+    series_metrics = metrics[(metrics["scope"] == "series") & (metrics["status"] == "ok")].copy()
     if series_metrics.empty:
         raise ValueError(
             f"No scope='series' rows in {metrics_csv}; run the benchmark first "

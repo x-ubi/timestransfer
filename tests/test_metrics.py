@@ -1,3 +1,4 @@
+import pytest
 import numpy as np
 import pandas as pd
 
@@ -25,7 +26,7 @@ def test_compute_metric_rows_overall_and_horizon():
     assert overall["n_obs"] == 2
     assert overall["forecast_horizon"] == 2
     assert np.isnan(overall["mase"])
-    assert set(rows["scope"]) == {"overall", "horizon", "series"}
+    assert set(rows["scope"]) == {"overall", "window", "horizon", "series"}
 
 
 def test_compute_metric_rows_series_scope_and_mase():
@@ -122,11 +123,45 @@ def test_seasonal_naive_scales_short_series_falls_back_to_lag1():
     assert scales.loc[0, "mase_scale"] == 4.0
 
 
+def test_compute_metric_rows_matches_mase_scale_per_window():
+    forecasts = pd.DataFrame(
+        {
+            "dataset": ["d"] * 4,
+            "model": ["m"] * 4,
+            "unique_id": ["a"] * 4,
+            "horizon": [1, 2, 1, 2],
+            "window": [0, 0, 1, 1],
+            "ds": [5, 6, 3, 4],
+            "y_true": [1.0, 1.0, 1.0, 1.0],
+            "y_pred": [2.0, 2.0, 3.0, 3.0],
+        }
+    )
+    scales = pd.DataFrame(
+        {"dataset": ["d", "d"], "window": [0, 1], "unique_id": ["a", "a"], "mase_scale": [1.0, 4.0]}
+    )
+
+    rows = compute_metric_rows(forecasts, mase_scales=scales)
+    windows = rows[rows["scope"] == "window"].set_index("window")["mase"]
+    overall = rows[rows["scope"] == "overall"].iloc[0]
+
+    assert windows.loc[0] == pytest.approx(1.0)
+    assert windows.loc[1] == pytest.approx(0.5)
+    assert overall["mase"] == pytest.approx(0.75)
+    assert overall["n_obs"] == 4
+
+
+def test_failure_metric_row_records_skipped_status():
+    row = failure_metric_row("ett_m1_h48", "auto_arima", "season too long", status="skipped")
+
+    assert row["status"] == "skipped"
+    assert row["scope"] == "model_status"
+
+
 def test_failure_metric_row_schema():
-    row = failure_metric_row("m4_hourly", "tabpfn", "missing dependency")
+    row = failure_metric_row("m4_hourly", "tabpfn_ts", "missing dependency")
 
     assert row["status"] == "failed"
     assert row["n_obs"] == 0
-    assert row["model"] == "tabpfn"
+    assert row["model"] == "tabpfn_ts"
     assert np.isnan(row["mase"])
     assert row["unique_id"] == ""

@@ -95,7 +95,9 @@ def write_forecast_plots(
 
         fig, ax = plt.subplots(figsize=(12, 5))
         if not history.empty:
-            ax.plot(history["ds"], history["y"], color="0.45", linewidth=1.2, label="history (train)")
+            ax.plot(
+                history["ds"], history["y"], color="0.45", linewidth=1.2, label="history (train)"
+            )
             ax.axvline(history["ds"].iloc[-1], color="0.7", linestyle=":", linewidth=1.0)
         ax.plot(
             actual["ds"],
@@ -106,7 +108,9 @@ def write_forecast_plots(
         )
         for model, model_group in series_forecasts.groupby("model", sort=True):
             model_group = model_group.sort_values("horizon")
-            ax.plot(model_group["ds"], model_group["y_pred"], linestyle="--", linewidth=1.2, label=model)
+            ax.plot(
+                model_group["ds"], model_group["y_pred"], linestyle="--", linewidth=1.2, label=model
+            )
         ax.set_title(f"{dataset_name} / {unique_id}")
         ax.set_xlabel("ds")
         ax.set_ylabel("y")

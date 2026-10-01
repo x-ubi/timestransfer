@@ -39,7 +39,9 @@ def dataset_configs(config: dict[str, Any]) -> list[dict[str, Any]]:
         raw_datasets = config["datasets"]
         if not isinstance(raw_datasets, list) or not raw_datasets:
             raise ValueError("config['datasets'] must be a non-empty list.")
-        return [_with_feature_defaults(dataset, config.get("features", {})) for dataset in raw_datasets]
+        return [
+            _with_feature_defaults(dataset, config.get("features", {})) for dataset in raw_datasets
+        ]
 
     if "dataset" not in config:
         raise ValueError("Config must include either 'dataset' or 'datasets'.")

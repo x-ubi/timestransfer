@@ -20,6 +20,7 @@ PACKAGE_NAMES = [
     "scikit-learn",
     "statsforecast",
     "tabpfn",
+    "tabpfn-time-series",
     "timesfm",
     "torch",
     "matplotlib",

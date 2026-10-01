@@ -35,12 +35,24 @@ def compute_metric_rows(
     forecasts: pd.DataFrame,
     mase_scales: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
+    """Score forecasts at overall, per-window, per-horizon-step and per-series scope.
+
+    Forecasts may carry a ``window`` column (rolling origins; absent means one window).
+    Overall, horizon and series rows pool all windows; ``window`` rows score each one.
+    MASE scales are matched per window, since each window has its own training history.
+    """
     scored = forecasts.copy()
+    if "window" not in scored.columns:
+        scored["window"] = 0
     if mase_scales is not None:
+        scales = mase_scales.copy()
+        if "window" not in scales.columns:
+            scales["window"] = 0
         scored = scored.merge(
-            mase_scales.loc[:, ["dataset", "unique_id", "mase_scale"]],
-            on=["dataset", "unique_id"],
+            scales.loc[:, ["dataset", "window", "unique_id", "mase_scale"]],
+            on=["dataset", "window", "unique_id"],
             how="left",
+            validate="many_to_one",
         )
     else:
         scored["mase_scale"] = np.nan
@@ -59,6 +71,19 @@ def compute_metric_rows(
                 group=group,
             )
         )
+        for window, window_group in group.groupby("window", sort=True):
+            rows.append(
+                _metric_row(
+                    dataset=dataset,
+                    model=model,
+                    scope="window",
+                    horizon="",
+                    unique_id="",
+                    forecast_horizon=forecast_horizon,
+                    group=window_group,
+                    window=int(window),
+                )
+            )
         for horizon, horizon_group in group.groupby("horizon", sort=True):
             rows.append(
                 _metric_row(
@@ -86,20 +111,27 @@ def compute_metric_rows(
     return pd.DataFrame(rows)
 
 
-def failure_metric_row(dataset: str, model: str, error: str, forecast_horizon: int | str = "") -> dict[str, object]:
+def failure_metric_row(
+    dataset: str,
+    model: str,
+    error: str,
+    forecast_horizon: int | str = "",
+    status: str = "failed",
+) -> dict[str, object]:
     return {
         "dataset": dataset,
         "model": model,
         "scope": "model_status",
         "horizon": "",
         "unique_id": "",
+        "window": "",
         "forecast_horizon": forecast_horizon,
         "mae": np.nan,
         "rmse": np.nan,
         "smape": np.nan,
         "mase": np.nan,
         "n_obs": 0,
-        "status": "failed",
+        "status": status,
         "error": error,
     }
 
@@ -112,6 +144,7 @@ def _metric_row(
     unique_id: str,
     forecast_horizon: int,
     group: pd.DataFrame,
+    window: int | str = "",
 ) -> dict[str, object]:
     y_true = group["y_true"].to_numpy(dtype=float)
     y_pred = group["y_pred"].to_numpy(dtype=float)
@@ -122,10 +155,13 @@ def _metric_row(
         "scope": scope,
         "horizon": horizon,
         "unique_id": unique_id,
+        "window": window,
         "forecast_horizon": forecast_horizon,
         "mae": float(np.mean(np.abs(error))),
         "rmse": float(np.sqrt(np.mean(np.square(error)))),
-        "smape": float(np.mean(200.0 * np.abs(error) / (np.abs(y_true) + np.abs(y_pred) + EPSILON))),
+        "smape": float(
+            np.mean(200.0 * np.abs(error) / (np.abs(y_true) + np.abs(y_pred) + EPSILON))
+        ),
         "mase": _mase(error=error, scales=group["mase_scale"].to_numpy(dtype=float)),
         "n_obs": int(len(group)),
         "status": "ok",

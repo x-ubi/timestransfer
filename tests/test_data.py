@@ -90,9 +90,7 @@ def test_load_long_horizon2_rejects_unknown_group(tmp_path):
 def test_load_dataset_dispatches_long_horizon2(monkeypatch, tmp_path):
     from datasetsforecast import long_horizon2
 
-    raw = pd.DataFrame(
-        {"unique_id": ["OT"], "ds": ["2016-07-01 00:00:00"], "y": ["1.0"]}
-    )
+    raw = pd.DataFrame({"unique_id": ["OT"], "ds": ["2016-07-01 00:00:00"], "y": ["1.0"]})
     monkeypatch.setattr(
         long_horizon2.LongHorizon2,
         "load",
@@ -123,12 +121,8 @@ def test_ensure_datetime_ds_maps_integer_ds_to_synthetic_hours():
 
 
 def test_ensure_datetime_ds_passes_datetime_through():
-    train = pd.DataFrame(
-        {"unique_id": ["a"], "ds": pd.to_datetime(["2016-07-01"]), "y": [1.0]}
-    )
-    test = pd.DataFrame(
-        {"unique_id": ["a"], "ds": pd.to_datetime(["2016-07-02"]), "y": [2.0]}
-    )
+    train = pd.DataFrame({"unique_id": ["a"], "ds": pd.to_datetime(["2016-07-01"]), "y": [1.0]})
+    test = pd.DataFrame({"unique_id": ["a"], "ds": pd.to_datetime(["2016-07-02"]), "y": [2.0]})
 
     train_out, test_out = ensure_datetime_ds(train, test, time_freq="h")
 

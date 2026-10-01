@@ -148,23 +148,45 @@ def select_series(df: pd.DataFrame, series_limit: int | None) -> pd.DataFrame:
     return selected.sort_values(["unique_id", "ds"], kind="mergesort").reset_index(drop=True)
 
 
-def fixed_train_test_split(df: pd.DataFrame, horizon: int) -> DatasetSplit:
-    """Use the last horizon observations of every series as test."""
+def fixed_train_test_split(df: pd.DataFrame, horizon: int, offset: int = 0) -> DatasetSplit:
+    """Use ``horizon`` observations ending ``offset`` steps before each series' end as test.
+
+    Train is everything before the test window; observations after it are dropped, so a
+    window with ``offset > 0`` sees no future data. ``offset=0`` is the final holdout.
+    """
     if horizon <= 0:
         raise ValueError("horizon must be positive.")
+    if offset < 0:
+        raise ValueError("offset must be non-negative.")
 
     train_parts: list[pd.DataFrame] = []
     test_parts: list[pd.DataFrame] = []
 
     for unique_id, group in df.sort_values(["unique_id", "ds"]).groupby("unique_id", sort=True):
-        if len(group) <= horizon:
+        if len(group) <= horizon + offset:
             raise ValueError(
                 f"Series {unique_id!r} has length {len(group)}, which is not greater than "
-                f"horizon {horizon}."
+                f"horizon {horizon} plus offset {offset}."
             )
-        test_parts.append(group.tail(horizon))
-        train_parts.append(group.iloc[:-horizon])
+        end = len(group) - offset
+        test_parts.append(group.iloc[end - horizon : end])
+        train_parts.append(group.iloc[: end - horizon])
 
     train = pd.concat(train_parts, ignore_index=True)
     test = pd.concat(test_parts, ignore_index=True)
     return DatasetSplit(train=train, test=test)
+
+
+def rolling_origin_splits(
+    df: pd.DataFrame, horizon: int, n_windows: int, stride: int | None = None
+) -> list[DatasetSplit]:
+    """Non-overlapping (by default) evaluation windows; index 0 is the final holdout.
+
+    Window ``k`` tests on the ``horizon`` points ending ``k * stride`` steps before the end.
+    """
+    if n_windows <= 0:
+        raise ValueError("n_windows must be positive.")
+    stride = horizon if stride is None else int(stride)
+    if stride <= 0:
+        raise ValueError("stride must be positive.")
+    return [fixed_train_test_split(df, horizon, offset=k * stride) for k in range(n_windows)]

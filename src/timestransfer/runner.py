@@ -7,17 +7,17 @@ from typing import Any, Callable
 import pandas as pd
 
 from timestransfer.config import dataset_configs, enabled_model_names, load_config
-from timestransfer.data import DatasetSplit, fixed_train_test_split, load_dataset, select_series
+from timestransfer.data import DatasetSplit, load_dataset, rolling_origin_splits, select_series
 from timestransfer.features import FeatureBundle, build_lag_feature_bundle
 from timestransfer.metadata import build_environment_metadata, write_json
 from timestransfer.metrics import compute_metric_rows, failure_metric_row, seasonal_naive_scales
 from timestransfer.models import (
     ModelRunResult,
-    run_chronos_bolt,
+    run_chronos2,
     run_linear_regression,
     run_prophet,
     run_statsforecast_model,
-    run_tabpfn,
+    run_tabpfn_ts,
     run_timesfm_2p5,
 )
 from timestransfer.reporting import write_reporting_outputs
@@ -33,6 +33,7 @@ class DatasetRunContext:
     split: DatasetSplit
     bundle: FeatureBundle
     seed: int
+    window: int = 0
 
 
 ModelEntryRunner = Callable[[str, dict[str, Any], DatasetRunContext], ModelRunResult]
@@ -52,6 +53,7 @@ _STATSFORECAST_RESERVED_KEYS = {
     "n_jobs",
     "season_length",
     "max_train_length",
+    "max_season_length",
 }
 
 
@@ -61,14 +63,20 @@ def _run_linear_regression_entry(
     return run_linear_regression(ctx.bundle, ctx.dataset_name, model_name=model_name)
 
 
-def _run_tabpfn_entry(
+def _run_tabpfn_ts_entry(
     model_name: str, model_cfg: dict[str, Any], ctx: DatasetRunContext
 ) -> ModelRunResult:
-    return run_tabpfn(
-        ctx.bundle,
+    model_version = model_cfg.get("model_version")
+    return run_tabpfn_ts(
+        ctx.split.train,
+        ctx.split.test,
         ctx.dataset_name,
         model_name=model_name,
-        prediction_batch_size=int(model_cfg.get("prediction_batch_size", 1024)),
+        horizon=ctx.horizon,
+        time_freq=str(ctx.dataset_config.get("time_freq", ctx.freq)),
+        model_version=str(model_version) if model_version is not None else None,
+        max_context_length=int(model_cfg.get("max_context_length", 32768)),
+        output_selection=str(model_cfg.get("output_selection", "median")),
     )
 
 
@@ -86,6 +94,7 @@ def _run_timesfm_entry(
         max_horizon=int(model_cfg.get("max_horizon", ctx.horizon)),
         horizon=ctx.horizon,
         forecast_config_overrides=overrides or None,
+        revision=_optional_str(model_cfg.get("revision")),
     )
 
 
@@ -114,22 +123,40 @@ def _run_prophet_entry(
 def _run_chronos_entry(
     model_name: str, model_cfg: dict[str, Any], ctx: DatasetRunContext
 ) -> ModelRunResult:
-    return run_chronos_bolt(
+    return run_chronos2(
         ctx.split.train,
         ctx.split.test,
         ctx.dataset_name,
         model_name=model_name,
         horizon=ctx.horizon,
-        model_id=str(model_cfg.get("model_id", "amazon/chronos-bolt-base")),
-        context_length=int(model_cfg.get("context_length", 2048)),
-        batch_size=int(model_cfg.get("batch_size", 64)),
+        model_id=str(model_cfg.get("model_id", "amazon/chronos-2")),
+        revision=_optional_str(model_cfg.get("revision")),
+        context_length=int(model_cfg.get("context_length", 8192)),
+        batch_size=int(model_cfg.get("batch_size", 100)),
         device_map=str(model_cfg.get("device_map", "cuda")),
     )
 
 
 def _make_statsforecast_entry(estimator: str) -> ModelEntryRunner:
-    def _entry(model_name: str, model_cfg: dict[str, Any], ctx: DatasetRunContext) -> ModelRunResult:
+    def _entry(
+        model_name: str, model_cfg: dict[str, Any], ctx: DatasetRunContext
+    ) -> ModelRunResult:
         max_train_length = model_cfg.get("max_train_length")
+        season_length = int(model_cfg.get("season_length", ctx.seasonality))
+        max_season_length = model_cfg.get("max_season_length")
+        if max_season_length is not None and season_length > int(max_season_length):
+            return ModelRunResult(
+                model=model_name,
+                status="skipped",
+                forecasts=None,
+                details={
+                    "estimator": estimator,
+                    "message": (
+                        f"Skipped: season_length {season_length} exceeds max_season_length "
+                        f"{int(max_season_length)} (seasonal search infeasible at this period)."
+                    ),
+                },
+            )
         return run_statsforecast_model(
             ctx.split.train,
             ctx.split.test,
@@ -153,15 +180,19 @@ def _make_statsforecast_entry(estimator: str) -> ModelEntryRunner:
 
 MODEL_RUNNERS: dict[str, ModelEntryRunner] = {
     "linear_regression": _run_linear_regression_entry,
-    "tabpfn": _run_tabpfn_entry,
+    "tabpfn_ts": _run_tabpfn_ts_entry,
     "timesfm_2p5": _run_timesfm_entry,
     "auto_arima": _make_statsforecast_entry("AutoARIMA"),
     "seasonal_naive": _make_statsforecast_entry("SeasonalNaive"),
     "auto_ets": _make_statsforecast_entry("AutoETS"),
     "auto_theta": _make_statsforecast_entry("AutoTheta"),
     "prophet": _run_prophet_entry,
-    "chronos_bolt": _run_chronos_entry,
+    "chronos2": _run_chronos_entry,
 }
+
+
+def _optional_str(value: Any) -> str | None:
+    return None if value is None else str(value)
 
 
 def _dispatch_model(
@@ -230,60 +261,92 @@ def run_benchmark(
 
         full_df = load_dataset(data_dir=data_dir, dataset_config=dataset_config)
         df = select_series(full_df, effective_series_limit)
-        split = fixed_train_test_split(df, horizon=horizon)
-
+        n_windows = int(dataset_config.get("n_windows", project.get("n_windows", 1)))
+        window_stride = dataset_config.get("window_stride", project.get("window_stride"))
+        splits = rolling_origin_splits(
+            df,
+            horizon=horizon,
+            n_windows=n_windows,
+            stride=int(window_stride) if window_stride is not None else None,
+        )
         mase_seasonality = int(dataset_config.get("mase_seasonality", seasonality))
-        dataset_mase_scales = seasonal_naive_scales(split.train, mase_seasonality)
-        dataset_mase_scales.insert(0, "dataset", dataset_name)
-        mase_scale_frames.append(dataset_mase_scales)
 
-        bundle = build_lag_feature_bundle(
-            split.train,
-            split.test,
-            horizon=horizon,
-            seasonality=seasonality,
-            lags=[int(lag) for lag in feature_config["lags"]],
-            train_row_cap=feature_config.get("train_row_cap"),
-            seed=seed,
-        )
+        window_results: dict[str, list[ModelRunResult]] = {name: [] for name in requested_models}
+        bundle_rows: list[int] = []
+        feature_columns: list[str] = []
+        for window, split in enumerate(splits):
+            window_scales = seasonal_naive_scales(split.train, mase_seasonality)
+            window_scales.insert(0, "window", window)
+            window_scales.insert(0, "dataset", dataset_name)
+            mase_scale_frames.append(window_scales)
 
-        ctx = DatasetRunContext(
-            dataset_name=dataset_name,
-            dataset_config=dataset_config,
-            horizon=horizon,
-            seasonality=seasonality,
-            freq=dataset_config.get("freq", 1),
-            split=split,
-            bundle=bundle,
-            seed=seed,
-        )
-        model_results = [
-            _dispatch_model(model_name, model_config.get(model_name, {}), ctx)
-            for model_name in requested_models
-        ]
+            bundle = build_lag_feature_bundle(
+                split.train,
+                split.test,
+                horizon=horizon,
+                seasonality=seasonality,
+                lags=[int(lag) for lag in feature_config["lags"]],
+                train_row_cap=feature_config.get("train_row_cap"),
+                seed=seed,
+            )
+            bundle_rows.append(int(len(bundle.X_train)))
+            feature_columns = bundle.feature_columns
+
+            ctx = DatasetRunContext(
+                dataset_name=dataset_name,
+                dataset_config=dataset_config,
+                horizon=horizon,
+                seasonality=seasonality,
+                freq=dataset_config.get("freq", 1),
+                split=split,
+                bundle=bundle,
+                seed=seed,
+                window=window,
+            )
+            for model_name in requested_models:
+                result = _dispatch_model(model_name, model_config.get(model_name, {}), ctx)
+                window_results[model_name].append(result)
 
         model_statuses[dataset_name] = {}
-        for result in model_results:
-            model_statuses[dataset_name][result.model] = {"status": result.status, **result.details}
-            if result.forecasts is not None and not result.forecasts.empty:
-                result_forecasts = result.forecasts.copy()
-                result_forecasts["forecast_horizon"] = horizon
-                forecast_frames.append(result_forecasts)
-                forecast_path = forecasts_dir / f"{dataset_name}_{result.model}.parquet"
-                result_forecasts.to_parquet(forecast_path, index=False)
-            else:
+        for model_name, results in window_results.items():
+            # A model is scored on a task only if every window succeeded; partial pooling
+            # would compare models on different windows.
+            first_bad = next((r for r in results if r.status != "ok"), None)
+            status = "ok" if first_bad is None else first_bad.status
+            model_statuses[dataset_name][model_name] = {
+                "status": status,
+                "n_windows": len(results),
+                "n_windows_ok": sum(r.status == "ok" for r in results),
+                **results[0].details,
+                **({} if first_bad is None else first_bad.details),
+            }
+            if first_bad is not None:
                 metric_frames.append(
                     pd.DataFrame(
                         [
                             failure_metric_row(
                                 dataset=dataset_name,
-                                model=result.model,
-                                error=result.details.get("error", result.details.get("message", "")),
+                                model=model_name,
+                                error=first_bad.details.get(
+                                    "error", first_bad.details.get("message", "")
+                                ),
                                 forecast_horizon=horizon,
+                                status=first_bad.status,
                             )
                         ]
                     )
                 )
+                continue
+            frames = []
+            for window, result in enumerate(results):
+                frame = result.forecasts.copy()
+                frame["window"] = window
+                frame["forecast_horizon"] = horizon
+                frames.append(frame)
+            result_forecasts = pd.concat(frames, ignore_index=True)
+            forecast_frames.append(result_forecasts)
+            forecast_path = forecasts_dir / f"{dataset_name}_{model_name}.parquet"
+            result_forecasts.to_parquet(forecast_path, index=False)
 
         dataset_summaries.append(
             {
@@ -293,19 +356,19 @@ def run_benchmark(
                 "horizon": horizon,
                 "seasonality": seasonality,
                 "freq": dataset_config.get("freq", 1),
+                "n_windows": n_windows,
+                "window_stride": int(window_stride) if window_stride is not None else horizon,
                 "full_series_count": int(full_df["unique_id"].nunique()),
                 "evaluated_series_count": int(df["unique_id"].nunique()),
                 "series_limit": effective_series_limit,
-                "train_rows": int(len(split.train)),
-                "test_rows": int(len(split.test)),
-                "lag_feature_train_rows": int(len(bundle.X_train)),
-                "lag_feature_columns": bundle.feature_columns,
+                "train_rows_final_window": int(len(splits[0].train)),
+                "test_rows_per_window": int(len(splits[0].test)),
+                "lag_feature_train_rows_per_window": bundle_rows,
+                "lag_feature_columns": feature_columns,
             }
         )
 
-    mase_scales = (
-        pd.concat(mase_scale_frames, ignore_index=True) if mase_scale_frames else None
-    )
+    mase_scales = pd.concat(mase_scale_frames, ignore_index=True) if mase_scale_frames else None
     if mase_scales is not None:
         mase_scales.to_csv(metrics_dir / "mase_scales.csv", index=False)
 

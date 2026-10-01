@@ -16,6 +16,7 @@ project:
   seed: 42
   data_dir: data
   outputs_dir: outputs/timesfm_tuning
+  n_windows: 5
 
 lag_presets:
   m4_hourly: &m4_hourly_lags [
@@ -93,60 +94,71 @@ models:
     enabled: true
     runner: timesfm_2p5
     model_id: google/timesfm-2.5-200m-pytorch
+    revision: 1d952420fba87f3c6dee4f240de0f1a0fbc790e3
     max_context: 512
   timesfm_2p5_ctx1024:  # baseline for both the sweep and the flag ablation
     enabled: true
     runner: timesfm_2p5
     model_id: google/timesfm-2.5-200m-pytorch
+    revision: 1d952420fba87f3c6dee4f240de0f1a0fbc790e3
     max_context: 1024
   timesfm_2p5_ctx2048:
     enabled: true
     runner: timesfm_2p5
     model_id: google/timesfm-2.5-200m-pytorch
+    revision: 1d952420fba87f3c6dee4f240de0f1a0fbc790e3
     max_context: 2048
   timesfm_2p5_ctx4096:
     enabled: true
     runner: timesfm_2p5
     model_id: google/timesfm-2.5-200m-pytorch
+    revision: 1d952420fba87f3c6dee4f240de0f1a0fbc790e3
     max_context: 4096
   timesfm_2p5_ctx8192:
     enabled: true
     runner: timesfm_2p5
     model_id: google/timesfm-2.5-200m-pytorch
+    revision: 1d952420fba87f3c6dee4f240de0f1a0fbc790e3
     max_context: 8192
   timesfm_2p5_ctx16256:
     enabled: true
     runner: timesfm_2p5
     model_id: google/timesfm-2.5-200m-pytorch
+    revision: 1d952420fba87f3c6dee4f240de0f1a0fbc790e3
     max_context: 16256
   # --- flag ablation (one flag flipped vs the ctx1024 baseline) ---
   timesfm_2p5_no_normalize:
     enabled: true
     runner: timesfm_2p5
     model_id: google/timesfm-2.5-200m-pytorch
+    revision: 1d952420fba87f3c6dee4f240de0f1a0fbc790e3
     max_context: 1024
     normalize_inputs: false
   timesfm_2p5_no_quantile_head:
     enabled: true
     runner: timesfm_2p5
     model_id: google/timesfm-2.5-200m-pytorch
+    revision: 1d952420fba87f3c6dee4f240de0f1a0fbc790e3
     max_context: 1024
     use_continuous_quantile_head: false
   timesfm_2p5_no_flip_invariance:
     enabled: true
     runner: timesfm_2p5
     model_id: google/timesfm-2.5-200m-pytorch
+    revision: 1d952420fba87f3c6dee4f240de0f1a0fbc790e3
     max_context: 1024
     force_flip_invariance: false
   timesfm_2p5_no_infer_positive:
     enabled: true
     runner: timesfm_2p5
     model_id: google/timesfm-2.5-200m-pytorch
+    revision: 1d952420fba87f3c6dee4f240de0f1a0fbc790e3
     max_context: 1024
     infer_is_positive: false
   timesfm_2p5_no_fix_crossing:
     enabled: true
     runner: timesfm_2p5
     model_id: google/timesfm-2.5-200m-pytorch
+    revision: 1d952420fba87f3c6dee4f240de0f1a0fbc790e3
     max_context: 1024
     fix_quantile_crossing: false

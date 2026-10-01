@@ -7,9 +7,7 @@ import pandas as pd
 from timestransfer.series_features import FEATURE_COLUMNS
 
 
-def join_features_and_metrics(
-    features: pd.DataFrame, series_metrics: pd.DataFrame
-) -> pd.DataFrame:
+def join_features_and_metrics(features: pd.DataFrame, series_metrics: pd.DataFrame) -> pd.DataFrame:
     """Join per-series features (with a dataset column) onto scope="series" metric rows."""
     return series_metrics.merge(features, on=["dataset", "unique_id"], how="inner")
 
@@ -68,9 +66,7 @@ def write_analysis_outputs(
     joined_path = output_dir / "series_features_with_metrics.csv"
     joined.to_csv(joined_path, index=False)
 
-    correlations = spearman_correlations(
-        joined, feature_columns=feature_columns, metric=metric
-    )
+    correlations = spearman_correlations(joined, feature_columns=feature_columns, metric=metric)
     correlations_path = output_dir / "feature_metric_correlations.csv"
     correlations.to_csv(correlations_path, index=False)
 
@@ -88,9 +84,7 @@ def write_analysis_outputs(
     heatmap = pooled.pivot_table(index="model", columns="feature", values="spearman_rho")
     heatmap = heatmap.reindex(columns=[c for c in feature_columns if c in heatmap.columns])
     if not heatmap.empty:
-        fig, ax = plt.subplots(
-            figsize=(1.2 * len(heatmap.columns) + 3, 0.5 * len(heatmap) + 2)
-        )
+        fig, ax = plt.subplots(figsize=(1.2 * len(heatmap.columns) + 3, 0.5 * len(heatmap) + 2))
         image = ax.imshow(heatmap.to_numpy(), cmap="RdBu_r", vmin=-1.0, vmax=1.0)
         ax.set_xticks(range(len(heatmap.columns)), heatmap.columns, rotation=45, ha="right")
         ax.set_yticks(range(len(heatmap.index)), heatmap.index)

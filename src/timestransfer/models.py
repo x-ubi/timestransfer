@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import hashlib
+import os
+from pathlib import Path
 from typing import Any
 import warnings
 
@@ -49,49 +52,142 @@ def run_linear_regression(
     )
 
 
-def run_tabpfn(
-    bundle: FeatureBundle,
+_TABPFN_CHECKPOINT_SHA256_CACHE: dict[str, str] = {}
+
+
+def run_tabpfn_ts(
+    train_df: pd.DataFrame,
+    test_df: pd.DataFrame,
     dataset_name: str,
     *,
-    model_name: str = "tabpfn",
-    prediction_batch_size: int = 1024,
+    horizon: int,
+    time_freq: str,
+    model_name: str = "tabpfn_ts",
+    model_version: str | None = None,
+    max_context_length: int = 32768,
+    output_selection: str = "median",
 ) -> ModelRunResult:
+    """Forecast each series with the published TabPFN-TS pipeline (local inference).
+
+    TabPFN-TS fits TabPFN per series on running-index, calendar, and auto-detected
+    seasonal features of the timestamps; no lag features. ``model_version=None`` keeps
+    the checkpoint pinned by the installed tabpfn-time-series release.
+    """
+    # Checked by tabpfn-common-utils at import/predict time; keep benchmark runs offline.
+    os.environ.setdefault("TABPFN_DISABLE_TELEMETRY", "1")
     try:
         import tabpfn
-        from tabpfn import TabPFNRegressor
+        import tabpfn_time_series
+        from tabpfn_time_series import TabPFNMode, TabPFNTSPipeline
+        from tabpfn_time_series.defaults import TABPFN_MODEL_VERSION
     except Exception as exc:
-        return _failed_result(model_name, exc, "TabPFN import failed.")
+        return _failed_result(model_name, exc, "TabPFN-TS import failed.")
 
     try:
-        regressor = TabPFNRegressor()
-        regressor.fit(bundle.X_train.to_numpy(dtype=np.float32), bundle.y_train.to_numpy(dtype=np.float32))
-        predictions: list[np.ndarray] = []
-        X_test = bundle.X_test.to_numpy(dtype=np.float32)
-        for start in range(0, len(X_test), prediction_batch_size):
-            stop = start + prediction_batch_size
-            predictions.append(np.asarray(regressor.predict(X_test[start:stop]), dtype=float))
-        y_pred_scaled = np.concatenate(predictions)
-        forecasts = _forecast_frame(
-            dataset_name=dataset_name,
-            model=model_name,
-            test_index=bundle.test_index,
-            y_pred_scaled=y_pred_scaled,
+        from timestransfer.data import ensure_datetime_ds
+
+        tabpfn_model_config: dict[str, Any] = {}
+        resolved_version = model_version or TABPFN_MODEL_VERSION
+        if model_version is not None:
+            from tabpfn import TabPFNRegressor
+            from tabpfn.constants import ModelVersion
+
+            tabpfn_model_config["model_path"] = TabPFNRegressor.create_default_for_version(
+                ModelVersion(model_version)
+            ).model_path
+
+        pipeline = TabPFNTSPipeline(
+            max_context_length=max_context_length,
+            tabpfn_mode=TabPFNMode.LOCAL,
+            tabpfn_output_selection=output_selection,
+            tabpfn_model_config=tabpfn_model_config,
         )
+
+        train_dt, test_dt = ensure_datetime_ds(train_df, test_df, time_freq=time_freq)
+        context = train_dt.loc[:, ["unique_id", "ds", "y"]].rename(
+            columns={"unique_id": "item_id", "ds": "timestamp", "y": "target"}
+        )
+        context["item_id"] = context["item_id"].astype(str)
+        future = test_dt.loc[:, ["unique_id", "ds"]].rename(
+            columns={"unique_id": "item_id", "ds": "timestamp"}
+        )
+        future["item_id"] = future["item_id"].astype(str)
+
+        predictions = pipeline.predict_df(context, future_df=future, quantiles=[0.5])
+        predictions = predictions.reset_index()
+        pred_groups = {
+            str(unique_id): group.sort_values("timestamp")["target"].to_numpy(dtype=float)
+            for unique_id, group in predictions.groupby("item_id", sort=True)
+        }
+        train_nonnegative = (
+            train_df.groupby("unique_id", sort=True)["y"].min().astype(float).ge(0.0).to_dict()
+        )
+
+        rows: list[dict[str, object]] = []
+        for unique_id, test_group in test_df.groupby("unique_id", sort=True):
+            unique_id = str(unique_id)
+            test_group = test_group.sort_values("ds").reset_index(drop=True)
+            point_forecast = pred_groups.get(unique_id)
+            if point_forecast is None or point_forecast.shape != (horizon,):
+                raise ValueError(
+                    f"TabPFN-TS returned {None if point_forecast is None else point_forecast.shape} "
+                    f"predictions for {unique_id!r}; expected ({horizon},)."
+                )
+            for h in range(1, horizon + 1):
+                y_pred = float(point_forecast[h - 1])
+                if train_nonnegative.get(unique_id, False):
+                    y_pred = max(0.0, y_pred)
+                test_row = test_group.iloc[h - 1]
+                rows.append(
+                    {
+                        "dataset": dataset_name,
+                        "model": model_name,
+                        "unique_id": unique_id,
+                        "horizon": h,
+                        "ds": test_row["ds"],
+                        "y_true": float(test_row["y"]),
+                        "y_pred": y_pred,
+                    }
+                )
+
+        model_path = Path(pipeline.predictor.inference_routine.__self__.model_config["model_path"])
         return ModelRunResult(
             model=model_name,
             status="ok",
-            forecasts=forecasts,
+            forecasts=pd.DataFrame(rows),
             details={
-                "estimator": "tabpfn.TabPFNRegressor",
+                "estimator": "tabpfn_time_series.TabPFNTSPipeline",
+                "tabpfn_time_series_version": getattr(tabpfn_time_series, "__version__", "unknown"),
                 "tabpfn_version": getattr(tabpfn, "__version__", "unknown"),
-                "prediction_batch_size": prediction_batch_size,
+                "tabpfn_mode": "local",
+                "model_version": resolved_version,
+                "checkpoint": model_path.name,
+                "checkpoint_sha256": _file_sha256(model_path),
+                "max_context_length": max_context_length,
+                "temporal_features": [
+                    type(feature).__name__
+                    for feature in pipeline.feature_transformer.feature_generators
+                ],
+                "point_forecast": output_selection,
             },
         )
     except Exception as exc:
-        return _failed_result(model_name, exc, "TabPFN fit/predict failed.")
+        return _failed_result(model_name, exc, "TabPFN-TS load/forecast failed.")
+
+
+def _file_sha256(path: Path) -> str:
+    key = str(path.resolve())
+    if key not in _TABPFN_CHECKPOINT_SHA256_CACHE:
+        digest = hashlib.sha256()
+        with path.open("rb") as handle:
+            for chunk in iter(lambda: handle.read(1 << 20), b""):
+                digest.update(chunk)
+        _TABPFN_CHECKPOINT_SHA256_CACHE[key] = digest.hexdigest()
+    return _TABPFN_CHECKPOINT_SHA256_CACHE[key]
 
 
 _TIMESFM_CHECKPOINT_CACHE: dict[str, Any] = {}
+_CHRONOS_PIPELINE_CACHE: dict[str, Any] = {}
 
 
 def run_timesfm_2p5(
@@ -105,6 +201,7 @@ def run_timesfm_2p5(
     horizon: int,
     model_name: str = "timesfm_2p5",
     forecast_config_overrides: dict[str, Any] | None = None,
+    revision: str | None = None,
 ) -> ModelRunResult:
     try:
         import timesfm
@@ -113,11 +210,16 @@ def run_timesfm_2p5(
 
     try:
         if horizon > max_horizon:
-            raise ValueError(f"Requested horizon {horizon} exceeds configured max_horizon {max_horizon}.")
+            raise ValueError(
+                f"Requested horizon {horizon} exceeds configured max_horizon {max_horizon}."
+            )
 
-        if model_id not in _TIMESFM_CHECKPOINT_CACHE:
-            _TIMESFM_CHECKPOINT_CACHE[model_id] = timesfm.TimesFM_2p5_200M_torch.from_pretrained(model_id)
-        model = _TIMESFM_CHECKPOINT_CACHE[model_id]
+        cache_key = f"{model_id}@{revision}"
+        if cache_key not in _TIMESFM_CHECKPOINT_CACHE:
+            _TIMESFM_CHECKPOINT_CACHE[cache_key] = timesfm.TimesFM_2p5_200M_torch.from_pretrained(
+                model_id, revision=revision
+            )
+        model = _TIMESFM_CHECKPOINT_CACHE[cache_key]
         config = _make_timesfm_forecast_config(
             timesfm,
             max_context=max_context,
@@ -129,14 +231,18 @@ def run_timesfm_2p5(
         inputs: list[np.ndarray] = []
         unique_ids: list[str] = []
         train_nonnegative: dict[str, bool] = {}
-        for unique_id, group in train_df.sort_values(["unique_id", "ds"]).groupby("unique_id", sort=True):
+        for unique_id, group in train_df.sort_values(["unique_id", "ds"]).groupby(
+            "unique_id", sort=True
+        ):
             values = group["y"].to_numpy(dtype=np.float32)
             inputs.append(values[-max_context:])
             unique_ids.append(str(unique_id))
             train_nonnegative[str(unique_id)] = bool(np.nanmin(values) >= 0)
 
         forecast_output = model.forecast(horizon=horizon, inputs=inputs)
-        point_forecast = forecast_output[0] if isinstance(forecast_output, tuple) else forecast_output
+        point_forecast = (
+            forecast_output[0] if isinstance(forecast_output, tuple) else forecast_output
+        )
         point_forecast = np.asarray(point_forecast, dtype=float)
         if point_forecast.shape != (len(unique_ids), horizon):
             raise ValueError(
@@ -174,7 +280,9 @@ def run_timesfm_2p5(
             forecasts=pd.DataFrame(rows),
             details={
                 "estimator": "timesfm.TimesFM_2p5_200M_torch",
+                "timesfm_version": _package_version("timesfm"),
                 "model_id": model_id,
+                "revision": revision,
                 "max_context": max_context,
                 "max_horizon": max_horizon,
                 "forecast_config": _timesfm_forecast_config_kwargs(
@@ -532,20 +640,21 @@ def run_prophet(
         return _failed_result(model_name, exc, "Prophet fit/forecast failed.")
 
 
-def run_chronos_bolt(
+def run_chronos2(
     train_df: pd.DataFrame,
     test_df: pd.DataFrame,
     dataset_name: str,
     *,
     horizon: int,
-    model_name: str = "chronos_bolt",
-    model_id: str = "amazon/chronos-bolt-base",
-    context_length: int = 2048,
-    batch_size: int = 64,
+    model_name: str = "chronos2",
+    model_id: str = "amazon/chronos-2",
+    revision: str | None = None,
+    context_length: int = 8192,
+    batch_size: int = 100,
     device_map: str = "cuda",
 ) -> ModelRunResult:
+    """Univariate Chronos-2 median forecasts; cross-learning is off so series stay independent."""
     try:
-        import chronos
         from chronos import BaseChronosPipeline
     except Exception as exc:
         return _failed_result(model_name, exc, "Chronos import failed.")
@@ -553,11 +662,16 @@ def run_chronos_bolt(
     try:
         import torch
 
-        pipeline = BaseChronosPipeline.from_pretrained(
-            model_id,
-            device_map=device_map,
-            torch_dtype=torch.bfloat16,
-        )
+        cache_key = f"{model_id}@{revision}@{device_map}"
+        if cache_key not in _CHRONOS_PIPELINE_CACHE:
+            _CHRONOS_PIPELINE_CACHE[cache_key] = BaseChronosPipeline.from_pretrained(
+                model_id, revision=revision, device_map=device_map
+            )
+        pipeline = _CHRONOS_PIPELINE_CACHE[cache_key]
+        if type(pipeline).__name__ != "Chronos2Pipeline":
+            raise TypeError(
+                f"{model_id!r} loaded as {type(pipeline).__name__}, not Chronos2Pipeline."
+            )
 
         contexts: list[Any] = []
         unique_ids: list[str] = []
@@ -569,19 +683,21 @@ def run_chronos_bolt(
             unique_ids.append(str(unique_id))
             train_nonnegative[str(unique_id)] = bool(np.nanmin(values) >= 0.0)
 
-        batches: list[np.ndarray] = []
-        for start in range(0, len(contexts), batch_size):
-            quantiles, _ = pipeline.predict_quantiles(
-                context=contexts[start : start + batch_size],
-                prediction_length=horizon,
-                quantile_levels=[0.5],
-                limit_prediction_length=False,
-            )
-            batches.append(quantiles[..., 0].to(torch.float32).cpu().numpy())
-        point_forecast = np.concatenate(batches, axis=0).astype(float)
+        quantiles, _ = pipeline.predict_quantiles(
+            contexts,
+            prediction_length=horizon,
+            quantile_levels=[0.5],
+            batch_size=batch_size,
+            context_length=context_length,
+            cross_learning=False,
+        )
+        # One (n_variates=1, horizon, n_quantiles=1) tensor per series.
+        point_forecast = np.stack(
+            [q[0, :, 0].to(torch.float32).cpu().numpy() for q in quantiles]
+        ).astype(float)
         if point_forecast.shape != (len(unique_ids), horizon):
             raise ValueError(
-                "Chronos returned unexpected forecast shape "
+                "Chronos-2 returned unexpected forecast shape "
                 f"{point_forecast.shape}; expected {(len(unique_ids), horizon)}."
             )
 
@@ -614,17 +730,19 @@ def run_chronos_bolt(
             status="ok",
             forecasts=pd.DataFrame(rows),
             details={
-                "estimator": "chronos.BaseChronosPipeline",
-                "chronos_version": getattr(chronos, "__version__", "unknown"),
+                "estimator": "chronos.Chronos2Pipeline",
+                "chronos_version": _package_version("chronos-forecasting"),
                 "model_id": model_id,
+                "revision": revision,
                 "context_length": context_length,
+                "model_context_length": int(pipeline.model_context_length),
                 "batch_size": batch_size,
+                "cross_learning": False,
                 "point_forecast": "median",
-                "autoregressive_beyond_64": horizon > 64,
             },
         )
     except Exception as exc:
-        return _failed_result(model_name, exc, "Chronos load/forecast failed.")
+        return _failed_result(model_name, exc, "Chronos-2 load/forecast failed.")
 
 
 def _timesfm_forecast_config_kwargs(
@@ -658,14 +776,8 @@ def _make_timesfm_forecast_config(
         max_horizon=max_horizon,
         overrides=overrides,
     )
-    try:
-        return timesfm_module.ForecastConfig(**kwargs)
-    except TypeError:
-        return timesfm_module.ForecastConfig(
-            max_context=max_context,
-            max_horizon=max_horizon,
-            normalize_inputs=True,
-        )
+    # No fallback: silently dropping flags would make recorded metadata wrong.
+    return timesfm_module.ForecastConfig(**kwargs)
 
 
 def _forecast_frame(
@@ -675,13 +787,24 @@ def _forecast_frame(
     test_index: pd.DataFrame,
     y_pred_scaled: np.ndarray,
 ) -> pd.DataFrame:
-    frame = test_index.loc[:, ["unique_id", "horizon", "ds", "y_true", "scale", "train_nonnegative"]].copy()
+    frame = test_index.loc[
+        :, ["unique_id", "horizon", "ds", "y_true", "scale", "train_nonnegative"]
+    ].copy()
     frame["dataset"] = dataset_name
     frame["model"] = model
     frame["y_pred"] = y_pred_scaled.astype(float) * frame["scale"].astype(float).to_numpy()
     nonnegative_mask = frame["train_nonnegative"].astype(bool)
     frame.loc[nonnegative_mask, "y_pred"] = frame.loc[nonnegative_mask, "y_pred"].clip(lower=0.0)
     return frame.loc[:, ["dataset", "model", "unique_id", "horizon", "ds", "y_true", "y_pred"]]
+
+
+def _package_version(name: str) -> str:
+    from importlib.metadata import PackageNotFoundError, version
+
+    try:
+        return version(name)
+    except PackageNotFoundError:
+        return "unknown"
 
 
 def _failed_result(model: str, exc: Exception, message: str) -> ModelRunResult:

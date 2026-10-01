@@ -4,10 +4,11 @@ from timestransfer.data import fixed_train_test_split
 from timestransfer.features import build_lag_feature_bundle
 from timestransfer.models import (
     run_auto_arima,
-    run_chronos_bolt,
+    run_chronos2,
     run_linear_regression,
     run_prophet,
     run_seasonal_naive,
+    run_tabpfn_ts,
     run_timesfm_2p5,
 )
 
@@ -137,7 +138,7 @@ def test_prophet_records_import_failure(monkeypatch):
     assert "import failed" in result.details["message"]
 
 
-def test_chronos_bolt_records_import_failure(monkeypatch):
+def test_chronos2_records_import_failure(monkeypatch):
     import builtins
 
     real_import = builtins.__import__
@@ -150,16 +151,88 @@ def test_chronos_bolt_records_import_failure(monkeypatch):
     monkeypatch.setattr(builtins, "__import__", fake_import)
     df = pd.DataFrame({"unique_id": ["a"] * 6, "ds": range(1, 7), "y": range(6)})
 
-    result = run_chronos_bolt(
+    result = run_chronos2(
         df.iloc[:4],
         df.iloc[4:],
         "toy",
         horizon=2,
     )
 
-    assert result.model == "chronos_bolt"
+    assert result.model == "chronos2"
     assert result.status == "failed"
     assert "import failed" in result.details["message"]
+
+
+def test_tabpfn_ts_records_import_failure(monkeypatch):
+    import builtins
+
+    real_import = builtins.__import__
+
+    def fake_import(name, *args, **kwargs):
+        if name.startswith("tabpfn_time_series"):
+            raise ModuleNotFoundError("No module named 'tabpfn_time_series'")
+        return real_import(name, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, "__import__", fake_import)
+    df = pd.DataFrame({"unique_id": ["a"] * 6, "ds": range(1, 7), "y": range(6)})
+
+    result = run_tabpfn_ts(df.iloc[:4], df.iloc[4:], "toy", horizon=2, time_freq="h")
+
+    assert result.model == "tabpfn_ts"
+    assert result.status == "failed"
+    assert "import failed" in result.details["message"]
+
+
+def test_tabpfn_ts_maps_integer_ds_and_clips(monkeypatch, tmp_path):
+    import tabpfn_time_series
+
+    checkpoint = tmp_path / "fake.ckpt"
+    checkpoint.write_bytes(b"weights")
+    seen = {}
+
+    class FakeAdapter:
+        model_config = {"model_path": checkpoint}
+
+        def predict(self):
+            pass
+
+    class FakePipeline:
+        def __init__(self, **kwargs):
+            seen["init"] = kwargs
+            self.predictor = type("P", (), {"inference_routine": FakeAdapter().predict})()
+            self.feature_transformer = type("F", (), {"feature_generators": []})()
+
+        def predict_df(self, context_df, future_df=None, quantiles=None):
+            seen["context"] = context_df
+            seen["future"] = future_df
+            out = future_df.copy()
+            # Series "a" gets negative predictions; "b" (negative history) must stay unclipped.
+            out["target"] = -1.0
+            return out.set_index(["item_id", "timestamp"])
+
+    monkeypatch.setattr(tabpfn_time_series, "TabPFNTSPipeline", FakePipeline)
+    df = pd.DataFrame(
+        {
+            "unique_id": ["a"] * 6 + ["b"] * 6,
+            "ds": list(range(1, 7)) * 2,
+            "y": [0.0, 1, 2, 3, 4, 5, -1, 1, 2, 3, 4, 5],
+        }
+    )
+    split = fixed_train_test_split(df, horizon=2)
+
+    result = run_tabpfn_ts(
+        split.train, split.test, "toy", horizon=2, time_freq="h", max_context_length=8
+    )
+
+    assert result.status == "ok", result.details
+    assert list(result.forecasts.columns) == FORECAST_COLUMNS
+    assert result.forecasts["ds"].tolist() == [5, 6, 5, 6]
+    assert result.forecasts["y_pred"].tolist() == [0.0, 0.0, -1.0, -1.0]
+    assert seen["init"]["max_context_length"] == 8
+    assert str(seen["future"]["timestamp"].iloc[0]) == "2000-01-01 04:00:00"
+    assert set(seen["context"].columns) == {"item_id", "timestamp", "target"}
+    assert result.details["checkpoint"] == "fake.ckpt"
+    assert len(result.details["checkpoint_sha256"]) == 64
 
 
 def test_timesfm_variant_name_flows_into_result(monkeypatch):

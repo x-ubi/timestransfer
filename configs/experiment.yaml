@@ -2,6 +2,10 @@ project:
   seed: 42
   data_dir: data
   outputs_dir: outputs
+  # Rolling-origin evaluation: window 0 is the final holdout, window k ends k * horizon
+  # steps earlier (non-overlapping; stride defaults to the horizon). Every model sees only
+  # data before its window's test span.
+  n_windows: 5
 
 # Lag presets shared across datasets (resolved by YAML anchors; not read directly).
 lag_presets:
@@ -44,7 +48,7 @@ datasets:
     series_limit: null
     features:
       lags: *m4_hourly_lags
-      train_row_cap: 10000
+      train_row_cap: 200000
   - name: ett_h1_h48
     loader: long_horizon2
     group: ETTh1
@@ -56,7 +60,7 @@ datasets:
     series_limit: null
     features:
       lags: *hourly_lags
-      train_row_cap: 10000
+      train_row_cap: 200000
   - name: ett_h1_h96
     loader: long_horizon2
     group: ETTh1
@@ -68,7 +72,7 @@ datasets:
     series_limit: null
     features:
       lags: *hourly_lags
-      train_row_cap: 10000
+      train_row_cap: 200000
   - name: ett_h2_h48
     loader: long_horizon2
     group: ETTh2
@@ -80,7 +84,7 @@ datasets:
     series_limit: null
     features:
       lags: *hourly_lags
-      train_row_cap: 10000
+      train_row_cap: 200000
   - name: ett_m1_h48
     loader: long_horizon2
     group: ETTm1
@@ -92,7 +96,7 @@ datasets:
     series_limit: null
     features:
       lags: *quarter_hourly_lags
-      train_row_cap: 10000
+      train_row_cap: 200000
   - name: ett_m2_h48
     loader: long_horizon2
     group: ETTm2
@@ -104,7 +108,7 @@ datasets:
     series_limit: null
     features:
       lags: *quarter_hourly_lags
-      train_row_cap: 10000
+      train_row_cap: 200000
   - name: ecl_h48
     loader: long_horizon2
     group: ECL
@@ -116,7 +120,7 @@ datasets:
     series_limit: null
     features:
       lags: *hourly_lags
-      train_row_cap: 10000
+      train_row_cap: 200000
   - name: traffic_h48
     loader: long_horizon2
     group: TrafficL
@@ -128,7 +132,7 @@ datasets:
     series_limit: null
     features:
       lags: *hourly_lags
-      train_row_cap: 10000
+      train_row_cap: 200000
   - name: weather_h48
     loader: long_horizon2
     group: Weather
@@ -140,7 +144,7 @@ datasets:
     series_limit: null
     features:
       lags: *ten_minutely_lags
-      train_row_cap: 10000
+      train_row_cap: 200000
   - name: exchange_h48
     loader: long_horizon2
     group: Exchange
@@ -154,7 +158,7 @@ datasets:
     series_limit: null
     features:
       lags: *daily_lags
-      train_row_cap: 10000
+      train_row_cap: 200000
   - name: ili_h48
     loader: long_horizon2
     group: ILI
@@ -166,54 +170,61 @@ datasets:
     series_limit: null
     features:
       lags: *weekly_lags
-      train_row_cap: 10000
+      train_row_cap: 200000
 
 models:
+  # Pooled direct multi-horizon OLS on lag features. The row cap is per task and window;
+  # 200k rows fit in seconds (the old 10k cap was a TabPFN table-size limit).
   linear_regression:
     enabled: true
   seasonal_naive:
     enabled: true
-    n_jobs: 4
+    n_jobs: 16
   auto_ets:
     enabled: true
-    n_jobs: 4
+    n_jobs: 16
     max_train_length: 5000
   auto_theta:
     enabled: true
-    n_jobs: 4
+    n_jobs: 16
     max_train_length: 5000
+  # StatsForecast default stepwise seasonal AutoARIMA search. Seasonal ARIMA is not run
+  # for season lengths above 52 (ETTm: 96, Weather: 144): one ETTm1 fit at m=96 did not
+  # finish in ~35 min, so those tasks are recorded as skipped.
   auto_arima:
     enabled: true
-    n_jobs: 4
+    n_jobs: 16
     max_train_length: 5000
-    approximation: true
-    seasonal: false
-    nmodels: 5
-    start_p: 0
-    start_q: 0
-    start_P: 0
-    start_Q: 0
-    max_p: 1
-    max_q: 1
-    max_P: 0
-    max_Q: 0
-    max_order: 2
-    max_d: 1
-    max_D: 0
-    allowdrift: false
+    max_season_length: 52
   prophet:
     enabled: true
-    n_jobs: 4
+    n_jobs: 16
     max_train_length: 4320
-  tabpfn:
+  # Published TabPFN-TS configuration (Hoo et al., arXiv:2501.02945 v4): TabPFN-v2
+  # regressor, most recent 4096 observations. Pipeline code from tabpfn-time-series 1.3.0.
+  tabpfn_ts:
     enabled: true
-    prediction_batch_size: 1024
+    model_version: v2
+    max_context_length: 4096
+    output_selection: median
+  # Same pipeline with the release's pinned TabPFN v3.5 checkpoint (synthetic-only
+  # pretraining) and its shipped context default. Requires accepting the TabPFN-3.5
+  # license at ux.priorlabs.ai; otherwise recorded as failed.
+  tabpfn_ts_v3p5:
+    enabled: true
+    runner: tabpfn_ts
+    model_version: v3.5
+    max_context_length: 32768
+    output_selection: median
   timesfm_2p5:
     enabled: true
     model_id: google/timesfm-2.5-200m-pytorch
+    revision: 1d952420fba87f3c6dee4f240de0f1a0fbc790e3
     max_context: 1024
-  chronos_bolt:
+  # Univariate Chronos-2 (arXiv:2510.15821); cross-learning off, full 8192 context.
+  chronos2:
     enabled: true
-    model_id: amazon/chronos-bolt-base
-    context_length: 2048
-    batch_size: 64
+    model_id: amazon/chronos-2
+    revision: 29ec3766d36d6f73f0696f85560a422f50e8498c
+    context_length: 8192
+    batch_size: 100

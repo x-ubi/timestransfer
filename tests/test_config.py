@@ -36,7 +36,7 @@ def test_enabled_model_names_preserves_config_order():
     config = {
         "models": {
             "seasonal_naive": {"enabled": True},
-            "tabpfn": {"enabled": False},
+            "tabpfn_ts": {"enabled": False},
             "timesfm_2p5_ctx4096": {"enabled": True, "runner": "timesfm_2p5"},
         }
     }

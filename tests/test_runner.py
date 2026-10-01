@@ -8,12 +8,13 @@ from timestransfer.runner import MODEL_RUNNERS, _dispatch_model
 def test_registry_contains_expected_runners():
     expected = {
         "linear_regression",
-        "tabpfn",
+        "tabpfn_ts",
         "timesfm_2p5",
         "auto_arima",
         "seasonal_naive",
         "auto_ets",
         "auto_theta",
+        "chronos2",
     }
     assert expected <= set(MODEL_RUNNERS)
 
@@ -50,3 +51,12 @@ def test_dispatch_defaults_runner_to_entry_name(monkeypatch):
 def test_dispatch_unknown_runner_raises():
     with pytest.raises(ValueError, match="Unknown model runner"):
         _dispatch_model("mystery", {}, ctx=None)
+
+
+def test_statsforecast_entry_skips_season_length_above_limit():
+    ctx = type("Ctx", (), {"seasonality": 96})()
+
+    result = MODEL_RUNNERS["auto_arima"]("auto_arima", {"max_season_length": 52}, ctx)
+
+    assert result.status == "skipped"
+    assert "96" in result.details["message"]

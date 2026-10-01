@@ -101,8 +101,6 @@ def test_write_forecast_plots_empty_frame_returns_nothing(tmp_path):
         columns=["dataset", "model", "unique_id", "horizon", "ds", "y_true", "y_pred"]
     )
 
-    paths = write_forecast_plots(
-        train, forecasts, dataset_name="toy", output_dir=tmp_path
-    )
+    paths = write_forecast_plots(train, forecasts, dataset_name="toy", output_dir=tmp_path)
 
     assert paths == []

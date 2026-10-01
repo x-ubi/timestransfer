@@ -173,7 +173,9 @@ def build_lag_feature_bundle(
 
 def _series_arrays(train_df: pd.DataFrame) -> list[_SeriesArrays]:
     arrays: list[_SeriesArrays] = []
-    for unique_id, group in train_df.sort_values(["unique_id", "ds"]).groupby("unique_id", sort=True):
+    for unique_id, group in train_df.sort_values(["unique_id", "ds"]).groupby(
+        "unique_id", sort=True
+    ):
         values = group["y"].to_numpy(dtype=float)
         ds = group["ds"].to_numpy()
         time_idx = np.arange(1, len(group) + 1, dtype=int)

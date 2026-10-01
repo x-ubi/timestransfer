@@ -1,6 +1,8 @@
 import pandas as pd
 
-from timestransfer.data import fixed_train_test_split, select_series
+import pytest
+
+from timestransfer.data import fixed_train_test_split, rolling_origin_splits, select_series
 
 
 def test_fixed_train_test_split_uses_last_horizon_per_series():
@@ -22,6 +24,31 @@ def test_fixed_train_test_split_uses_last_horizon_per_series():
         assert train_group["ds"].max() == 4
         assert test_group["ds"].tolist() == [5, 6]
         assert train_group["ds"].max() < test_group["ds"].min()
+
+
+def test_offset_split_drops_observations_after_the_window():
+    df = pd.DataFrame({"unique_id": ["a"] * 10, "ds": range(1, 11), "y": range(10)})
+
+    split = fixed_train_test_split(df, horizon=2, offset=3)
+
+    assert split.test["ds"].tolist() == [6, 7]
+    assert split.train["ds"].tolist() == [1, 2, 3, 4, 5]
+
+
+def test_rolling_origin_splits_are_non_overlapping_and_final_first():
+    df = pd.DataFrame({"unique_id": ["a"] * 10, "ds": range(1, 11), "y": range(10)})
+
+    splits = rolling_origin_splits(df, horizon=2, n_windows=3)
+
+    assert [s.test["ds"].tolist() for s in splits] == [[9, 10], [7, 8], [5, 6]]
+    assert all(s.train["ds"].max() < s.test["ds"].min() for s in splits)
+
+
+def test_rolling_origin_splits_reject_too_short_series():
+    df = pd.DataFrame({"unique_id": ["a"] * 5, "ds": range(1, 6), "y": range(5)})
+
+    with pytest.raises(ValueError, match="offset"):
+        rolling_origin_splits(df, horizon=2, n_windows=3)
 
 
 def test_select_series_is_deterministic():

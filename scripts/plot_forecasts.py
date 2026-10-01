@@ -15,7 +15,9 @@ def parse_args() -> argparse.Namespace:
         description="Plot per-series train history + actual continuation vs model forecasts."
     )
     parser.add_argument("--config", default="configs/experiment.yaml", help="Path to YAML config.")
-    parser.add_argument("--datasets", nargs="+", help="Optional subset of configured dataset names.")
+    parser.add_argument(
+        "--datasets", nargs="+", help="Optional subset of configured dataset names."
+    )
     parser.add_argument(
         "--forecasts-dir",
         default=None,
@@ -26,14 +28,18 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Directory for figures (default: <outputs_dir>/figures/forecasts).",
     )
-    parser.add_argument("--history-points", type=int, default=168, help="Train tail length to draw.")
+    parser.add_argument(
+        "--history-points", type=int, default=168, help="Train tail length to draw."
+    )
     parser.add_argument(
         "--reference-model",
         default="timesfm_2p5",
         help="Model whose per-series sMAPE picks the best/median/worst series.",
     )
     parser.add_argument("--series", nargs="+", default=None, help="Explicit unique_ids to plot.")
-    parser.add_argument("--models", nargs="+", default=None, help="Optional subset of models to draw.")
+    parser.add_argument(
+        "--models", nargs="+", default=None, help="Optional subset of models to draw."
+    )
     parser.add_argument(
         "--series-limit",
         type=int,
@@ -66,10 +72,11 @@ def main() -> None:
         if not parquet_paths:
             print(f"[skip] {dataset_name}: no forecast parquets in {forecasts_dir}")
             continue
-        forecasts = pd.concat(
-            [pd.read_parquet(path) for path in parquet_paths], ignore_index=True
-        )
+        forecasts = pd.concat([pd.read_parquet(path) for path in parquet_paths], ignore_index=True)
         forecasts = forecasts[forecasts["dataset"].astype(str) == dataset_name]
+        # Rolling-origin runs: plot the final holdout, whose history is the split below.
+        if "window" in forecasts.columns:
+            forecasts = forecasts[forecasts["window"] == 0]
         forecasts = forecasts.drop_duplicates(
             subset=["dataset", "model", "unique_id", "horizon"], keep="last"
         )
