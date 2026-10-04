@@ -26,6 +26,16 @@ def parse_args() -> argparse.Namespace:
         help="Override config dataset.series_limit. Use config null for all series.",
     )
     parser.add_argument(
+        "--outputs-dir",
+        default=None,
+        help="Override project.outputs_dir (e.g. to keep a filtered run's outputs separate).",
+    )
+    parser.add_argument(
+        "--no-progress",
+        action="store_true",
+        help="Disable the stdout progress bar and per-window timing lines.",
+    )
+    parser.add_argument(
         "--allow-timesfm-failure",
         action="store_true",
         help="Accepted for compatibility; TimesFM failures are always recorded and non-fatal.",
@@ -40,6 +50,8 @@ def main() -> None:
         model_names=args.models,
         series_limit=args.series_limit,
         dataset_names=args.datasets,
+        outputs_dir=args.outputs_dir,
+        progress=not args.no_progress,
     )
     print(f"metrics: {paths['metrics']}")
     print(f"metadata: {paths['metadata']}")

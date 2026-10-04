@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 import hashlib
 import os
@@ -14,6 +15,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import Pipeline
 
 from timestransfer.features import FeatureBundle
+from timestransfer.metrics import quantile_column
 
 
 @dataclass(frozen=True)
@@ -66,12 +68,14 @@ def run_tabpfn_ts(
     model_version: str | None = None,
     max_context_length: int = 32768,
     output_selection: str = "median",
+    quantile_levels: Sequence[float] | None = None,
 ) -> ModelRunResult:
     """Forecast each series with the published TabPFN-TS pipeline (local inference).
 
     TabPFN-TS fits TabPFN per series on running-index, calendar, and auto-detected
     seasonal features of the timestamps; no lag features. ``model_version=None`` keeps
-    the checkpoint pinned by the installed tabpfn-time-series release.
+    the checkpoint pinned by the installed tabpfn-time-series release. ``quantile_levels``
+    adds one column per level (see ``_quantile_fields``); the point forecast is unchanged.
     """
     # Checked by tabpfn-common-utils at import/predict time; keep benchmark runs offline.
     os.environ.setdefault("TABPFN_DISABLE_TELEMETRY", "1")
@@ -113,12 +117,20 @@ def run_tabpfn_ts(
         )
         future["item_id"] = future["item_id"].astype(str)
 
-        predictions = pipeline.predict_df(context, future_df=future, quantiles=[0.5])
+        levels = _validate_quantile_levels(quantile_levels)
+        predictions = pipeline.predict_df(
+            context, future_df=future, quantiles=sorted({0.5, *levels})
+        )
         predictions = predictions.reset_index()
-        pred_groups = {
-            str(unique_id): group.sort_values("timestamp")["target"].to_numpy(dtype=float)
-            for unique_id, group in predictions.groupby("item_id", sort=True)
-        }
+        pred_groups = {}
+        quantile_groups = {}
+        for unique_id, group in predictions.groupby("item_id", sort=True):
+            group = group.sort_values("timestamp")
+            pred_groups[str(unique_id)] = group["target"].to_numpy(dtype=float)
+            if levels:
+                quantile_groups[str(unique_id)] = _monotone_quantiles(
+                    np.column_stack([_tabpfn_quantile_column(group, level) for level in levels])
+                )
         train_nonnegative = (
             train_df.groupby("unique_id", sort=True)["y"].min().astype(float).ge(0.0).to_dict()
         )
@@ -133,9 +145,13 @@ def run_tabpfn_ts(
                     f"TabPFN-TS returned {None if point_forecast is None else point_forecast.shape} "
                     f"predictions for {unique_id!r}; expected ({horizon},)."
                 )
+            series_quantiles = quantile_groups.get(unique_id)
+            if levels and (series_quantiles is None or len(series_quantiles) != horizon):
+                raise ValueError(f"TabPFN-TS returned incomplete quantiles for {unique_id!r}.")
             for h in range(1, horizon + 1):
                 y_pred = float(point_forecast[h - 1])
-                if train_nonnegative.get(unique_id, False):
+                nonnegative = train_nonnegative.get(unique_id, False)
+                if nonnegative:
                     y_pred = max(0.0, y_pred)
                 test_row = test_group.iloc[h - 1]
                 rows.append(
@@ -147,6 +163,11 @@ def run_tabpfn_ts(
                         "ds": test_row["ds"],
                         "y_true": float(test_row["y"]),
                         "y_pred": y_pred,
+                        **_quantile_fields(
+                            levels,
+                            None if series_quantiles is None else series_quantiles[h - 1],
+                            nonnegative,
+                        ),
                     }
                 )
 
@@ -169,10 +190,19 @@ def run_tabpfn_ts(
                     for feature in pipeline.feature_transformer.feature_generators
                 ],
                 "point_forecast": output_selection,
+                **_quantile_details(levels),
             },
         )
     except Exception as exc:
         return _failed_result(model_name, exc, "TabPFN-TS load/forecast failed.")
+
+
+def _tabpfn_quantile_column(predictions: pd.DataFrame, level: float) -> np.ndarray:
+    # TabPFN-TS keys quantile columns by the requested float level.
+    for key in (level, str(level)):
+        if key in predictions.columns:
+            return predictions[key].to_numpy(dtype=float)
+    raise ValueError(f"TabPFN-TS output has no column for quantile {level}.")
 
 
 def _file_sha256(path: Path) -> str:
@@ -202,7 +232,10 @@ def run_timesfm_2p5(
     model_name: str = "timesfm_2p5",
     forecast_config_overrides: dict[str, Any] | None = None,
     revision: str | None = None,
+    quantile_levels: Sequence[float] | None = None,
 ) -> ModelRunResult:
+    """TimesFM 2.5 median forecasts; ``quantile_levels`` (a subset of 0.1..0.9, the
+    levels of the quantile head) adds one column per level."""
     try:
         import timesfm
     except Exception as exc:
@@ -212,6 +245,13 @@ def run_timesfm_2p5(
         if horizon > max_horizon:
             raise ValueError(
                 f"Requested horizon {horizon} exceeds configured max_horizon {max_horizon}."
+            )
+        levels = _validate_quantile_levels(quantile_levels)
+        unsupported = [level for level in levels if level not in _TIMESFM_QUANTILE_CHANNELS]
+        if unsupported:
+            raise ValueError(
+                f"TimesFM 2.5 outputs quantiles {sorted(_TIMESFM_QUANTILE_CHANNELS)}; "
+                f"unsupported level(s) {unsupported}."
             )
 
         cache_key = f"{model_id}@{revision}"
@@ -249,30 +289,29 @@ def run_timesfm_2p5(
                 "TimesFM returned unexpected forecast shape "
                 f"{point_forecast.shape}; expected {(len(unique_ids), horizon)}."
             )
-
-        rows: list[dict[str, object]] = []
-        test_groups = {
-            str(unique_id): group.sort_values("ds").reset_index(drop=True)
-            for unique_id, group in test_df.groupby("unique_id", sort=True)
-        }
-        for series_idx, unique_id in enumerate(unique_ids):
-            test_group = test_groups[unique_id]
-            for h in range(1, horizon + 1):
-                y_pred = float(point_forecast[series_idx, h - 1])
-                if train_nonnegative[unique_id]:
-                    y_pred = max(0.0, y_pred)
-                test_row = test_group.iloc[h - 1]
-                rows.append(
-                    {
-                        "dataset": dataset_name,
-                        "model": model_name,
-                        "unique_id": unique_id,
-                        "horizon": h,
-                        "ds": test_row["ds"],
-                        "y_true": float(test_row["y"]),
-                        "y_pred": y_pred,
-                    }
+        quantile_forecast = None
+        if levels:
+            # Channel 0 is the mean, channels 1..9 are q0.1..q0.9 (channel 5 = point).
+            raw_quantiles = np.asarray(forecast_output[1], dtype=float)
+            if raw_quantiles.shape[:2] != (len(unique_ids), horizon):
+                raise ValueError(
+                    f"TimesFM returned unexpected quantile shape {raw_quantiles.shape}."
                 )
+            quantile_forecast = _monotone_quantiles(
+                raw_quantiles[..., [_TIMESFM_QUANTILE_CHANNELS[level] for level in levels]]
+            )
+
+        rows = _point_and_quantile_rows(
+            dataset_name=dataset_name,
+            model_name=model_name,
+            unique_ids=unique_ids,
+            test_df=test_df,
+            horizon=horizon,
+            point_forecast=point_forecast,
+            train_nonnegative=train_nonnegative,
+            levels=levels,
+            quantile_forecast=quantile_forecast,
+        )
 
         return ModelRunResult(
             model=model_name,
@@ -290,6 +329,7 @@ def run_timesfm_2p5(
                     max_horizon=max_horizon,
                     overrides=forecast_config_overrides,
                 ),
+                **_quantile_details(levels),
             },
         )
     except Exception as exc:
@@ -652,8 +692,13 @@ def run_chronos2(
     context_length: int = 8192,
     batch_size: int = 100,
     device_map: str = "cuda",
+    quantile_levels: Sequence[float] | None = None,
 ) -> ModelRunResult:
-    """Univariate Chronos-2 median forecasts; cross-learning is off so series stay independent."""
+    """Univariate Chronos-2 median forecasts; cross-learning is off so series stay independent.
+
+    ``quantile_levels`` adds one column per level; levels Chronos-2 was not trained on are
+    interpolated by the pipeline. The median is read from the same output either way.
+    """
     try:
         from chronos import BaseChronosPipeline
     except Exception as exc:
@@ -683,47 +728,43 @@ def run_chronos2(
             unique_ids.append(str(unique_id))
             train_nonnegative[str(unique_id)] = bool(np.nanmin(values) >= 0.0)
 
+        levels = _validate_quantile_levels(quantile_levels)
+        requested_levels = sorted({0.5, *levels})
         quantiles, _ = pipeline.predict_quantiles(
             contexts,
             prediction_length=horizon,
-            quantile_levels=[0.5],
+            quantile_levels=requested_levels,
             batch_size=batch_size,
             context_length=context_length,
             cross_learning=False,
         )
-        # One (n_variates=1, horizon, n_quantiles=1) tensor per series.
-        point_forecast = np.stack(
-            [q[0, :, 0].to(torch.float32).cpu().numpy() for q in quantiles]
-        ).astype(float)
+        # One (n_variates=1, horizon, n_quantiles) tensor per series.
+        all_quantiles = np.stack([q[0].to(torch.float32).cpu().numpy() for q in quantiles]).astype(
+            float
+        )
+        point_forecast = all_quantiles[..., requested_levels.index(0.5)]
         if point_forecast.shape != (len(unique_ids), horizon):
             raise ValueError(
                 "Chronos-2 returned unexpected forecast shape "
                 f"{point_forecast.shape}; expected {(len(unique_ids), horizon)}."
             )
+        quantile_forecast = None
+        if levels:
+            quantile_forecast = _monotone_quantiles(
+                all_quantiles[..., [requested_levels.index(level) for level in levels]]
+            )
 
-        rows: list[dict[str, object]] = []
-        test_groups = {
-            str(unique_id): group.sort_values("ds").reset_index(drop=True)
-            for unique_id, group in test_df.groupby("unique_id", sort=True)
-        }
-        for series_idx, unique_id in enumerate(unique_ids):
-            test_group = test_groups[unique_id]
-            for h in range(1, horizon + 1):
-                y_pred = float(point_forecast[series_idx, h - 1])
-                if train_nonnegative[unique_id]:
-                    y_pred = max(0.0, y_pred)
-                test_row = test_group.iloc[h - 1]
-                rows.append(
-                    {
-                        "dataset": dataset_name,
-                        "model": model_name,
-                        "unique_id": unique_id,
-                        "horizon": h,
-                        "ds": test_row["ds"],
-                        "y_true": float(test_row["y"]),
-                        "y_pred": y_pred,
-                    }
-                )
+        rows = _point_and_quantile_rows(
+            dataset_name=dataset_name,
+            model_name=model_name,
+            unique_ids=unique_ids,
+            test_df=test_df,
+            horizon=horizon,
+            point_forecast=point_forecast,
+            train_nonnegative=train_nonnegative,
+            levels=levels,
+            quantile_forecast=quantile_forecast,
+        )
 
         return ModelRunResult(
             model=model_name,
@@ -739,10 +780,93 @@ def run_chronos2(
                 "batch_size": batch_size,
                 "cross_learning": False,
                 "point_forecast": "median",
+                **_quantile_details(levels),
             },
         )
     except Exception as exc:
         return _failed_result(model_name, exc, "Chronos-2 load/forecast failed.")
+
+
+_TIMESFM_QUANTILE_CHANNELS = {round(0.1 * i, 1): i for i in range(1, 10)}
+
+
+def _validate_quantile_levels(levels: Sequence[float] | None) -> list[float]:
+    """Sorted, de-duplicated levels in (0, 1); empty when quantiles are disabled."""
+    if not levels:
+        return []
+    cleaned = sorted({round(float(level), 6) for level in levels})
+    if cleaned[0] <= 0.0 or cleaned[-1] >= 1.0:
+        raise ValueError(f"Quantile levels must lie strictly in (0, 1); got {cleaned}.")
+    return cleaned
+
+
+def _monotone_quantiles(values: np.ndarray) -> np.ndarray:
+    """Sort along the last (level) axis: the monotone rearrangement of crossed quantiles."""
+    return np.sort(np.asarray(values, dtype=float), axis=-1)
+
+
+def _quantile_fields(
+    levels: list[float], values: np.ndarray | None, nonnegative: bool
+) -> dict[str, float]:
+    """Quantile columns for one forecast row, clipped at zero like the median."""
+    if not levels:
+        return {}
+    if nonnegative:
+        values = np.maximum(values, 0.0)
+    return {
+        quantile_column(level): float(value) for level, value in zip(levels, values, strict=True)
+    }
+
+
+def _quantile_details(levels: list[float]) -> dict[str, Any]:
+    # Omitted when disabled so metadata of point-only runs is unchanged.
+    return {"quantile_levels": levels} if levels else {}
+
+
+def _point_and_quantile_rows(
+    *,
+    dataset_name: str,
+    model_name: str,
+    unique_ids: list[str],
+    test_df: pd.DataFrame,
+    horizon: int,
+    point_forecast: np.ndarray,
+    train_nonnegative: dict[str, bool],
+    levels: list[float],
+    quantile_forecast: np.ndarray | None,
+) -> list[dict[str, object]]:
+    """Long forecast rows from (n_series, horizon) medians and (n_series, horizon, n_levels)
+    quantiles; series with nonnegative training history are clipped at zero."""
+    rows: list[dict[str, object]] = []
+    test_groups = {
+        str(unique_id): group.sort_values("ds").reset_index(drop=True)
+        for unique_id, group in test_df.groupby("unique_id", sort=True)
+    }
+    for series_idx, unique_id in enumerate(unique_ids):
+        test_group = test_groups[unique_id]
+        nonnegative = train_nonnegative[unique_id]
+        for h in range(1, horizon + 1):
+            y_pred = float(point_forecast[series_idx, h - 1])
+            if nonnegative:
+                y_pred = max(0.0, y_pred)
+            test_row = test_group.iloc[h - 1]
+            rows.append(
+                {
+                    "dataset": dataset_name,
+                    "model": model_name,
+                    "unique_id": unique_id,
+                    "horizon": h,
+                    "ds": test_row["ds"],
+                    "y_true": float(test_row["y"]),
+                    "y_pred": y_pred,
+                    **_quantile_fields(
+                        levels,
+                        None if quantile_forecast is None else quantile_forecast[series_idx, h - 1],
+                        nonnegative,
+                    ),
+                }
+            )
+    return rows
 
 
 def _timesfm_forecast_config_kwargs(

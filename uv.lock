@@ -1865,6 +1865,7 @@ dependencies = [
     { name = "statsmodels" },
     { name = "tabpfn-time-series" },
     { name = "timesfm", extra = ["torch"] },
+    { name = "tqdm" },
 ]
 
 [package.optional-dependencies]
@@ -1904,6 +1905,7 @@ requires-dist = [
     { name = "timesfm", extras = ["torch"], specifier = ">=2.0.1" },
     { name = "timesfm", extras = ["torch"], marker = "extra == 'all'", specifier = ">=2.0" },
     { name = "timesfm", extras = ["torch"], marker = "extra == 'timesfm'", specifier = ">=2.0" },
+    { name = "tqdm", specifier = ">=4.66,<5" },
 ]
 provides-extras = ["tabpfn", "timesfm", "all"]
 

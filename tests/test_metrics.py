@@ -165,3 +165,107 @@ def test_failure_metric_row_schema():
     assert row["model"] == "tabpfn_ts"
     assert np.isnan(row["mase"])
     assert row["unique_id"] == ""
+
+
+def test_quantile_column_names_round_trip():
+    from timestransfer.metrics import quantile_column, quantile_columns
+
+    names = [quantile_column(level) for level in (0.1, 0.5, 0.9, 0.025)]
+    assert names == ["q10", "q50", "q90", "q2.5"]
+    assert quantile_columns(["y_pred", "q90", "q10", "q2.5", "quality"]) == [
+        (0.025, "q2.5"),
+        (0.1, "q10"),
+        (0.9, "q90"),
+    ]
+
+
+def test_weighted_quantile_loss_hand_computed():
+    from timestransfer.metrics import weighted_quantile_loss
+
+    y = np.array([10.0, 20.0])
+    # q0.1 forecasts [12, 18]: residuals [-2, 2] -> pinball [0.9*2, 0.1*2] = [1.8, 0.2].
+    # q0.9 forecasts [8, 25]: residuals [2, -5] -> pinball [0.9*2, 0.1*5] = [1.8, 0.5].
+    quantiles = np.array([[12.0, 8.0], [18.0, 25.0]])
+    expected = np.mean([2 * 2.0 / 30.0, 2 * 2.3 / 30.0])
+    assert weighted_quantile_loss(y, quantiles, np.array([0.1, 0.9])) == pytest.approx(expected)
+
+
+def test_scaled_quantile_loss_of_point_forecast_equals_mase():
+    from timestransfer.metrics import scaled_quantile_loss
+
+    rng = np.random.default_rng(0)
+    y = rng.normal(size=50)
+    y_pred = rng.normal(size=50)
+    scales = rng.uniform(0.5, 2.0, size=50)
+    levels = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
+    degenerate = np.repeat(y_pred[:, None], len(levels), axis=1)
+
+    sql = scaled_quantile_loss(y, degenerate, levels, scales)
+
+    assert sql == pytest.approx(np.mean(np.abs(y - y_pred) / scales))
+
+
+def test_compute_metric_rows_probabilistic_columns():
+    forecasts = pd.DataFrame(
+        {
+            "dataset": ["toy"] * 4,
+            "model": ["fm", "fm", "point_only", "point_only"],
+            "unique_id": ["a", "a", "a", "a"],
+            "horizon": [1, 2, 1, 2],
+            "ds": [10, 11, 10, 11],
+            "y_true": [10.0, 20.0, 10.0, 20.0],
+            "y_pred": [10.0, 20.0, 10.0, 20.0],
+            "q10": [9.0, 21.0, np.nan, np.nan],
+            "q50": [10.0, 20.0, np.nan, np.nan],
+            "q90": [11.0, 22.0, np.nan, np.nan],
+        }
+    )
+    mase_scales = pd.DataFrame({"dataset": ["toy"], "unique_id": ["a"], "mase_scale": [2.0]})
+
+    rows = compute_metric_rows(forecasts, mase_scales=mase_scales)
+
+    overall = rows[rows["scope"] == "overall"].set_index("model")
+    # Row 1 is inside [9, 11]; row 2 (20) is below q10 = 21.
+    assert overall.loc["fm", "coverage_80"] == 0.5
+    # Row 1 pinball: q10 0.1*1, q90 0.1*1; row 2: q10 0.9*1, q90 0.1*2. q50 is exact.
+    pinball_sums = np.array([0.1 + 0.9, 0.0, 0.1 + 0.2])
+    assert overall.loc["fm", "wql"] == pytest.approx(np.mean(2 * pinball_sums / 30.0))
+    row_sql = [2 * (0.1 + 0.0 + 0.1) / 3 / 2.0, 2 * (0.9 + 0.0 + 0.2) / 3 / 2.0]
+    assert overall.loc["fm", "sql"] == pytest.approx(np.mean(row_sql))
+    assert np.isnan(overall.loc["point_only", "wql"])
+    assert np.isnan(overall.loc["point_only", "coverage_80"])
+    assert overall.loc["point_only", "mase"] == 0.0
+    assert set(rows["scope"]) == {"overall", "window", "horizon", "series"}
+
+
+def test_compute_metric_rows_without_quantiles_keeps_schema():
+    forecasts = pd.DataFrame(
+        {
+            "dataset": ["toy"],
+            "model": ["m"],
+            "unique_id": ["a"],
+            "horizon": [1],
+            "ds": [1],
+            "y_true": [1.0],
+            "y_pred": [2.0],
+        }
+    )
+
+    rows = compute_metric_rows(forecasts)
+
+    assert list(rows.columns) == [
+        "dataset",
+        "model",
+        "scope",
+        "horizon",
+        "unique_id",
+        "window",
+        "forecast_horizon",
+        "mae",
+        "rmse",
+        "smape",
+        "mase",
+        "n_obs",
+        "status",
+        "error",
+    ]

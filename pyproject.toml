@@ -21,6 +21,7 @@ dependencies = [
   "prophet>=1.1.6,<2.0",
   "chronos-forecasting>=2.3,<3.0",
   "statsmodels>=0.14,<0.15",
+  "tqdm>=4.66,<5",
 ]
 
 [project.optional-dependencies]

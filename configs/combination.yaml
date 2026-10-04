@@ -1,0 +1,208 @@
+# Combination study (docs/combination-study-plan.md, Phase A): the three zero-shot
+# TSFMs plus SeasonalNaive on 20 rolling origins, with q0.1..q0.9 saved next to the median
+# for probabilistic pooling. Windows 0-4 coincide with configs/experiment.yaml, so they
+# must reproduce outputs/forecasts/ (acceptance check). Combination is done post hoc on
+# the saved forecasts; this config never writes to outputs/.
+#
+# Filtered runs (--models) overwrite this outputs_dir's combined files, so run TabPFN-TS
+# separately with --outputs-dir (e.g. outputs/combination_tabpfn).
+
+project:
+  seed: 42
+  data_dir: data
+  outputs_dir: outputs/combination
+  # Window k ends k * horizon steps before the series end (stride = horizon).
+  n_windows: 20
+
+# Lag presets shared across datasets (resolved by YAML anchors; not read directly).
+lag_presets:
+  m4_hourly: &m4_hourly_lags [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+    25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,
+    72, 96, 120, 144, 168,
+  ]
+  hourly: &hourly_lags [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+    25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,
+    72, 96, 168, 336, 720,
+  ]
+  quarter_hourly: &quarter_hourly_lags [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+    48, 72, 96, 192, 288, 672, 1344,
+  ]
+  ten_minutely: &ten_minutely_lags [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+    36, 48, 72, 144, 288, 1008,
+  ]
+  daily: &daily_lags [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
+    21, 28, 30, 60, 90, 180, 365,
+  ]
+  weekly: &weekly_lags [1, 2, 3, 4, 5, 6, 7, 8, 13, 26, 52, 104]
+
+# Same tasks, loaders and full panels as configs/experiment.yaml.
+datasets:
+  - name: m4_hourly
+    loader: m4_hourly
+    group: Hourly
+    horizon: 48
+    seasonality: 24
+    freq: 1
+    time_freq: h
+    expected_n_series: 414
+    series_limit: null
+    # Shortest series has 748 points: 10 windows leave >= 268 training points.
+    n_windows: 10
+    features:
+      lags: *m4_hourly_lags
+      train_row_cap: 200000
+  - name: ett_h1_h48
+    loader: long_horizon2
+    group: ETTh1
+    horizon: 48
+    seasonality: 24
+    freq: h
+    time_freq: h
+    expected_n_series: 7
+    series_limit: null
+    features:
+      lags: *hourly_lags
+      train_row_cap: 200000
+  - name: ett_h1_h96
+    loader: long_horizon2
+    group: ETTh1
+    horizon: 96
+    seasonality: 24
+    freq: h
+    time_freq: h
+    expected_n_series: 7
+    series_limit: null
+    features:
+      lags: *hourly_lags
+      train_row_cap: 200000
+  - name: ett_h2_h48
+    loader: long_horizon2
+    group: ETTh2
+    horizon: 48
+    seasonality: 24
+    freq: h
+    time_freq: h
+    expected_n_series: 7
+    series_limit: null
+    features:
+      lags: *hourly_lags
+      train_row_cap: 200000
+  - name: ett_m1_h48
+    loader: long_horizon2
+    group: ETTm1
+    horizon: 48
+    seasonality: 96
+    freq: 15min
+    time_freq: 15min
+    expected_n_series: 7
+    series_limit: null
+    features:
+      lags: *quarter_hourly_lags
+      train_row_cap: 200000
+  - name: ett_m2_h48
+    loader: long_horizon2
+    group: ETTm2
+    horizon: 48
+    seasonality: 96
+    freq: 15min
+    time_freq: 15min
+    expected_n_series: 7
+    series_limit: null
+    features:
+      lags: *quarter_hourly_lags
+      train_row_cap: 200000
+  - name: ecl_h48
+    loader: long_horizon2
+    group: ECL
+    horizon: 48
+    seasonality: 24
+    freq: h
+    time_freq: h
+    expected_n_series: 321
+    series_limit: null
+    features:
+      lags: *hourly_lags
+      train_row_cap: 200000
+  - name: traffic_h48
+    loader: long_horizon2
+    group: TrafficL
+    horizon: 48
+    seasonality: 24
+    freq: h
+    time_freq: h
+    expected_n_series: 862
+    series_limit: null
+    features:
+      lags: *hourly_lags
+      train_row_cap: 200000
+  - name: weather_h48
+    loader: long_horizon2
+    group: Weather
+    horizon: 48
+    seasonality: 144
+    freq: 10min
+    time_freq: 10min
+    expected_n_series: 21
+    series_limit: null
+    features:
+      lags: *ten_minutely_lags
+      train_row_cap: 200000
+  - name: exchange_h48
+    loader: long_horizon2
+    group: Exchange
+    horizon: 48
+    seasonality: 7
+    # FX is non-seasonal in the M4/MASE convention; a weekly scale would understate errors.
+    mase_seasonality: 1
+    freq: D
+    time_freq: D
+    expected_n_series: 8
+    series_limit: null
+    features:
+      lags: *daily_lags
+      train_row_cap: 200000
+  - name: ili_h48
+    loader: long_horizon2
+    group: ILI
+    horizon: 48
+    seasonality: 52
+    freq: W-TUE
+    time_freq: W-TUE
+    expected_n_series: 7
+    series_limit: null
+    # 966 weekly points: 10 windows leave >= 486 training points.
+    n_windows: 10
+    features:
+      lags: *weekly_lags
+      train_row_cap: 200000
+
+models:
+  seasonal_naive:
+    enabled: true
+    n_jobs: 16
+  timesfm_2p5:
+    enabled: true
+    model_id: google/timesfm-2.5-200m-pytorch
+    revision: 1d952420fba87f3c6dee4f240de0f1a0fbc790e3
+    max_context: 1024
+    # Batching only pads the batch; 64 cut ECL from 31 s to 4 s per window.
+    per_core_batch_size: 64
+    quantile_levels: &deciles [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+  chronos2:
+    enabled: true
+    model_id: amazon/chronos-2
+    revision: 29ec3766d36d6f73f0696f85560a422f50e8498c
+    context_length: 8192
+    batch_size: 100
+    quantile_levels: *deciles
+  tabpfn_ts:
+    enabled: true
+    model_version: v2
+    max_context_length: 4096
+    output_selection: median
+    quantile_levels: *deciles

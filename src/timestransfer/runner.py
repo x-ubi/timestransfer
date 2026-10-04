@@ -2,9 +2,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+import sys
+import time
 from typing import Any, Callable
 
 import pandas as pd
+from tqdm import tqdm
 
 from timestransfer.config import dataset_configs, enabled_model_names, load_config
 from timestransfer.data import DatasetSplit, load_dataset, rolling_origin_splits, select_series
@@ -31,7 +34,7 @@ class DatasetRunContext:
     seasonality: int
     freq: str | int
     split: DatasetSplit
-    bundle: FeatureBundle
+    bundle: FeatureBundle | None
     seed: int
     window: int = 0
 
@@ -45,6 +48,7 @@ _TIMESFM_FLAG_KEYS = (
     "infer_is_positive",
     "fix_quantile_crossing",
 )
+_TIMESFM_INT_KEYS = ("per_core_batch_size",)
 
 _STATSFORECAST_RESERVED_KEYS = {
     "enabled",
@@ -77,13 +81,17 @@ def _run_tabpfn_ts_entry(
         model_version=str(model_version) if model_version is not None else None,
         max_context_length=int(model_cfg.get("max_context_length", 32768)),
         output_selection=str(model_cfg.get("output_selection", "median")),
+        quantile_levels=_quantile_levels(model_cfg),
     )
 
 
 def _run_timesfm_entry(
     model_name: str, model_cfg: dict[str, Any], ctx: DatasetRunContext
 ) -> ModelRunResult:
-    overrides = {key: bool(model_cfg[key]) for key in _TIMESFM_FLAG_KEYS if key in model_cfg}
+    overrides: dict[str, Any] = {
+        key: bool(model_cfg[key]) for key in _TIMESFM_FLAG_KEYS if key in model_cfg
+    }
+    overrides.update({key: int(model_cfg[key]) for key in _TIMESFM_INT_KEYS if key in model_cfg})
     return run_timesfm_2p5(
         ctx.split.train,
         ctx.split.test,
@@ -95,6 +103,7 @@ def _run_timesfm_entry(
         horizon=ctx.horizon,
         forecast_config_overrides=overrides or None,
         revision=_optional_str(model_cfg.get("revision")),
+        quantile_levels=_quantile_levels(model_cfg),
     )
 
 
@@ -134,6 +143,7 @@ def _run_chronos_entry(
         context_length=int(model_cfg.get("context_length", 8192)),
         batch_size=int(model_cfg.get("batch_size", 100)),
         device_map=str(model_cfg.get("device_map", "cuda")),
+        quantile_levels=_quantile_levels(model_cfg),
     )
 
 
@@ -178,6 +188,8 @@ def _make_statsforecast_entry(estimator: str) -> ModelEntryRunner:
     return _entry
 
 
+_LAG_FEATURE_RUNNERS = {"linear_regression"}
+
 MODEL_RUNNERS: dict[str, ModelEntryRunner] = {
     "linear_regression": _run_linear_regression_entry,
     "tabpfn_ts": _run_tabpfn_ts_entry,
@@ -193,6 +205,27 @@ MODEL_RUNNERS: dict[str, ModelEntryRunner] = {
 
 def _optional_str(value: Any) -> str | None:
     return None if value is None else str(value)
+
+
+def _estimated_series_windows(
+    dataset_config: dict[str, Any], project: dict[str, Any], series_limit: int | None
+) -> int:
+    n_windows = int(dataset_config.get("n_windows", project.get("n_windows", 1)))
+    n_series = int(dataset_config.get("expected_n_series") or 0)
+    limit = dataset_config.get("series_limit", 32) if series_limit is None else series_limit
+    if limit is not None and n_series:
+        n_series = min(n_series, int(limit))
+    return n_series * n_windows
+
+
+def _format_duration(seconds: float) -> str:
+    hours, remainder = divmod(int(seconds), 3600)
+    return f"{hours}h{remainder // 60:02d}m{remainder % 60:02d}s"
+
+
+def _quantile_levels(model_cfg: dict[str, Any]) -> list[float] | None:
+    levels = model_cfg.get("quantile_levels")
+    return None if not levels else [float(level) for level in levels]
 
 
 def _dispatch_model(
@@ -212,9 +245,19 @@ def run_benchmark(
     model_names: list[str] | None = None,
     series_limit: int | None = None,
     dataset_names: list[str] | None = None,
+    outputs_dir: str | Path | None = None,
+    progress: bool = False,
 ) -> dict[str, Path]:
+    """Run every requested model on every dataset window and write outputs.
+
+    ``progress`` shows a bar on stdout counting series-windows (cost scales with the
+    series count, not the window count) and one timing line per completed window.
+    """
     config = load_config(config_path)
-    project = config.get("project", {})
+    project = config.setdefault("project", {})
+    if outputs_dir is not None:
+        # Recorded in the metadata config so the run documents where it wrote.
+        project["outputs_dir"] = str(outputs_dir)
     model_config = config.get("models", {})
 
     data_dir = Path(project.get("data_dir", "data"))
@@ -251,6 +294,26 @@ def run_benchmark(
     model_statuses: dict[str, dict[str, dict[str, Any]]] = {}
     dataset_summaries: list[dict[str, Any]] = []
 
+    # Totals come from expected_n_series and are corrected as each dataset loads.
+    estimated_work = {
+        str(dataset.get("name")): _estimated_series_windows(dataset, project, series_limit)
+        for dataset in configured_datasets
+    }
+    progress_bar = tqdm(
+        total=sum(estimated_work.values()),
+        unit="series-window",
+        file=sys.stdout,
+        disable=not progress,
+        smoothing=0.0,
+        dynamic_ncols=True,
+    )
+    run_start = time.monotonic()
+    # Lag features cost 7-15 s per window and only the pooled regression reads them.
+    needs_lag_features = any(
+        str(model_config.get(name, {}).get("runner", name)) in _LAG_FEATURE_RUNNERS
+        for name in requested_models
+    )
+
     for dataset_config in configured_datasets:
         dataset_name = str(dataset_config.get("name", "m4_hourly"))
         horizon = int(dataset_config.get("horizon", 48))
@@ -262,6 +325,9 @@ def run_benchmark(
         full_df = load_dataset(data_dir=data_dir, dataset_config=dataset_config)
         df = select_series(full_df, effective_series_limit)
         n_windows = int(dataset_config.get("n_windows", project.get("n_windows", 1)))
+        n_series = int(df["unique_id"].nunique())
+        progress_bar.total += n_series * n_windows - estimated_work[dataset_name]
+        progress_bar.set_description(dataset_name)
         window_stride = dataset_config.get("window_stride", project.get("window_stride"))
         splits = rolling_origin_splits(
             df,
@@ -272,6 +338,7 @@ def run_benchmark(
         mase_seasonality = int(dataset_config.get("mase_seasonality", seasonality))
 
         window_results: dict[str, list[ModelRunResult]] = {name: [] for name in requested_models}
+        model_seconds: dict[str, float] = {name: 0.0 for name in requested_models}
         bundle_rows: list[int] = []
         feature_columns: list[str] = []
         for window, split in enumerate(splits):
@@ -280,17 +347,19 @@ def run_benchmark(
             window_scales.insert(0, "dataset", dataset_name)
             mase_scale_frames.append(window_scales)
 
-            bundle = build_lag_feature_bundle(
-                split.train,
-                split.test,
-                horizon=horizon,
-                seasonality=seasonality,
-                lags=[int(lag) for lag in feature_config["lags"]],
-                train_row_cap=feature_config.get("train_row_cap"),
-                seed=seed,
-            )
-            bundle_rows.append(int(len(bundle.X_train)))
-            feature_columns = bundle.feature_columns
+            bundle = None
+            if needs_lag_features:
+                bundle = build_lag_feature_bundle(
+                    split.train,
+                    split.test,
+                    horizon=horizon,
+                    seasonality=seasonality,
+                    lags=[int(lag) for lag in feature_config["lags"]],
+                    train_row_cap=feature_config.get("train_row_cap"),
+                    seed=seed,
+                )
+                bundle_rows.append(int(len(bundle.X_train)))
+                feature_columns = bundle.feature_columns
 
             ctx = DatasetRunContext(
                 dataset_name=dataset_name,
@@ -303,9 +372,22 @@ def run_benchmark(
                 seed=seed,
                 window=window,
             )
+            timings = []
             for model_name in requested_models:
+                model_start = time.monotonic()
                 result = _dispatch_model(model_name, model_config.get(model_name, {}), ctx)
+                seconds = time.monotonic() - model_start
+                model_seconds[model_name] += seconds
                 window_results[model_name].append(result)
+                timings.append(f"{model_name} {result.status} {seconds:.1f}s")
+            progress_bar.update(n_series)
+            if progress:
+                progress_bar.write(
+                    f"[{dataset_name}] window {window + 1}/{n_windows} | {n_series} series | "
+                    f"{', '.join(timings)} | elapsed "
+                    f"{_format_duration(time.monotonic() - run_start)}",
+                    file=sys.stdout,
+                )
 
         model_statuses[dataset_name] = {}
         for model_name, results in window_results.items():
@@ -317,6 +399,7 @@ def run_benchmark(
                 "status": status,
                 "n_windows": len(results),
                 "n_windows_ok": sum(r.status == "ok" for r in results),
+                "runtime_seconds": round(model_seconds[model_name], 1),
                 **results[0].details,
                 **({} if first_bad is None else first_bad.details),
             }
@@ -368,6 +451,7 @@ def run_benchmark(
             }
         )
 
+    progress_bar.close()
     mase_scales = pd.concat(mase_scale_frames, ignore_index=True) if mase_scale_frames else None
     if mase_scales is not None:
         mase_scales.to_csv(metrics_dir / "mase_scales.csv", index=False)

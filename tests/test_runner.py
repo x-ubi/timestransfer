@@ -60,3 +60,38 @@ def test_statsforecast_entry_skips_season_length_above_limit():
 
     assert result.status == "skipped"
     assert "96" in result.details["message"]
+
+
+def test_foundation_model_entries_pass_quantiles_and_batch_size(monkeypatch):
+    seen = {}
+
+    def fake_runner(name):
+        def _run(*args, **kwargs):
+            seen[name] = kwargs
+            return ModelRunResult(
+                model=kwargs["model_name"], status="ok", forecasts=None, details={}
+            )
+
+        return _run
+
+    for name in ("run_timesfm_2p5", "run_chronos2", "run_tabpfn_ts"):
+        monkeypatch.setattr(runner_module, name, fake_runner(name))
+    split = type("Split", (), {"train": None, "test": None})()
+    ctx = type(
+        "Ctx",
+        (),
+        {"split": split, "dataset_name": "toy", "horizon": 2, "freq": "h", "dataset_config": {}},
+    )()
+    cfg = {"quantile_levels": [0.1, 0.9], "per_core_batch_size": 64, "normalize_inputs": True}
+
+    MODEL_RUNNERS["timesfm_2p5"]("timesfm_2p5", cfg, ctx)
+    MODEL_RUNNERS["chronos2"]("chronos2", {"quantile_levels": [0.1, 0.9]}, ctx)
+    MODEL_RUNNERS["tabpfn_ts"]("tabpfn_ts", {}, ctx)
+
+    assert seen["run_timesfm_2p5"]["quantile_levels"] == [0.1, 0.9]
+    assert seen["run_timesfm_2p5"]["forecast_config_overrides"] == {
+        "normalize_inputs": True,
+        "per_core_batch_size": 64,
+    }
+    assert seen["run_chronos2"]["quantile_levels"] == [0.1, 0.9]
+    assert seen["run_tabpfn_ts"]["quantile_levels"] is None
