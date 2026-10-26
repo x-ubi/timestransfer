@@ -1,0 +1,30 @@
+[project]
+name = "timestransfer-finetune"
+version = "0.1.0"
+description = "Step 3 of the thesis study: LoRA fine-tuning of TimesFM 2.5 via HF Transformers + PEFT, isolated from the benchmark environment."
+requires-python = ">=3.12,<3.13"
+# torch matches the benchmark environment; transformers is newer than the benchmark's
+# 4.57.6 because TimesFm2_5ModelForPrediction is not in that release. The benchmark code in
+# ../src (data loading, splits, metrics) needs numpy, pandas, pyyaml and datasetsforecast (dataset loaders).
+dependencies = [
+  "torch==2.12.1",
+  "datasetsforecast>=1.0.0,<2.0.0",
+  "transformers>=5,<6",
+  "peft>=0.15,<1",
+  "accelerate>=1.1,<2",
+  "numpy>=1.26,<3.0",
+  "pandas>=2.2,<3.0",
+  "pyarrow>=15.0,<23.0",
+  "pyyaml>=6.0.1,<7.0",
+  "safetensors>=0.5.3",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.2,<9.0"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["../src", "."]
