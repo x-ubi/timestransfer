@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-07T23:30:30.851717+00:00",
+  "generated_at_utc": "2026-10-26T18:15:46.660821+00:00",
   "args": {
     "forecasts": "outputs/combination/forecasts/all_datasets_all_models.parquet",
     "mase_scales": "outputs/combination/metrics/mase_scales.csv",
@@ -10,6 +10,8 @@
     "seed": 0,
     "outputs_dir": "outputs/combination/analysis"
   },
+  "stats_run_seasonal_naive_max_abs_diff": 0.0,
+  "stats_run_rows_matched": 1405920,
   "pools": {
     "fm": [
       "timesfm_2p5",
@@ -21,6 +23,21 @@
       "chronos2",
       "tabpfn_ts",
       "seasonal_naive"
+    ],
+    "fm_stats": [
+      "timesfm_2p5",
+      "chronos2",
+      "tabpfn_ts",
+      "auto_ets",
+      "auto_theta"
+    ],
+    "fm_sn_stats": [
+      "timesfm_2p5",
+      "chronos2",
+      "tabpfn_ts",
+      "seasonal_naive",
+      "auto_ets",
+      "auto_theta"
     ]
   },
   "spearman_diversity_vs_regret": {
@@ -38,7 +55,7 @@
     }
   },
   "git": {
-    "commit": "8b2f9755f7c0f36765cc5e9167e04554bf97f72a",
-    "status_short": "M configs/combination.yaml\n M src/timestransfer/series_features.py\n?? docs/combination-study-plan.md\n?? exports/\n?? outputs_archive_pre_rolling_origin/\n?? scripts/run_combination.py\n?? scripts/run_combination_analysis.py\n?? src/timestransfer/combination.py\n?? src/timestransfer/combination_analysis.py\n?? tests/test_combination.py\n?? tests/test_combination_analysis.py\n?? thesis-package/"
+    "commit": "3aeb660fe422c5119867d6f0446aab9b4e2dc87e",
+    "status_short": "M docs/thesis-status-2026-10-26.md\n?? exports/\n?? outputs_archive_pre_rolling_origin/\n?? results/pilots_2026-10/out/.corrupt.err\n?? results/pilots_2026-10/out/.mv.err\n?? results/pilots_2026-10/out/corruption_run.txt"
   }
 }

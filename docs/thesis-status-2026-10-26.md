@@ -71,7 +71,11 @@ These numbers use squared scaled error, which the theory works with; the benchma
   The first principal component of the error covariance gives the same picture (0.85–0.94).
 - **Even ideal weights barely help.** The best fixed non-negative weights per task, fitted after the fact (an upper bound), reduce squared error relative to the best single model by a median of **3%** (ratio 0.969). The largest reductions are ILI (0.878), ETTm1 (0.884) and M4 (0.918); several tasks are at 0.99–1.00.
 - **Classical combination theory explains it.** Combining two models helps only if their errors are weakly correlated *and* their accuracies are similar. Here error correlations are 0.75–0.97 and accuracy ratios 0.82–1.00, which puts almost every pair in the region of negligible gain. The one low-correlation pair (TimesFM–Chronos-2 on ILI, ρ ≈ 0.01) has very unequal accuracy (ratio 0.38), so it gains little.
-- **Statistical models add diversity that can't be exploited out of sample.** With AutoETS, AutoTheta and SeasonalNaive added, the shared share drops (e.g. M4 0.43, ETTm1 0.46). The ideal-weight bound improves to a median of 0.938 (Weather 0.847). Yet weights learned from past windows did worse with these members in earlier runs (0.732 → 0.779 on 5 windows). The 20-origin learning curves for these pools are being recomputed.
+- **Statistical models add diversity that can't be exploited out of sample.** With AutoETS, AutoTheta and SeasonalNaive added, the shared share drops (e.g. M4 0.43, ETTm1 0.46). The ideal-weight bound improves to a median of 0.938 (Weather 0.847). Yet weights learned from past windows do worse with these members at every amount of past data on the 20-origin runs:
+  - all tasks: task-level weights 0.625 (foundation models only) vs 0.629 (+ AutoETS/AutoTheta) vs 0.632 (+ SeasonalNaive too); equal mean 0.674 vs 0.760;
+  - 20-window tasks with 10 past windows: 0.727 vs 0.747.
+
+  The diversity they add is real in sample but is not recovered out of sample. Part of this gap may come from the bound being computed on squared error while the scores use absolute error.
 - **Shared error isn't removed by simple bias correction** (pilot, `results/pilots_2026-10/shared_error.py`). A series' error barely correlates between consecutive windows (−0.16 to 0.37), and correcting each series for its past bias makes MASE worse on most tasks. More sophisticated correction methods exist (ECHO, arXiv 2610.16433) but were not tested.
 
 ### 1.4 Pilots behind the direction decision (`results/pilots_2026-10/`)
@@ -144,17 +148,3 @@ These numbers use squared scaled error, which the theory works with; the benchma
 | Fine-tuning | Small gains (~0–5%) on long datasets, none or negative on short ones | **Hypothesis**, consistent with the literature | Weight adaptation helps only with enough target data |
 | Combined strategies | Combination adds little on top of a well-configured or fine-tuned model | **Hypothesis**, follows from the redundancy result | Model-side adaptation, not model pooling, reduces the shared error |
 | Cost-effectiveness | configuration > fine-tuning > combination in gain per GPU hour | **Hypothesis** | A practical recommendation order |
-
-### Is this enough for a master's thesis?
-
-**Very likely yes, provided steps 2–4 are completed.**
-
-- **Original contribution:** an empirical-analytical one. It has two parts, the redundancy diagnosis with its theoretical explanation and the controlled three-way comparison, and as far as the literature checks found, both are new. That is the expected level for a master's thesis.
-- **Volume:** a 9-model benchmark plus three experimental arms with statistical testing is ample material.
-- **Rigour:** leakage-free rolling origins, significance tests and confidence intervals.
-- **What would weaken it:**
-  - configuration gains confined to two tasks;
-  - fine-tuning dropped, which would thin the link to the "transfer learning" title;
-  - too little writing time.
-
-  The step 2 results (within about a week) are the right moment to show the supervisor and confirm sufficiency.

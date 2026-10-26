@@ -2,6 +2,10 @@ learning curve fm/all_tasks done
 learning curve fm/long_tasks done
 learning curve fm_sn/all_tasks done
 learning curve fm_sn/long_tasks done
+learning curve fm_stats/all_tasks done
+learning curve fm_stats/long_tasks done
+learning curve fm_sn_stats/all_tasks done
+learning curve fm_sn_stats/long_tasks done
                 model  n_tasks  geomean_relative_mase
             nnls_task       11               0.632812
           inv_mase_p4       11               0.633040
@@ -69,7 +73,9 @@ nnls_task_h6 timesfm_2p5      10           2          0               5
  select_task  equal_mean       6           1          0               3
  select_task timesfm_2p5       7           0          0               3
 {
-  "generated_at_utc": "2026-10-07T23:30:30.851717+00:00",
+  "generated_at_utc": "2026-10-26T18:15:46.660821+00:00",
+  "stats_run_seasonal_naive_max_abs_diff": 0.0,
+  "stats_run_rows_matched": 1405920,
   "pools": {
     "fm": [
       "timesfm_2p5",
@@ -81,6 +87,21 @@ nnls_task_h6 timesfm_2p5      10           2          0               5
       "chronos2",
       "tabpfn_ts",
       "seasonal_naive"
+    ],
+    "fm_stats": [
+      "timesfm_2p5",
+      "chronos2",
+      "tabpfn_ts",
+      "auto_ets",
+      "auto_theta"
+    ],
+    "fm_sn_stats": [
+      "timesfm_2p5",
+      "chronos2",
+      "tabpfn_ts",
+      "seasonal_naive",
+      "auto_ets",
+      "auto_theta"
     ]
   },
   "spearman_diversity_vs_regret": {
@@ -99,7 +120,4 @@ nnls_task_h6 timesfm_2p5      10           2          0               5
   }
 }
 outputs: outputs/combination/analysis
-
-real	6m56.672s
-user	27m15.886s
-sys	0m20.350s
+exit 0
