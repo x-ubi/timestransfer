@@ -4,8 +4,8 @@
 # must reproduce outputs/forecasts/ (acceptance check). Combination is done post hoc on
 # the saved forecasts; this config never writes to outputs/.
 #
-# Filtered runs (--models) overwrite this outputs_dir's combined files, so run TabPFN-TS
-# separately with --outputs-dir (e.g. outputs/combination_tabpfn).
+# Filtered runs (--models) overwrite this outputs_dir's combined files, so give them their
+# own --outputs-dir.
 
 project:
   seed: 42
@@ -185,6 +185,17 @@ models:
   seasonal_naive:
     enabled: true
     n_jobs: 16
+  # Statistical members for the combination-puzzle retest (Phase C3), same settings as
+  # configs/experiment.yaml. Disabled so a plain run of this config skips them; run with
+  # --models seasonal_naive auto_ets auto_theta --outputs-dir outputs/combination_stats.
+  auto_ets:
+    enabled: false
+    n_jobs: 16
+    max_train_length: 5000
+  auto_theta:
+    enabled: false
+    n_jobs: 16
+    max_train_length: 5000
   timesfm_2p5:
     enabled: true
     model_id: google/timesfm-2.5-200m-pytorch

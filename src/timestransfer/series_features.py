@@ -41,11 +41,23 @@ def compute_series_features(
     for unique_id, group in grouped:
         full_values = group["y"].to_numpy(dtype=float)
         values = full_values[-max_points:] if max_points is not None else full_values
-        features = _series_features(values, seasonality=seasonality)
-        features["length"] = int(len(full_values))
+        features = features_from_values(values, seasonality=seasonality, length=len(full_values))
         rows.append({"unique_id": str(unique_id), **features})
     frame = pd.DataFrame(rows)
     return frame.loc[:, ["unique_id", *FEATURE_COLUMNS]]
+
+
+def features_from_values(
+    values: np.ndarray, *, seasonality: int, length: int | None = None
+) -> dict[str, float]:
+    """FEATURE_COLUMNS for one (already tail-capped) series; ``length`` is the full train
+    length and defaults to ``len(values)``."""
+    if seasonality <= 0:
+        raise ValueError("seasonality must be positive.")
+    values = np.asarray(values, dtype=float)
+    features = _series_features(values, seasonality=seasonality)
+    features["length"] = int(len(values) if length is None else length)
+    return features
 
 
 def _series_features(values: np.ndarray, *, seasonality: int) -> dict[str, float]:
