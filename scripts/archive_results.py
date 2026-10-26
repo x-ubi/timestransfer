@@ -44,7 +44,13 @@ EXTRAS = [
 ]
 
 # Run logs hold the wall-clock timings; *.log is git-ignored, so they are stored as .txt.
-LOGS = ["combination/run.log", "combination_stats/run.log", "combination/analysis_run.log"]
+LOGS = [
+    "combination/run.log",
+    "combination/progress.log",
+    "combination_stats/run.log",
+    "combination_stats/progress.log",
+    "combination/analysis_run.log",
+]
 
 
 def _run_dir(base: Path, run: str) -> Path:

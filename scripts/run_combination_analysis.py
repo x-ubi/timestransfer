@@ -1,9 +1,10 @@
 """Phase C analyses on the saved member forecasts (R1) and combined forecasts (R2).
 
-C1 diversity, C2 granularity, C3 combination puzzle (learning curves and pools), C4
-robustness and inference, C5 failure modes. Statistical members (AutoETS, AutoTheta)
-join the C1/C3 pools when their run's forecasts exist. Writes CSV tables and a run
-record; nothing here produces new model forecasts.
+C1 diversity (including the shared/specific error split and the optimal-weight bound),
+C2 granularity, C3 combination puzzle (learning curves and pools), C4 robustness and
+inference, C5 failure modes. Statistical members (AutoETS, AutoTheta) join the C1/C3
+pools when their run's forecasts exist. Writes CSV tables and a run record; nothing
+here produces new model forecasts.
 """
 
 from __future__ import annotations
@@ -34,13 +35,16 @@ from timestransfer.combination_analysis import (
     ambiguity_decomposition,
     amplitude_ratios,
     bootstrap_aggregate,
+    combination_bound,
     dm_tests,
     error_correlations,
     horizon_phase_ratios,
     learning_curve,
+    pairwise_combination_theory,
     regret_summary,
     regret_table,
     relative_to_baseline,
+    shared_error_decomposition,
     task_mase,
     window_losses,
     winner_persistence,
@@ -176,10 +180,14 @@ def main() -> None:
     # --- C1 diversity (member tables on the R2 evaluated windows)
     protocol = RollingProtocol()
     correlation_frames, ambiguity = [], None
+    shared_frames, bound_frames, pair_frames = [], [], []
     for name, members in pools.items():
         pool_table = build_combination_table(forecasts, scales, members)
         mask = protocol.evaluation_mask(pool_table)
         correlation_frames.append(error_correlations(pool_table, mask).assign(pool=name))
+        shared_frames.append(shared_error_decomposition(pool_table, mask).assign(pool=name))
+        bound_frames.append(combination_bound(pool_table, mask).assign(pool=name))
+        pair_frames.append(pairwise_combination_theory(pool_table, mask).assign(pool=name))
         if name == "fm":
             ambiguity = ambiguity_decomposition(pool_table, mask)
             persistence = winner_persistence(pool_table)
@@ -188,6 +196,12 @@ def main() -> None:
         ["dataset", "member_a", "member_b"]
     )
     correlations.to_csv(out / "error_correlations.csv", index=False)
+    pd.concat(shared_frames, ignore_index=True).to_csv(out / "shared_error.csv", index=False)
+    bounds = pd.concat(bound_frames, ignore_index=True)
+    bounds.to_csv(out / "combination_bound.csv", index=False)
+    pd.concat(pair_frames, ignore_index=True).drop_duplicates(
+        ["dataset", "better_member", "worse_member"]
+    ).to_csv(out / "pairwise_theory.csv", index=False)
     fm_corr = (
         correlations[correlations["member_a"].isin(FM) & correlations["member_b"].isin(FM)]
         .groupby("dataset")["corr"]

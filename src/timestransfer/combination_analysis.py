@@ -351,6 +351,139 @@ def ambiguity_decomposition(
     return pd.DataFrame(rows)
 
 
+def shared_error_decomposition(
+    table: CombinationTable, mask: np.ndarray | None = None
+) -> pd.DataFrame:
+    """Split member errors into a shared and a member-specific part, per task.
+
+    With e_m the signed scaled error of member m, the shared error is the equal-weight
+    mean c = mean_m e_m and the specific parts are s_m = e_m - c. Because the s_m sum to
+    zero, mean member MSE = E[c^2] + mean_m E[s_m^2] exactly; ``shared_share`` is
+    E[c^2] / mean member MSE (= 1 - ambiguity ratio). ``first_pc_share`` is the share of
+    the error covariance carried by its first principal component, a scale-free check
+    that does not depend on equal weights.
+    """
+    use = table.valid_scale if mask is None else table.valid_scale & mask
+    signed = table.scaled_predictions - table.scaled_y[:, None]
+    rows = []
+    for code, dataset in enumerate(table.datasets):
+        errors = signed[use & (table.dataset_codes == code)]
+        shared = errors.mean(axis=1)
+        specific = errors - shared[:, None]
+        mean_member_mse = float(np.mean(errors**2))
+        eigenvalues = np.linalg.eigvalsh(np.cov(errors, rowvar=False))
+        rows.append(
+            {
+                "dataset": dataset,
+                "mean_member_mse": mean_member_mse,
+                "shared_mse": float(np.mean(shared**2)),
+                "specific_mse": float(np.mean(specific**2)),
+                "shared_share": float(np.mean(shared**2)) / mean_member_mse,
+                "first_pc_share": float(eigenvalues[-1] / eigenvalues.sum()),
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def _simplex_mse_weights(moments: np.ndarray) -> np.ndarray:
+    """Exact argmin_w w'Mw over the probability simplex for a handful of members.
+
+    The optimum is the sum-to-one optimum M_S^-1 1 / 1'M_S^-1 1 on some support S, so
+    every support is tried and the best nonnegative candidate kept (2^n - 1 small solves).
+    """
+    n = len(moments)
+    best_weights, best_value = None, np.inf
+    for mask in range(1, 2**n):
+        support = [i for i in range(n) if mask >> i & 1]
+        sub = moments[np.ix_(support, support)]
+        try:
+            raw = np.linalg.solve(sub, np.ones(len(support)))
+        except np.linalg.LinAlgError:
+            continue
+        if raw.sum() <= 0 or np.any(raw < -1e-12):
+            continue
+        weights = np.zeros(n)
+        weights[support] = np.maximum(raw, 0) / raw.sum()
+        value = float(weights @ moments @ weights)
+        if value < best_value:
+            best_weights, best_value = weights, value
+    return best_weights
+
+
+def combination_bound(table: CombinationTable, mask: np.ndarray | None = None) -> pd.DataFrame:
+    """Ex-post optimal fixed weights per task: the most any fixed linear combination of
+    the members could have reduced squared scaled error, relative to the best member.
+
+    M is the second-moment matrix of signed scaled errors (bias included), so a weight
+    vector w with sum 1 has MSE w'Mw. ``unconstrained`` uses w ~ M^-1 1 (Bates-Granger
+    with free signs), ``simplex`` restricts w to nonnegative weights summing to one (the
+    NNLS combiners' constraint), ``equal`` is the equal mean. All are in-sample upper
+    bounds: weights are fitted on the same rows they are scored on.
+    """
+    use = table.valid_scale if mask is None else table.valid_scale & mask
+    signed = table.scaled_predictions - table.scaled_y[:, None]
+    n = len(table.members)
+    rows = []
+    for code, dataset in enumerate(table.datasets):
+        errors = signed[use & (table.dataset_codes == code)]
+        moments = errors.T @ errors / len(errors)
+        best = int(np.argmin(np.diag(moments)))
+        best_mse = float(moments[best, best])
+        free = np.linalg.solve(moments, np.ones(n))
+        free = free / free.sum()
+        simplex = _simplex_mse_weights(moments)
+        equal = np.full(n, 1.0 / n)
+        rows.append(
+            {
+                "dataset": dataset,
+                "best_member": table.members[best],
+                "best_member_mse": best_mse,
+                "unconstrained_vs_best": float(free @ moments @ free) / best_mse,
+                "simplex_vs_best": float(simplex @ moments @ simplex) / best_mse,
+                "equal_vs_best": float(equal @ moments @ equal) / best_mse,
+                **{f"simplex_w_{m}": float(w) for m, w in zip(table.members, simplex, strict=True)},
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def pairwise_combination_theory(
+    table: CombinationTable, mask: np.ndarray | None = None
+) -> pd.DataFrame:
+    """Two-member Bates-Granger view per task and member pair.
+
+    With second moments a = E[e_1^2] <= b = E[e_2^2] and c = E[e_1 e_2], the optimal
+    sum-to-one combination has MSE (ab - c^2) / (a + b - 2c). In terms of the
+    uncentred error correlation rho = c / sqrt(ab) and accuracy ratio k = sqrt(a/b) <= 1,
+    its ratio to the better member is (1 - rho^2) / (1 + k^2 - 2 rho k), so gains need
+    both low rho and k close to one. Reports rho, k and that ratio.
+    """
+    use = table.valid_scale if mask is None else table.valid_scale & mask
+    signed = table.scaled_predictions - table.scaled_y[:, None]
+    rows = []
+    for code, dataset in enumerate(table.datasets):
+        errors = signed[use & (table.dataset_codes == code)]
+        moments = errors.T @ errors / len(errors)
+        for i, first in enumerate(table.members):
+            for j in range(i + 1, len(table.members)):
+                a, b, c = moments[i, i], moments[j, j], moments[i, j]
+                better, worse = (first, table.members[j]) if a <= b else (table.members[j], first)
+                low, high = min(a, b), max(a, b)
+                rho = c / np.sqrt(a * b)
+                k = np.sqrt(low / high)
+                rows.append(
+                    {
+                        "dataset": dataset,
+                        "better_member": better,
+                        "worse_member": worse,
+                        "rho": float(rho),
+                        "accuracy_ratio_k": float(k),
+                        "optimal_vs_better": float((1 - rho**2) / (1 + k**2 - 2 * rho * k)),
+                    }
+                )
+    return pd.DataFrame(rows)
+
+
 # --- granularity
 
 

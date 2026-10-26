@@ -1,0 +1,14 @@
+ett_h1_h48 5s
+ett_h2_h48 4s
+ett_m1_h48 4s
+ett_m2_h48 4s
+weather_h48 11s
+ecl_h48 171s
+               uni  multi  ratio  windows_improved  series_improved
+dataset                                                            
+ecl_h48      0.903  1.032  1.144              0.25            0.131
+ett_h1_h48   0.849  0.822  0.969              0.70            1.000
+ett_h2_h48   1.071  1.094  1.022              0.45            0.143
+ett_m1_h48   0.513  0.483  0.941              0.65            0.571
+ett_m2_h48   0.531  0.528  0.996              0.55            0.571
+weather_h48  0.289  0.265  0.917              0.65            1.000

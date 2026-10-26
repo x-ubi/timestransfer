@@ -10,19 +10,23 @@ from timestransfer.combination import (
     nnls_weights,
 )
 from timestransfer.combination_analysis import (
+    _simplex_mse_weights,
     aggregate_relative,
     ambiguity_decomposition,
     amplitude_ratios,
     bootstrap_aggregate,
+    combination_bound,
     diebold_mariano,
     dm_tests,
     error_correlations,
     holm_adjust,
     horizon_phase_ratios,
     learning_curve,
+    pairwise_combination_theory,
     regret_summary,
     regret_table,
     relative_to_baseline,
+    shared_error_decomposition,
     task_mase,
     task_mase_long,
     window_losses,
@@ -166,6 +170,62 @@ def test_diversity_measures():
     assert np.allclose(
         ambiguity["ensemble_mse"], ambiguity["mean_member_mse"] - ambiguity["ambiguity"]
     )
+
+
+def test_shared_error_decomposition_is_exact_and_matches_ambiguity():
+    def predict(y, rng, *_):
+        common = rng.normal(size=y.shape)
+        return {m: y + common + 0.3 * rng.normal(size=y.shape) for m in ("a", "b", "c")}
+
+    forecasts, scales = _long(predict)
+    table = build_combination_table(forecasts, scales, ["a", "b", "c"])
+    shared = shared_error_decomposition(table).set_index("dataset")
+    ambiguity = ambiguity_decomposition(table).set_index("dataset")
+
+    assert np.allclose(shared["shared_mse"] + shared["specific_mse"], shared["mean_member_mse"])
+    assert np.allclose(shared["shared_share"], 1 - ambiguity["diversity_ratio"])
+    assert (shared["shared_share"] > 0.7).all()
+    assert ((shared["first_pc_share"] > 1 / 3) & (shared["first_pc_share"] <= 1)).all()
+
+
+# Orthogonal errors within every series-window: E[e_a^2] = 1, E[e_b^2] = 4, E[e_a e_b] = 0.
+_PATTERN = {"a": np.array([1.0, -1.0, 1.0, -1.0]), "b": np.array([2.0, 2.0, -2.0, -2.0])}
+
+
+def _orthogonal(y, *_):
+    return {m: y + e for m, e in _PATTERN.items()}
+
+
+def test_combination_bound_on_orthogonal_errors():
+    forecasts, scales = _long(_orthogonal)
+    table = build_combination_table(forecasts, scales, ["a", "b"])
+    bound = combination_bound(table).set_index("dataset").loc["d1"]
+
+    assert bound["best_member"] == "a"
+    assert bound["best_member_mse"] == pytest.approx(1.0)
+    # Optimum (ab - c^2) / (a + b - 2c) = 4 / 5 with weights (0.8, 0.2); equal = 5/4.
+    assert bound["unconstrained_vs_best"] == pytest.approx(0.8)
+    assert bound["simplex_vs_best"] == pytest.approx(0.8)
+    assert bound["equal_vs_best"] == pytest.approx(1.25)
+    assert bound["simplex_w_a"] == pytest.approx(0.8)
+
+    theory = pairwise_combination_theory(table).set_index("dataset").loc["d1"]
+    assert theory["better_member"] == "a"
+    assert theory["rho"] == pytest.approx(0.0, abs=1e-12)
+    assert theory["accuracy_ratio_k"] == pytest.approx(0.5)
+    assert theory["optimal_vs_better"] == pytest.approx(0.8)
+
+
+def test_simplex_weights_drop_a_member_that_needs_a_negative_weight():
+    moments = np.array([[1.0, 1.9], [1.9, 4.0]])
+    free = np.linalg.solve(moments, np.ones(2))
+    free /= free.sum()
+    assert free[1] < 0
+    assert free @ moments @ free == pytest.approx(0.39 / 1.2)
+
+    assert np.allclose(_simplex_mse_weights(moments), [1.0, 0.0])
+    three = np.array([[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]])
+    assert np.allclose(_simplex_mse_weights(three), [1 / 3] * 3)
 
 
 def test_winner_persistence_and_chance():
