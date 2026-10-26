@@ -27,7 +27,7 @@ FORECASTS = "forecasts/all_datasets_all_models.parquet"
 
 # Output directories (relative to outputs/) whose forecasts, metrics and metadata are kept.
 # "." is the main 5-window benchmark that the thesis chapters cite.
-RUNS = [".", "timesfm_tuning", "combination", "combination_stats"]
+RUNS = [".", "timesfm_tuning", "combination", "combination_stats", "timesfm_config"]
 
 # Extra files and folders (relative to outputs/) copied as they are.
 EXTRAS = [
@@ -41,6 +41,39 @@ EXTRAS = [
     "combination/combiners/fm/metrics/relative_to_seasonal_naive.csv",
     "combination/combiners/fm/metrics/model_comparison_wide.csv",
     "combination/combiners/fm/metrics/window_spread.csv",
+    "timesfm_config/analysis",
+    "timesfm_config/selection/tfm_ctx/weights",
+    "timesfm_config/selection/tfm_ctx/metadata",
+    "timesfm_config/selection/tfm_ctx/metrics/aggregate_relative_scores.csv",
+    "timesfm_config/selection/tfm_ctx/metrics/relative_to_seasonal_naive.csv",
+    "timesfm_config/selection/tfm_cfg/weights",
+    "timesfm_config/selection/tfm_cfg/metadata",
+    "timesfm_config/selection/tfm_cfg/metrics/aggregate_relative_scores.csv",
+    "timesfm_config/selection/tfm_cfg/metrics/relative_to_seasonal_naive.csv",
+    "timesfm_config/selection/chr_ctx/weights",
+    "timesfm_config/selection/chr_ctx/metadata",
+    "timesfm_config/selection/chr_ctx/metrics/aggregate_relative_scores.csv",
+    "timesfm_config/selection/chr_ctx/metrics/relative_to_seasonal_naive.csv",
+    "timesfm_config/selection/default_pair/weights",
+    "timesfm_config/selection/default_pair/metadata",
+    "timesfm_config/selection/default_pair/metrics/aggregate_relative_scores.csv",
+    "timesfm_config/selection/default_pair/metrics/relative_to_seasonal_naive.csv",
+    "timesfm_config/selection/long_pair/weights",
+    "timesfm_config/selection/long_pair/metadata",
+    "timesfm_config/selection/long_pair/metrics/aggregate_relative_scores.csv",
+    "timesfm_config/selection/long_pair/metrics/relative_to_seasonal_naive.csv",
+    "timesfm_config/selection/all_cfg/weights",
+    "timesfm_config/selection/all_cfg/metadata",
+    "timesfm_config/selection/all_cfg/metrics/aggregate_relative_scores.csv",
+    "timesfm_config/selection/all_cfg/metrics/relative_to_seasonal_naive.csv",
+    "timesfm_config/selection/default_trio/weights",
+    "timesfm_config/selection/default_trio/metadata",
+    "timesfm_config/selection/default_trio/metrics/aggregate_relative_scores.csv",
+    "timesfm_config/selection/default_trio/metrics/relative_to_seasonal_naive.csv",
+    "timesfm_config/selection/long_trio/weights",
+    "timesfm_config/selection/long_trio/metadata",
+    "timesfm_config/selection/long_trio/metrics/aggregate_relative_scores.csv",
+    "timesfm_config/selection/long_trio/metrics/relative_to_seasonal_naive.csv",
 ]
 
 # Run logs hold the wall-clock timings; *.log is git-ignored, so they are stored as .txt.
@@ -50,6 +83,10 @@ LOGS = [
     "combination_stats/run.log",
     "combination_stats/progress.log",
     "combination/analysis_run.log",
+    "timesfm_config/run.log",
+    "timesfm_config/progress.log",
+    "timesfm_config/selection/run.log",
+    "timesfm_config/selection/run_extra.log",
 ]
 
 

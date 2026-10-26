@@ -1,0 +1,68 @@
+== long_pair
+/home/ubuntu/timestransfer/src/timestransfer/reporting.py:194: UserWarning: Tight layout not applied. The bottom and top margins cannot be made large enough to accommodate all Axes decorations.
+  plt.tight_layout()
+/home/ubuntu/timestransfer/src/timestransfer/reporting.py:194: UserWarning: Tight layout not applied. The bottom and top margins cannot be made large enough to accommodate all Axes decorations.
+  plt.tight_layout()
+/home/ubuntu/timestransfer/src/timestransfer/reporting.py:194: UserWarning: Tight layout not applied. The bottom and top margins cannot be made large enough to accommodate all Axes decorations.
+  plt.tight_layout()
+equal_mean: 0.5s
+median: 0.5s
+select_task: 1.2s
+select_series: 1.6s
+nnls_task: 1.4s
+               model  n_tasks  geomean_relative_mase  geomean_relative_mae
+           nnls_task       11               0.623950              0.672206
+         select_task       11               0.625964              0.673960
+       select_series       11               0.627548              0.671608
+timesfm_2p5_ctx16256       11               0.639246              0.688083
+          equal_mean       11               0.650917              0.705520
+              median       11               0.650917              0.705520
+    chronos2_ctx8192       11               0.701867              0.756506
+      seasonal_naive       11               1.000000              1.000000
+outputs: outputs/timesfm_config/selection/long_pair
+== default_trio
+/home/ubuntu/timestransfer/src/timestransfer/reporting.py:194: UserWarning: Tight layout not applied. The bottom and top margins cannot be made large enough to accommodate all Axes decorations.
+  plt.tight_layout()
+/home/ubuntu/timestransfer/src/timestransfer/reporting.py:194: UserWarning: Tight layout not applied. The bottom and top margins cannot be made large enough to accommodate all Axes decorations.
+  plt.tight_layout()
+/home/ubuntu/timestransfer/src/timestransfer/reporting.py:194: UserWarning: Tight layout not applied. The bottom and top margins cannot be made large enough to accommodate all Axes decorations.
+  plt.tight_layout()
+equal_mean: 0.6s
+median: 0.6s
+select_task: 1.5s
+select_series: 1.8s
+nnls_task: 1.6s
+              model  n_tasks  geomean_relative_mase  geomean_relative_mae
+          nnls_task       11               0.632812              0.674635
+        select_task       11               0.639731              0.687824
+      select_series       11               0.641964              0.687121
+timesfm_2p5_ctx1024       11               0.662716              0.715103
+         equal_mean       11               0.681653              0.720639
+             median       11               0.683735              0.722378
+   chronos2_ctx8192       11               0.701867              0.756506
+          tabpfn_ts       11               0.772564              0.801527
+     seasonal_naive       11               1.000000              1.000000
+outputs: outputs/timesfm_config/selection/default_trio
+== long_trio
+/home/ubuntu/timestransfer/src/timestransfer/reporting.py:194: UserWarning: Tight layout not applied. The bottom and top margins cannot be made large enough to accommodate all Axes decorations.
+  plt.tight_layout()
+/home/ubuntu/timestransfer/src/timestransfer/reporting.py:194: UserWarning: Tight layout not applied. The bottom and top margins cannot be made large enough to accommodate all Axes decorations.
+  plt.tight_layout()
+/home/ubuntu/timestransfer/src/timestransfer/reporting.py:194: UserWarning: Tight layout not applied. The bottom and top margins cannot be made large enough to accommodate all Axes decorations.
+  plt.tight_layout()
+equal_mean: 0.5s
+median: 0.5s
+select_task: 1.2s
+select_series: 1.6s
+nnls_task: 1.6s
+               model  n_tasks  geomean_relative_mase  geomean_relative_mae
+           nnls_task       11               0.622836              0.665582
+         select_task       11               0.626837              0.673280
+       select_series       11               0.629985              0.675951
+timesfm_2p5_ctx16256       11               0.639246              0.688083
+          equal_mean       11               0.672980              0.711439
+              median       11               0.675250              0.713475
+    chronos2_ctx8192       11               0.701867              0.756506
+           tabpfn_ts       11               0.772564              0.801527
+      seasonal_naive       11               1.000000              1.000000
+outputs: outputs/timesfm_config/selection/long_trio

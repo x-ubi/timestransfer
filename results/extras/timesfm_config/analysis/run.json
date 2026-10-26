@@ -1,0 +1,14 @@
+{
+  "generated_at_utc": "2026-10-26T22:10:41.840207+00:00",
+  "args": {
+    "run_dir": "outputs/timesfm_config",
+    "baseline": "seasonal_naive",
+    "n_boot": 2000,
+    "seed": 0
+  },
+  "n_rows": 1164720,
+  "git": {
+    "commit": "caab2dbe0b9c1ab1686ef637039108912b00bd5e",
+    "status_short": "?? exports/\n?? outputs_archive_pre_rolling_origin/\n?? results/pilots_2026-10/out/.corrupt.err\n?? results/pilots_2026-10/out/.mv.err\n?? scripts/run_config_analysis.py\n?? scripts/run_timesfm_config_selection.sh"
+  }
+}

@@ -78,23 +78,58 @@ These numbers use squared scaled error, which the theory works with; the benchma
   The diversity they add is real in sample but is not recovered out of sample. Part of this gap may come from the bound being computed on squared error while the scores use absolute error.
 - **Shared error isn't removed by simple bias correction** (pilot, `results/pilots_2026-10/shared_error.py`). A series' error barely correlates between consecutive windows (−0.16 to 0.37), and correcting each series for its past bias makes MASE worse on most tasks. More sophisticated correction methods exist (ECHO, arXiv 2610.16433) but were not tested.
 
-### 1.4 Pilots behind the direction decision (`results/pilots_2026-10/`)
+### 1.4 TimesFM configuration study (step 2, 2026-10-26) — **Established**
+
+Setup:
+- Grid: TimesFM 2.5 at context {512, 1,024, 2,048, 4,096, 8,192, 16,256} × flip invariance on/off, and Chronos-2 at context {1,024, 2,048, 4,096, 8,192}, on the 20-origin windows of §1.2 (`configs/timesfm_config.yaml`).
+- The default variants (TimesFM 1,024, Chronos-2 8,192) reproduce the §1.2 forecasts exactly.
+- Selection and weighting use the same rolling protocol as §1.2 (`scripts/run_timesfm_config_selection.sh`).
+- Analysis in `scripts/run_config_analysis.py`; tables in `outputs/timesfm_config/analysis/`.
+- Ratios below are against TimesFM at context 1,024. CIs are bootstrap intervals resampling series and windows.
+
+| Result | Number |
+|---|---|
+| One fixed long context for every task (16,256) | 0.639 vs 0.663: ratio **0.965** (CI 0.944–0.987); better on 9 tasks, equal on M4 and ILI (series shorter than 1,024) |
+| Largest per-task gains of the long context | Traffic −11.5%, Weather −10.2%, ETTh2 −4.6%, ECL −3.9%, Exchange −3.9%; ETTh1/ETTm1/ETTm2 −0.2% to −1.5% |
+| Context chosen per task from past windows | 0.640 (contexts only) and 0.642 (with flip on/off): **no better than always using 16,256** (ratio 1.001, CI 0.980–1.021) |
+| Ex-post best configuration per task (unattainable oracle) | 0.629 |
+| Flip invariance off | Worse at every context in aggregate; at 16,256 it is worse on 8 of 11 tasks (3 significant after Holm). It halves inference time at long contexts |
+| Chronos-2 context | Hardly matters: 0.715 (1,024) → 0.702 (8,192) |
+| TimesFM vs Chronos-2 | Chronos-2 is 1.059× TimesFM (default) and 1.098× TimesFM (16,256). At 16,256, TimesFM overtakes Chronos-2 on Weather and Exchange and pulls ahead on Traffic. Chronos-2 stays better on ECL and the four ETT tasks |
+| Combination after configuration | TimesFM 16,256 + Chronos-2, task-level weights: 0.624, ratio **0.976** (CI 0.958–0.991) to TimesFM 16,256. Adding TabPFN-TS: 0.623 |
+| Original combination vs long context alone | 0.634 vs 0.639: ratio 0.992 (CI 0.967–1.014), **indistinguishable** |
+| Best overall | TimesFM 16,256 + Chronos-2 (+ TabPFN-TS), task-level weights: 0.623, ratio **0.940** (CI 0.916–0.962) to TimesFM default |
+| Inference cost, all 11 tasks × 20 origins, A5000 | TimesFM 1,024: 5.6 min, 8,192: 21.7 min, 16,256: 42.3 min (no flip: 22.8 min); Chronos-2 8,192: 8.8 min. Logged per-model times include data handling (SeasonalNaive: 4.4 min) |
+
+Per-task DM tests have little power with 17 evaluated windows: no single-task context gain survives the Holm correction; the closest is Traffic (p = 0.007 raw, 0.08 Holm). The aggregate gains are significant under all three bootstrap schemes.
+
+Interpretation:
+- **One fixed setting beats per-task tuning.** Context length is a real lever, but the right per-task setting cannot be identified from past windows. Window-to-window noise in the ranking of configurations outweighs their differences.
+  - ETTm1 is the one task where selection helps: −10% from choosing 512.
+  - On Weather and ETTh1 selection loses part of the long-context gain.
+- **The pilot overstated the configuration gains.** The pilot below (Weather −28%, ETTm1 −13%) used 4 windows of the 5-origin benchmark; on 20 origins the gains are −10% (Weather, fixed long context) and −10% (ETTm1, selected).
+- **Configuration and combination are partly substitutes.** A longer context alone recovers the whole gain the combination study reported. Combining still adds 2.4% on top of the long-context model, and the combination keeps its insurance role.
+- **Longer context does not make TimesFM less redundant with Chronos-2.** The shared error share of the pair is unchanged (0.94–0.99 on the long-series tasks), consistent with §1.3.
+- **The benchmark understated TimesFM.** Default-setting benchmarks partly confound model and configuration: three task rankings change, and the aggregate gap to Chronos-2 widens.
+
+### 1.5 Pilots behind the direction decision (`results/pilots_2026-10/`)
 
 | Pilot | Result | Label |
 |---|---|---|
-| Choosing TimesFM's context per task from past windows (Experiment 3 sweep, 4 tasks, windows 0–3) | Weather 0.231 → **0.167 (−28%)**, ETTm1 0.527 → **0.460 (−13%)**, ETTh1 and M4 unchanged. On those two tasks TimesFM nearly matches Chronos-2 (0.169, 0.441) | Pilot |
+| Choosing TimesFM's context per task from past windows (Experiment 3 sweep, 4 tasks, windows 0–3) | Weather 0.231 → **0.167 (−28%)**, ETTm1 0.527 → **0.460 (−13%)**, ETTh1 and M4 unchanged. On those two tasks TimesFM nearly matches Chronos-2 (0.169, 0.441). **Superseded by §1.4** | Pilot |
 | Chronos-2 forecasting all variables jointly (multivariate / cross-learning), 20 origins (rerun today, identical to the first run) | Weather −8.3%, ETTm1 −5.9%, ETTh1 −3.1%, ETTm2 0%, ETTh2 +2.2%, ECL **+14%** (unrelated series grouped together) | Pilot |
 | Probabilistic combination | Mixing the three predictive distributions (1.043× best single model's quantile loss) beats averaging their quantiles (1.082×), the method used by leaderboard ensembles | Pilot |
 | Damaged inputs (20% missing, missing block, outliers) | The models do **not** become more complementary; TabPFN-TS suffers most from missing data. The rerun with a deterministic seed is in progress | Pilot |
 
-### 1.5 Takeaways
+### 1.6 Takeaways
 
 1. Zero-shot foundation models are **largely redundant forecasters**: most of their error is shared. That caps what combining them can achieve, and the cap matches classical combination theory.
 2. In practice, combining them amounts to **choosing the right model per task**. That has real value as insurance (worst case 1.03 vs up to 2.9), but no accuracy gain beyond the best model.
-3. The levers that remain must reduce the **shared** error, by changing what the model does on the target data: its configuration, its weights, or the information it receives. The pilots suggest configuration can matter a lot on some tasks.
-4. Part of the model ranking in the benchmark (TimesFM vs Chronos-2 on high-frequency tasks) appears to reflect default settings rather than the models themselves.
+3. The levers that remain must reduce the **shared** error, by changing what the model does on the target data: its configuration, its weights, or the information it receives.
+   - Configuration (§1.4) gives −3.5% from one fixed long context. Per-task tuning adds nothing to that.
+4. Part of the model ranking in the benchmark reflects default settings rather than the models themselves. With a long context, TimesFM overtakes Chronos-2 on Weather and Exchange.
 
-### 1.6 Infrastructure
+### 1.7 Infrastructure
 
 - **Code:** `src/timestransfer/combination.py` (combiners, rolling protocol) and `combination_analysis.py` (diversity, shared-error split, ideal-weight bound, DM tests, bootstrap, regret, learning curves, failure modes), with tests (all passing).
 - **Archive:** all expensive outputs are on GitHub (`results/`, branch `ensemble_research`), verified to restore exactly.
@@ -108,7 +143,7 @@ These numbers use squared scaled error, which the theory works with; the benchma
 | # | Step | Content | Compute | When |
 |---|---|---|---|---|
 | 1 | Close the combination study | **Done 2026-10-26:** shared-error split, ideal-weight bound, two-model theory, pools with AutoETS/AutoTheta. The figure of tasks on the correlation/accuracy plane moves to step 6 (thesis artifact pipeline) | CPU, minutes | done |
-| 2 | TimesFM configuration study | Context {512, 1,024, 2,048, 4,096, 8,192, 16,256} × flip invariance on/off on all 11 tasks, 20 origins. Setting chosen per task from past windows via the combination module. Chronos-2 context grid as a fairness control | ~3–10 GPU h (A5000) | from Oct 27 |
+| 2 | TimesFM configuration study | **Done 2026-10-26** (§1.4): grid 3.1 h on the A5000; selection, combination after configuration, DM tests and bootstrap | 3.1 GPU h | done |
 | 3 | Fine-tuning | TimesFM 2.5 LoRA in a separate environment (HF `TimesFm2_5ModelForPrediction` + `peft`; first check the HF checkpoint matches ours). One fine-tune per task on data before the evaluation windows. Chronos-2 LoRA via `fit()` as fallback and second model | ~6–18 GPU h | early November |
 | 4 | Three-way comparison | Zero-shot vs configured vs fine-tuned vs combined, and their combinations; DM tests, bootstrap CIs, regret, compute cost | CPU | early November |
 | 5 | Literature re-check | Error correlation of foundation models, context selection, fine-tuning vs zero-shot, multi-strategy comparisons; follow-ups to ECHO and Chronos-2 | – | before writing |
@@ -124,7 +159,7 @@ These numbers use squared scaled error, which the theory works with; the benchma
 
 ### 2.3 Risks
 
-- **Configuration gains don't generalise beyond Weather and ETTm1.** Step 2 settles this within about a week; the thesis then leans more on the diagnosis and the fine-tuning comparison.
+- **Configuration gains don't generalise beyond Weather and ETTm1.** Partly realised (§1.4): the gains are real but moderate (−3.5% aggregate) and come from one fixed long context, not per-task tuning. Fine-tuning must be compared against TimesFM at 16,256, the stronger zero-shot baseline, not only at 1,024.
 - **The TimesFM LoRA setup fails** (HF checkpoint mismatch or dependency conflicts). Fallback: Chronos-2 `fit()`.
 - **Possible pretraining contamination** (M4 and ECL are in some models' training data). Report it as a limitation; relative comparisons are less affected than absolute scores.
 - **New related papers** in a fast-moving field. The step 5 re-check guards against this.
@@ -134,7 +169,10 @@ These numbers use squared scaled error, which the theory works with; the benchma
 
 1. **Measurement of shared vs model-specific error** across zero-shot foundation models, linked to the combination bound and classical theory. No prior measurement found.
 2. **Weighting granularity under a leakage-free rolling protocol.** This contradicts the per-series / per-window weighting used by recent foundation-model ensembles (Toto 2.0, TimeRouter, ZooCast), at least on this benchmark.
-3. **Per-task backtested configuration of TimesFM.** The method itself is incremental (context sensitivity is documented; GITCO, arXiv 2606.05332). What's new is quantifying how it changes model rankings.
+3. **Backtested configuration of TimesFM.** The method itself is incremental (context sensitivity is documented; GITCO, arXiv 2606.05332).
+   - What's new is the result under a leakage-free protocol: per-task selection does not beat one fixed long context.
+   - The long context alone matches the gain of combining foundation models.
+   - It changes three task-level rankings against Chronos-2.
 4. **Combination vs configuration vs fine-tuning under one protocol.** No single source found. Fine-tuning vs zero-shot alone is known (e.g. Laglil et al., arXiv 2607.23146: LoRA +2–3% on medium/large datasets).
 
 ---
@@ -144,7 +182,7 @@ These numbers use squared scaled error, which the theory works with; the benchma
 | Arm | Expected result | Basis | What it would mean |
 |---|---|---|---|
 | Combination | Combining ≈ per-task model selection; ~4.5% better than a single fixed model, ≈0% better than the best model per task; ideal fixed weights ≤ ~3% (median) | **Established** | Redundancy, not the weighting method, limits foundation-model ensembles |
-| Configuration | Large gains on long high-frequency series (pilot: −13% to −28%), little or none on short series (M4, ILI); TimesFM vs Chronos-2 ranking changes on some tasks | **Pilot** | Default-setting benchmarks mix up model and configuration; per-task configuration is the cheapest effective transfer step |
-| Fine-tuning | Small gains (~0–5%) on long datasets, none or negative on short ones | **Hypothesis**, consistent with the literature | Weight adaptation helps only with enough target data |
-| Combined strategies | Combination adds little on top of a well-configured or fine-tuned model | **Hypothesis**, follows from the redundancy result | Model-side adaptation, not model pooling, reduces the shared error |
+| Configuration | Fixed long context −3.5% (Traffic −11.5%, Weather −10%), none on short series (M4, ILI). Per-task selection from past windows no better than the fixed long context. Rankings vs Chronos-2 change on Weather and Exchange | **Established** (§1.4) | Default-setting benchmarks partly confound model and configuration. Configuration is a cheap transfer step, but its best form is a single good default, not per-task tuning |
+| Fine-tuning | Small gains (~0–5%) on long datasets, none or negative on short ones; must beat TimesFM at 16,256 to matter | **Hypothesis**, consistent with the literature | Weight adaptation helps only with enough target data |
+| Combined strategies | Combination still adds ~2.4% on top of the long-context TimesFM (CI 0.958–0.991); expected to add little on top of a fine-tuned model | **Established** for configuration; **Hypothesis** for fine-tuning | Configuration does not reduce the shared error between models; whether fine-tuning does is the open question |
 | Cost-effectiveness | configuration > fine-tuning > combination in gain per GPU hour | **Hypothesis** | A practical recommendation order |

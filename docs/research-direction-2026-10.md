@@ -24,7 +24,7 @@ Established (Phase C, `results/extras/combination/analysis/`):
 Pilots (`results/pilots_2026-10/`): see the table in `results/README.md`. In short:
 - 84–97% of FM error variance is a shared component, not removable by simple bias correction.
 - Mixture pooling beats quantile averaging.
-- Choosing TimesFM's context per task from past windows gives −28% on Weather and −13% on ETTm1, closing most of the gap to Chronos-2 on those tasks.
+- Choosing TimesFM's context per task from past windows gives −28% on Weather and −13% on ETTm1, closing most of the gap to Chronos-2 on those tasks. This is superseded by the 20-origin step 2 results: −10% and −10%.
 - Damaged inputs do not make the FMs complementary.
 - Chronos-2 multivariate mode helps on physically coupled variables (Weather, ETT) and hurts on unrelated series (ECL).
 
@@ -40,7 +40,11 @@ Recent related work to track: ECHO (arXiv 2610.16433, TSFM error correction), Ch
 ## Next steps
 
 1. Close the combination study: commit Phase B/C code; rerun `scripts/run_combination_analysis.py` with the statistical pools; add the shared/specific error decomposition and the per-task optimal-weight bound to `combination_analysis.py` with tests. **Done 2026-10-26** (results in `docs/thesis-status-2026-10-26.md`, §1.3).
-2. TimesFM configuration study: context {512, …, 16256} × flip invariance on/off, 20 origins, all tasks; small Chronos-2 context grid as a fairness control; selection and weighting through the existing combination module.
+2. TimesFM configuration study: context {512, …, 16256} × flip invariance on/off, 20 origins, all tasks; small Chronos-2 context grid as a fairness control; selection and weighting through the existing combination module. **Done 2026-10-26** (results in `docs/thesis-status-2026-10-26.md`, §1.4).
+   - Fixed context 16,256 gives −3.5% vs 1,024. Per-task selection adds nothing.
+   - Long context alone matches the original combination gain.
+   - Combination adds 2.4% on top of it.
+   - Step 3 must report against TimesFM at 16,256 as well as at 1,024.
 3. TimesFM 2.5 LoRA fine-tuning in a separate environment (`transformers` with `TimesFm2_5ModelForPrediction`, `peft`; checkpoint `google/timesfm-2.5-200m-transformers`, checked against the pinned PyTorch checkpoint first). One fine-tune per task on data before the earliest evaluation window. Fallback: `Chronos2Pipeline.fit`.
 4. Three-way comparison with DM tests, bootstrap CIs, regret and compute cost.
 5. Literature re-check.

@@ -1,0 +1,275 @@
+{
+  "generated_at_utc": "2026-10-26T22:04:20.706817+00:00",
+  "args": {
+    "forecasts": [
+      "outputs/timesfm_config/forecasts/all_datasets_all_models.parquet"
+    ],
+    "mase_scales": [
+      "outputs/timesfm_config/metrics/mase_scales.csv"
+    ],
+    "members": [
+      "timesfm_2p5_ctx1024",
+      "chronos2_ctx8192"
+    ],
+    "baseline": "seasonal_naive",
+    "methods": [
+      "equal_mean",
+      "median",
+      "select_task",
+      "select_series",
+      "nnls_task"
+    ],
+    "datasets": null,
+    "min_past_windows": 3,
+    "max_past_windows": null,
+    "name": "default_pair",
+    "outputs_root": "outputs/timesfm_config/selection",
+    "config": "configs/combination.yaml",
+    "features_cache": "outputs/combination/combiners/series_features.parquet",
+    "feature_max_points": 2048,
+    "n_jobs": 16,
+    "no_meta_learner": true
+  },
+  "members": [
+    "timesfm_2p5_ctx1024",
+    "chronos2_ctx8192"
+  ],
+  "protocol": {
+    "min_past_windows": 3,
+    "max_past_windows": null
+  },
+  "evaluated_windows": {
+    "ecl_h48": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "ett_h1_h48": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "ett_h1_h96": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "ett_h2_h48": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "ett_m1_h48": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "ett_m2_h48": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "exchange_h48": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "ili_h48": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "m4_hourly": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "traffic_h48": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "weather_h48": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ]
+  },
+  "methods": {
+    "equal_mean": {
+      "kind": "equal_mean"
+    },
+    "median": {
+      "kind": "median"
+    },
+    "select_task": {
+      "kind": "linear",
+      "fitter": "select_best",
+      "level": "task",
+      "n_bins": 1,
+      "recent_windows": null,
+      "shrinkage": 0.0
+    },
+    "select_series": {
+      "kind": "linear",
+      "fitter": "select_best",
+      "level": "series",
+      "n_bins": 1,
+      "recent_windows": null,
+      "shrinkage": 0.0
+    },
+    "nnls_task": {
+      "kind": "linear",
+      "fitter": "nnls_weights",
+      "level": "task",
+      "n_bins": 1,
+      "recent_windows": null,
+      "shrinkage": 0.0
+    }
+  },
+  "runtime_seconds": {
+    "equal_mean": 0.5,
+    "median": 0.6,
+    "select_task": 1.4,
+    "select_series": 1.6,
+    "nnls_task": 1.3
+  },
+  "git": {
+    "commit": "caab2dbe0b9c1ab1686ef637039108912b00bd5e",
+    "status_short": "?? exports/\n?? outputs_archive_pre_rolling_origin/\n?? results/pilots_2026-10/out/.corrupt.err\n?? results/pilots_2026-10/out/.mv.err\n?? scripts/run_timesfm_config_selection.sh"
+  }
+}

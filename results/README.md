@@ -10,6 +10,7 @@
 | `timesfm_tuning/` | `outputs/timesfm_tuning/` | Experiment 3: TimesFM context sweep and flag ablation | a few hours |
 | `combination/` | `outputs/combination/` | R1: TimesFM, Chronos-2, TabPFN-TS, SeasonalNaive with q10–q90, 20 origins (10 for M4 and ILI) | 22.3 h (TabPFN-TS 22.0 h) |
 | `combination_stats/` | `outputs/combination_stats/` | SeasonalNaive, AutoETS, AutoTheta on the R1 windows | about 3.3 h |
+| `timesfm_config/` | `outputs/timesfm_config/` | Step 2: TimesFM 2.5 at 6 contexts × flip on/off, Chronos-2 at 4 contexts, SeasonalNaive, on the R1 windows | 3.1 h (A5000) |
 | `extras/` | various | Phase C analysis tables, Experiment 2 features, combiner weights and summary metrics, cached series features | minutes |
 | `logs/` | `*.log` | Run logs with wall-clock timings (stored as `.txt` because `*.log` is git-ignored) | – |
 | `pilots_2026-10/` | none (written here) | Exploratory pilots behind the October 2026 direction decision; see below | minutes, except `corruption.py` (~40 min) |
@@ -22,7 +23,7 @@ Each run folder holds `forecasts/` (one zstd parquet per dataset and model), `me
 uv run python scripts/archive_results.py restore
 ```
 
-This rebuilds `outputs/<run>/forecasts/all_datasets_all_models.parquet` plus the metrics, metadata and extras. The combined forecasts of the combiners are not archived; regenerate them with `scripts/run_combination.py` (about 35 s). Then `scripts/run_combination_analysis.py` reproduces `outputs/combination/analysis/`.
+This rebuilds `outputs/<run>/forecasts/all_datasets_all_models.parquet` plus the metrics, metadata and extras. The combined forecasts of the combiners are not archived; regenerate them with `scripts/run_combination.py` (about 35 s). Then `scripts/run_combination_analysis.py` reproduces `outputs/combination/analysis/`. For step 2, `scripts/run_timesfm_config_selection.sh` followed by `scripts/run_config_analysis.py` reproduces `outputs/timesfm_config/{selection,analysis}/`.
 
 ## Pilots (`pilots_2026-10/`)
 
