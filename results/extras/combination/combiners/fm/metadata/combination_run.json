@@ -1,0 +1,396 @@
+{
+  "generated_at_utc": "2026-10-07T22:27:33.868256+00:00",
+  "args": {
+    "forecasts": [
+      "outputs/combination/forecasts/all_datasets_all_models.parquet"
+    ],
+    "mase_scales": [
+      "outputs/combination/metrics/mase_scales.csv"
+    ],
+    "members": [
+      "timesfm_2p5",
+      "chronos2",
+      "tabpfn_ts"
+    ],
+    "baseline": "seasonal_naive",
+    "methods": null,
+    "datasets": null,
+    "min_past_windows": 3,
+    "max_past_windows": null,
+    "name": "fm",
+    "outputs_root": "outputs/combination/combiners",
+    "config": "configs/combination.yaml",
+    "features_cache": "outputs/combination/combiners/series_features.parquet",
+    "feature_max_points": 2048,
+    "n_jobs": 16,
+    "no_meta_learner": false
+  },
+  "members": [
+    "timesfm_2p5",
+    "chronos2",
+    "tabpfn_ts"
+  ],
+  "protocol": {
+    "min_past_windows": 3,
+    "max_past_windows": null
+  },
+  "evaluated_windows": {
+    "ecl_h48": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "ett_h1_h48": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "ett_h1_h96": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "ett_h2_h48": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "ett_m1_h48": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "ett_m2_h48": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "exchange_h48": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "ili_h48": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "m4_hourly": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "traffic_h48": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "weather_h48": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ]
+  },
+  "methods": {
+    "equal_mean": {
+      "kind": "equal_mean"
+    },
+    "median": {
+      "kind": "median"
+    },
+    "select_task": {
+      "kind": "linear",
+      "fitter": "select_best",
+      "level": "task",
+      "n_bins": 1,
+      "recent_windows": null,
+      "shrinkage": 0.0
+    },
+    "select_series": {
+      "kind": "linear",
+      "fitter": "select_best",
+      "level": "series",
+      "n_bins": 1,
+      "recent_windows": null,
+      "shrinkage": 0.0
+    },
+    "select_series_last": {
+      "kind": "linear",
+      "fitter": "select_best",
+      "level": "series",
+      "n_bins": 1,
+      "recent_windows": 1,
+      "shrinkage": 0.0
+    },
+    "inv_mase_p1": {
+      "kind": "linear",
+      "fitter": {
+        "inverse_error": {
+          "power": 1,
+          "top_k": null
+        }
+      },
+      "level": "series",
+      "n_bins": 1,
+      "recent_windows": null,
+      "shrinkage": 0.0
+    },
+    "inv_mase_p2": {
+      "kind": "linear",
+      "fitter": {
+        "inverse_error": {
+          "power": 2,
+          "top_k": null
+        }
+      },
+      "level": "series",
+      "n_bins": 1,
+      "recent_windows": null,
+      "shrinkage": 0.0
+    },
+    "inv_mase_p4": {
+      "kind": "linear",
+      "fitter": {
+        "inverse_error": {
+          "power": 4,
+          "top_k": null
+        }
+      },
+      "level": "series",
+      "n_bins": 1,
+      "recent_windows": null,
+      "shrinkage": 0.0
+    },
+    "inv_mase_p2_top2": {
+      "kind": "linear",
+      "fitter": {
+        "inverse_error": {
+          "power": 2,
+          "top_k": 2
+        }
+      },
+      "level": "series",
+      "n_bins": 1,
+      "recent_windows": null,
+      "shrinkage": 0.0
+    },
+    "nnls_global": {
+      "kind": "linear",
+      "fitter": "nnls_weights",
+      "level": "global",
+      "n_bins": 1,
+      "recent_windows": null,
+      "shrinkage": 0.0
+    },
+    "nnls_task": {
+      "kind": "linear",
+      "fitter": "nnls_weights",
+      "level": "task",
+      "n_bins": 1,
+      "recent_windows": null,
+      "shrinkage": 0.0
+    },
+    "nnls_task_h3": {
+      "kind": "linear",
+      "fitter": "nnls_weights",
+      "level": "task",
+      "n_bins": 3,
+      "recent_windows": null,
+      "shrinkage": 0.0
+    },
+    "nnls_task_h6": {
+      "kind": "linear",
+      "fitter": "nnls_weights",
+      "level": "task",
+      "n_bins": 6,
+      "recent_windows": null,
+      "shrinkage": 0.0
+    },
+    "nnls_series": {
+      "kind": "linear",
+      "fitter": "nnls_weights",
+      "level": "series",
+      "n_bins": 1,
+      "recent_windows": null,
+      "shrinkage": 0.0
+    },
+    "nnls_task_h3_shrink50": {
+      "kind": "linear",
+      "fitter": "nnls_weights",
+      "level": "task",
+      "n_bins": 3,
+      "recent_windows": null,
+      "shrinkage": 0.5
+    },
+    "fforma_lodo": {
+      "kind": "fforma_linear_softmax",
+      "feature_columns": [
+        "length",
+        "cv",
+        "acf1",
+        "acf_seasonal",
+        "trend_strength",
+        "seasonal_strength",
+        "spectral_entropy"
+      ],
+      "l2": 0.01,
+      "leave_one_dataset_out": true
+    }
+  },
+  "runtime_seconds": {
+    "equal_mean": 0.5,
+    "median": 0.5,
+    "select_task": 1.3,
+    "select_series": 1.6,
+    "select_series_last": 1.0,
+    "inv_mase_p1": 1.7,
+    "inv_mase_p2": 1.7,
+    "inv_mase_p4": 1.7,
+    "inv_mase_p2_top2": 1.8,
+    "nnls_global": 1.6,
+    "nnls_task": 1.3,
+    "nnls_task_h3": 1.7,
+    "nnls_task_h6": 1.9,
+    "nnls_series": 2.5,
+    "nnls_task_h3_shrink50": 1.5,
+    "fforma_lodo": 12.5
+  },
+  "git": {
+    "commit": "8b2f9755f7c0f36765cc5e9167e04554bf97f72a",
+    "status_short": "M src/timestransfer/series_features.py\n?? docs/combination-study-plan.md\n?? exports/\n?? outputs_archive_pre_rolling_origin/\n?? scripts/run_combination.py\n?? src/timestransfer/combination.py\n?? tests/test_combination.py\n?? thesis-package/"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "main_score_cells_and_winners_checked": 396,
+  "correlation_tables_checked": 2,
+  "context_scores_checked": 48,
+  "flag_deltas_checked": 40,
+  "selection_ids_and_scores_checked": 6,
+  "requested_contexts_and_flags_verified": 44,
+  "rendered_tex_files": 25,
+  "citations_resolved": 20,
+  "preexisting_editorial_todos_outside_new_sections": 6,
+  "unique_labels": 44,
+  "source_hashes_verified": 35,
+  "integrated_files_match_package": true,
+  "build_pdf_exists_and_no_unresolved_references_or_missing_glyphs": true,
+  "overfull_boxes": 1
+}

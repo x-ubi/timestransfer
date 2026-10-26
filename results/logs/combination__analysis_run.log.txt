@@ -1,0 +1,105 @@
+learning curve fm/all_tasks done
+learning curve fm/long_tasks done
+learning curve fm_sn/all_tasks done
+learning curve fm_sn/long_tasks done
+                model  n_tasks  geomean_relative_mase
+            nnls_task       11               0.632812
+          inv_mase_p4       11               0.633040
+         nnls_task_h3       11               0.634287
+         nnls_task_h6       11               0.635214
+     inv_mase_p2_top2       11               0.636803
+          nnls_series       11               0.638358
+          select_task       11               0.639731
+        select_series       11               0.641964
+          inv_mase_p2       11               0.643501
+nnls_task_h3_shrink50       11               0.652280
+   select_series_last       11               0.652980
+          nnls_global       11               0.657041
+          inv_mase_p1       11               0.660174
+          fforma_lodo       11               0.660629
+          timesfm_2p5       11               0.662716
+           equal_mean       11               0.681653
+               median       11               0.683735
+             chronos2       11               0.701867
+            tabpfn_ts       11               0.772564
+       seasonal_naive       11               1.000000
+                model  max_regret  mean_regret  tasks_above_1.10
+         nnls_task_h3    1.015403     1.004020                 0
+         nnls_task_h6    1.020636     1.005503                 0
+            nnls_task    1.025058     1.001796                 0
+          inv_mase_p4    1.040730     1.002365                 0
+     inv_mase_p2_top2    1.041624     1.008345                 0
+        select_series    1.051863     1.016346                 0
+          nnls_series    1.052357     1.010715                 0
+          select_task    1.063444     1.012694                 0
+          nnls_global    1.088502     1.040537                 0
+          fforma_lodo    1.094144     1.046162                 0
+          timesfm_2p5    1.101221     1.049594                 1
+   select_series_last    1.111235     1.034215                 1
+          inv_mase_p2    1.136411     1.019544                 1
+nnls_task_h3_shrink50    1.345938     1.036512                 1
+          inv_mase_p1    1.451247     1.051524                 1
+           equal_mean    1.938678     1.101580                 1
+               median    2.255709     1.119513                 1
+             chronos2    2.898562     1.181381                 1
+            tabpfn_ts    2.918629     1.287000                 6
+       seasonal_naive    3.429887     1.688976                10
+       model   reference  better  sig_better  sig_worse  sig_better_raw
+  equal_mean best_member       2           0          1               1
+  equal_mean timesfm_2p5       9           0          0               2
+ fforma_lodo best_member       1           0          0               1
+ fforma_lodo  equal_mean       3           0          0               1
+ fforma_lodo timesfm_2p5       9           0          0               2
+ inv_mase_p4 best_member       4           1          1               1
+ inv_mase_p4  equal_mean      10           2          0               4
+ inv_mase_p4 timesfm_2p5      11           2          0               3
+ nnls_series best_member       4           1          0               1
+ nnls_series  equal_mean       6           1          0               3
+ nnls_series timesfm_2p5      10           1          0               2
+   nnls_task best_member       3           1          0               1
+   nnls_task  equal_mean       7           1          0               2
+   nnls_task timesfm_2p5      11           3          0               4
+nnls_task_h3 best_member       1           1          0               1
+nnls_task_h3  equal_mean       9           1          0               3
+nnls_task_h3 timesfm_2p5      10           2          0               5
+nnls_task_h6 best_member       2           1          0               1
+nnls_task_h6  equal_mean       8           1          0               3
+nnls_task_h6 timesfm_2p5      10           2          0               5
+ select_task best_member       0           0          0               0
+ select_task  equal_mean       6           1          0               3
+ select_task timesfm_2p5       7           0          0               3
+{
+  "generated_at_utc": "2026-10-07T23:30:30.851717+00:00",
+  "pools": {
+    "fm": [
+      "timesfm_2p5",
+      "chronos2",
+      "tabpfn_ts"
+    ],
+    "fm_sn": [
+      "timesfm_2p5",
+      "chronos2",
+      "tabpfn_ts",
+      "seasonal_naive"
+    ]
+  },
+  "spearman_diversity_vs_regret": {
+    "regret_equal_mean": {
+      "rho": 0.3181818181818182,
+      "p": 0.34029761418190363
+    },
+    "regret_nnls_task_h3": {
+      "rho": -0.3090909090909091,
+      "p": 0.3550284397015071
+    },
+    "ensemble_vs_best_mse": {
+      "rho": 0.11818181818181818,
+      "p": 0.72928477951978
+    }
+  }
+}
+outputs: outputs/combination/analysis
+
+real	6m56.672s
+user	27m15.886s
+sys	0m20.350s

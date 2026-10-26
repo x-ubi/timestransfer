@@ -1,0 +1,19 @@
+\begin{table}[!htbp]
+\centering
+\caption{Within-task Spearman correlations with per-series sMAPE. $n$ is the valid-pair count for each displayed model. }
+\label{tab:corrsmape}
+\small
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lrrrrr}
+\hline
+Task & Feature & $n$ & TimesFM & Bolt & SNaive \\
+\hline
+M4 Hourly & ACF($s$) & 414 & -0.827 & -0.827 & -0.832 \\
+M4 Hourly & STL seasonal & 414 & -0.859 & -0.858 & -0.860 \\
+ECL & ACF($s$) & 320 & -0.084 & -0.079 & -0.156 \\
+ECL & STL seasonal & 320 & -0.056 & -0.067 & -0.137 \\
+Traffic & ACF($s$) & 862 & -0.072 & -0.075 & -0.111 \\
+Traffic & STL seasonal & 862 & -0.144 & -0.130 & -0.174 \\
+\hline
+\end{tabular}
+\end{table}

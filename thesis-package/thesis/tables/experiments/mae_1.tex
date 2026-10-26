@@ -1,0 +1,22 @@
+\begin{table}[!htbp]
+\centering
+\caption{MAE by task, part 1 ($\downarrow$). Bold: minimum before rounding; exact ties share bold. Bolt denotes Chronos-Bolt; SNaive denotes SeasonalNaive.}
+\label{tab:mae1}
+\small
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lrrrrrr}
+\hline
+Model & M4 Hourly & ETTh1/48 & ETTh1/96 & ETTh2/48 & ETTm1/48 & ETTm2/48 \\
+\hline
+Linear & 1818.594 & 1.548 & 2.042 & 1.617 & 1.699 & 1.035 \\
+TabPFN & 275.742 & 1.995 & 1.922 & 1.670 & 1.169 & 1.146 \\
+TimesFM & \textbf{208.184} & 1.047 & 1.826 & 1.669 & 0.807 & \textbf{0.747} \\
+Bolt & 244.375 & 1.161 & 1.713 & \textbf{1.468} & 0.741 & 0.766 \\
+Prophet & 382.568 & 2.304 & 2.347 & 2.552 & 2.365 & 3.667 \\
+ARIMA & 2794.775 & 1.153 & 1.740 & 1.627 & 1.681 & 0.821 \\
+ETS & 570.776 & 1.161 & 1.825 & 1.604 & 2.159 & 0.788 \\
+Theta & 387.127 & 2.434 & 2.489 & 1.584 & 1.719 & 0.884 \\
+SNaive & 353.856 & \textbf{0.580} & \textbf{1.362} & 1.548 & \textbf{0.682} & 1.593 \\
+\hline
+\end{tabular}
+\end{table}

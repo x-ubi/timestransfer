@@ -1,0 +1,44 @@
+{
+  "generated_at_utc": "2026-10-07T23:30:30.851717+00:00",
+  "args": {
+    "forecasts": "outputs/combination/forecasts/all_datasets_all_models.parquet",
+    "mase_scales": "outputs/combination/metrics/mase_scales.csv",
+    "stats_forecasts": "outputs/combination_stats/forecasts/all_datasets_all_models.parquet",
+    "combined": "outputs/combination/combiners/fm/forecasts/combined_forecasts.parquet",
+    "baseline": "seasonal_naive",
+    "n_boot": 2000,
+    "seed": 0,
+    "outputs_dir": "outputs/combination/analysis"
+  },
+  "pools": {
+    "fm": [
+      "timesfm_2p5",
+      "chronos2",
+      "tabpfn_ts"
+    ],
+    "fm_sn": [
+      "timesfm_2p5",
+      "chronos2",
+      "tabpfn_ts",
+      "seasonal_naive"
+    ]
+  },
+  "spearman_diversity_vs_regret": {
+    "regret_equal_mean": {
+      "rho": 0.3181818181818182,
+      "p": 0.34029761418190363
+    },
+    "regret_nnls_task_h3": {
+      "rho": -0.3090909090909091,
+      "p": 0.3550284397015071
+    },
+    "ensemble_vs_best_mse": {
+      "rho": 0.11818181818181818,
+      "p": 0.72928477951978
+    }
+  },
+  "git": {
+    "commit": "8b2f9755f7c0f36765cc5e9167e04554bf97f72a",
+    "status_short": "M configs/combination.yaml\n M src/timestransfer/series_features.py\n?? docs/combination-study-plan.md\n?? exports/\n?? outputs_archive_pre_rolling_origin/\n?? scripts/run_combination.py\n?? scripts/run_combination_analysis.py\n?? src/timestransfer/combination.py\n?? src/timestransfer/combination_analysis.py\n?? tests/test_combination.py\n?? tests/test_combination_analysis.py\n?? thesis-package/"
+  }
+}

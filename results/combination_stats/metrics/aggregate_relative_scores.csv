@@ -1,0 +1,4 @@
+model,n_tasks,geomean_relative_mase,geomean_relative_mae
+seasonal_naive,11,1.0,1.0
+auto_theta,11,1.0567566662390455,1.0863719718481977
+auto_ets,11,1.1442440272457397,1.2940367885743636

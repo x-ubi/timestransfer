@@ -1,0 +1,22 @@
+\begin{table}[!htbp]
+\centering
+\caption{MAE by task, part 2 ($\downarrow$). Bold: minimum before rounding; exact ties share bold. Bolt denotes Chronos-Bolt; SNaive denotes SeasonalNaive.}
+\label{tab:mae2}
+\small
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lrrrrr}
+\hline
+Model & ECL & Traffic & Weather & Exchange & ILI \\
+\hline
+Linear & 426.857 & 0.018 & 40.528 & \textbf{0.009} & 41870.322 \\
+TabPFN & 298.153 & 0.016 & 1.945 & 0.011 & 51818.755 \\
+TimesFM & 207.623 & 0.010 & \textbf{1.167} & 0.010 & \textbf{8982.046} \\
+Bolt & \textbf{174.319} & \textbf{0.009} & 1.381 & 0.012 & 94957.719 \\
+Prophet & 457.158 & 0.022 & 2.920 & 0.031 & 22649.203 \\
+ARIMA & 840.241 & 0.027 & 5.777 & 0.010 & 89360.243 \\
+ETS & 242.442 & 0.023 & 2.230 & 0.010 & 88784.349 \\
+Theta & 422.019 & 0.022 & 2.112 & 0.010 & 81172.317 \\
+SNaive & 236.034 & 0.013 & 2.487 & 0.014 & 32563.887 \\
+\hline
+\end{tabular}
+\end{table}

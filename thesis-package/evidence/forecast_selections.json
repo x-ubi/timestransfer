@@ -1,0 +1,104 @@
+[
+  {
+    "figure": "forecast_1",
+    "dataset": "m4_hourly",
+    "unique_id": "H187",
+    "rule": "best",
+    "reference_model": "timesfm_2p5",
+    "rank_1based": 1,
+    "n_series": 414,
+    "history_points": 96,
+    "origin": "960",
+    "smape": {
+      "timesfm_2p5": 0.1490400531361669,
+      "chronos_bolt": 0.2675205032956901,
+      "seasonal_naive": 0.0872314890371678,
+      "prophet": 0.3149983740365895
+    }
+  },
+  {
+    "figure": "forecast_2",
+    "dataset": "m4_hourly",
+    "unique_id": "H349",
+    "rule": "worst",
+    "reference_model": "timesfm_2p5",
+    "rank_1based": 414,
+    "n_series": 414,
+    "history_points": 96,
+    "origin": "960",
+    "smape": {
+      "timesfm_2p5": 84.70664056806633,
+      "chronos_bolt": 85.45518365658167,
+      "seasonal_naive": 83.00672857335944,
+      "prophet": 102.41730439341552
+    }
+  },
+  {
+    "figure": "forecast_3",
+    "dataset": "ett_h1_h48",
+    "unique_id": "HUFL",
+    "rule": "median",
+    "reference_model": "timesfm_2p5",
+    "rank_1based": 4,
+    "n_series": 7,
+    "history_points": 96,
+    "origin": "2018-02-18 23:00:00",
+    "smape": {
+      "timesfm_2p5": 26.540432693025377,
+      "chronos_bolt": 40.35527655445798,
+      "seasonal_naive": 8.885186199989013,
+      "prophet": 71.83939286121112
+    }
+  },
+  {
+    "figure": "forecast_4",
+    "dataset": "traffic_h48",
+    "unique_id": "193",
+    "rule": "median",
+    "reference_model": "timesfm_2p5",
+    "rank_1based": 432,
+    "n_series": 862,
+    "history_points": 96,
+    "origin": "2018-06-30 01:00:00",
+    "smape": {
+      "timesfm_2p5": 18.65396538290328,
+      "chronos_bolt": 15.62750690568079,
+      "seasonal_naive": 20.067813725323457,
+      "prophet": 80.53882579023411
+    }
+  },
+  {
+    "figure": "forecast_5",
+    "dataset": "weather_h48",
+    "unique_id": "max. PAR (\ufffdmol/m\ufffd/s)",
+    "rule": "worst",
+    "reference_model": "timesfm_2p5",
+    "rank_1based": 21,
+    "n_series": 21,
+    "history_points": 432,
+    "origin": "2020-12-31 16:00:00",
+    "smape": {
+      "timesfm_2p5": 158.46257758092057,
+      "chronos_bolt": 187.96323518022427,
+      "seasonal_naive": 3.785376776575837,
+      "prophet": 41.274367246194174
+    }
+  },
+  {
+    "figure": "forecast_6",
+    "dataset": "ili_h48",
+    "unique_id": "AGE 5-24",
+    "rule": "median",
+    "reference_model": "timesfm_2p5",
+    "rank_1based": 4,
+    "n_series": 7,
+    "history_points": 156,
+    "origin": "2019-07-30 00:00:00",
+    "smape": {
+      "timesfm_2p5": 9.952162771159102,
+      "chronos_bolt": 74.00087233194965,
+      "seasonal_naive": 83.94787042344352,
+      "prophet": 112.74281906371574
+    }
+  }
+]

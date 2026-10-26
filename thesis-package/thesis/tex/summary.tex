@@ -1,0 +1,7 @@
+\clearpage
+\section{Summary}
+The completed benchmark evaluates nine forecasting implementations on eleven tasks drawn from ten dataset panels. All 99 configured main-run combinations and 44 TimesFM sensitivity combinations completed successfully. Recalculation from saved predictions reproduces the reported point-error metrics, and diagnostic figures connect aggregate scores to observed histories and continuations.
+
+Performance differs by task and metric. Chronos-Bolt performs strongly on ECL and Traffic, TimesFM on ILI and selected MASE comparisons, and SeasonalNaive or fitted statistical methods lead several ETT tasks. Rankings can change with the metric, as on M4 and Weather. Strong negative associations between seasonal structure and sMAPE on M4 become much weaker or change sign under MASE and in other panels. These are descriptive findings from dependent series and single forecast origins.
+
+TimesFM's context and flag settings have task-dependent effects. Longer context is not uniformly beneficial, and limited history explains saturation on M4. The settings were examined on the test set, so their best observed values are not unbiased tuned-model estimates. The thesis delivers an auditable experimental account with explicit limits concerning model budgets, archive metadata, historical source state and pretraining overlap. Validation-based selection, repeated forecast origins and weight adaptation are future work.

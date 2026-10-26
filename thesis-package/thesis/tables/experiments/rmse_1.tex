@@ -1,0 +1,22 @@
+\begin{table}[!htbp]
+\centering
+\caption{RMSE by task, part 1 ($\downarrow$). Bold: minimum before rounding; exact ties share bold. Bolt denotes Chronos-Bolt; SNaive denotes SeasonalNaive.}
+\label{tab:rmse1}
+\small
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lrrrrrr}
+\hline
+Model & M4 Hourly & ETTh1/48 & ETTh1/96 & ETTh2/48 & ETTm1/48 & ETTm2/48 \\
+\hline
+Linear & 11466.819 & 2.214 & 3.917 & 2.177 & 2.632 & 1.509 \\
+TabPFN & 1060.464 & 3.480 & 3.693 & 2.225 & 1.787 & 1.650 \\
+TimesFM & \textbf{903.699} & 1.759 & 4.090 & 2.305 & 1.208 & 1.090 \\
+Bolt & 1073.639 & 2.447 & 3.723 & \textbf{2.075} & \textbf{1.081} & \textbf{1.046} \\
+Prophet & 1725.029 & 3.638 & 3.871 & 3.229 & 3.862 & 4.903 \\
+ARIMA & 23956.632 & 1.785 & 3.878 & 2.487 & 2.818 & 1.312 \\
+ETS & 2599.813 & 1.733 & 4.086 & 2.442 & 3.749 & 1.307 \\
+Theta & 1912.757 & 4.135 & 4.055 & 2.254 & 2.992 & 1.176 \\
+SNaive & 1901.146 & \textbf{1.006} & \textbf{3.195} & 2.159 & 1.114 & 2.352 \\
+\hline
+\end{tabular}
+\end{table}

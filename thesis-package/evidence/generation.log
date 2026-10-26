@@ -1,0 +1,570 @@
+/home/ubuntu/.config/matplotlib is not a writable directory
+Matplotlib created a temporary cache directory at /tmp/matplotlib-58buueue because there was an issue with the default path ({configdir}); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+Checking cached dataset: m4_hourly
+INFO:fontTools.subset:maxp pruned
+INFO:fontTools.subset:cmap pruned
+INFO:fontTools.subset:kern dropped
+INFO:fontTools.subset:post pruned
+INFO:fontTools.subset:FFTM dropped
+INFO:fontTools.subset:GPOS pruned
+INFO:fontTools.subset:GSUB pruned
+INFO:fontTools.subset:glyf pruned
+INFO:fontTools.subset:Added gid0 to subset
+INFO:fontTools.subset:Added first four glyphs to subset
+INFO:fontTools.subset:Closing glyph list over 'MATH': 48 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'H', 'M', 'N', 'O', 'P', 'S', 'T', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'five', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nine', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'r', 's', 'seven', 'six', 'slash', 'space', 't', 'two', 'u', 'v', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 36, 37, 40, 41, 43, 48, 49, 50, 51, 54, 55, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 92]
+INFO:fontTools.subset:Closed glyph list over 'MATH': 54 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'H', 'M', 'N', 'O', 'P', 'S', 'T', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'five', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nine', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'r', 's', 'seven', 'six', 'slash', 'space', 't', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'v', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 36, 37, 40, 41, 43, 48, 49, 50, 51, 54, 55, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 92, 3506, 3507, 3508, 3509, 3510, 3511]
+INFO:fontTools.subset:Closing glyph list over 'GSUB': 54 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'H', 'M', 'N', 'O', 'P', 'S', 'T', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'five', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nine', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'r', 's', 'seven', 'six', 'slash', 'space', 't', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'v', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 36, 37, 40, 41, 43, 48, 49, 50, 51, 54, 55, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 92, 3506, 3507, 3508, 3509, 3510, 3511]
+INFO:fontTools.subset:Closed glyph list over 'GSUB': 59 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'H', 'M', 'N', 'O', 'P', 'S', 'T', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'fi', 'five', 'fl', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nine', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'r', 's', 'seven', 'six', 'slash', 'space', 't', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'uniFB00', 'uniFB03', 'uniFB04', 'v', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 36, 37, 40, 41, 43, 48, 49, 50, 51, 54, 55, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 92, 3506, 3507, 3508, 3509, 3510, 3511, 5038, 5039, 5040, 5041, 5042]
+INFO:fontTools.subset:Closing glyph list over 'glyf': 59 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'H', 'M', 'N', 'O', 'P', 'S', 'T', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'fi', 'five', 'fl', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nine', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'r', 's', 'seven', 'six', 'slash', 'space', 't', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'uniFB00', 'uniFB03', 'uniFB04', 'v', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 36, 37, 40, 41, 43, 48, 49, 50, 51, 54, 55, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 92, 3506, 3507, 3508, 3509, 3510, 3511, 5038, 5039, 5040, 5041, 5042]
+INFO:fontTools.subset:Closed glyph list over 'glyf': 59 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'H', 'M', 'N', 'O', 'P', 'S', 'T', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'fi', 'five', 'fl', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nine', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'r', 's', 'seven', 'six', 'slash', 'space', 't', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'uniFB00', 'uniFB03', 'uniFB04', 'v', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 36, 37, 40, 41, 43, 48, 49, 50, 51, 54, 55, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 92, 3506, 3507, 3508, 3509, 3510, 3511, 5038, 5039, 5040, 5041, 5042]
+INFO:fontTools.subset:Retaining 59 glyphs
+INFO:fontTools.subset:head subsetting not needed
+INFO:fontTools.subset:hhea subsetting not needed
+INFO:fontTools.subset:maxp subsetting not needed
+INFO:fontTools.subset:OS/2 subsetting not needed
+INFO:fontTools.subset:hmtx subsetted
+INFO:fontTools.subset:cmap subsetted
+INFO:fontTools.subset:fpgm subsetting not needed
+INFO:fontTools.subset:prep subsetting not needed
+INFO:fontTools.subset:cvt  subsetting not needed
+INFO:fontTools.subset:loca subsetting not needed
+INFO:fontTools.subset:post subsetted
+INFO:fontTools.subset:gasp subsetting not needed
+INFO:fontTools.subset:MATH subsetted
+INFO:fontTools.subset:GDEF subsetted
+INFO:fontTools.subset:GPOS subsetted
+INFO:fontTools.subset:GSUB subsetted
+INFO:fontTools.subset:name subsetting not needed
+INFO:fontTools.subset:glyf subsetted
+INFO:fontTools.subset:head pruned
+INFO:fontTools.subset:OS/2 Unicode ranges pruned: [0]
+INFO:fontTools.subset:OS/2 CodePage ranges pruned: [0]
+INFO:fontTools.subset:glyf pruned
+INFO:fontTools.subset:GDEF pruned
+INFO:fontTools.subset:GPOS pruned
+INFO:fontTools.subset:GSUB pruned
+INFO:fontTools.subset:name pruned
+INFO:fontTools.subset:maxp pruned
+INFO:fontTools.subset:cmap pruned
+INFO:fontTools.subset:kern dropped
+INFO:fontTools.subset:post pruned
+INFO:fontTools.subset:FFTM dropped
+INFO:fontTools.subset:GPOS pruned
+INFO:fontTools.subset:GSUB pruned
+INFO:fontTools.subset:glyf pruned
+INFO:fontTools.subset:Added gid0 to subset
+INFO:fontTools.subset:Added first four glyphs to subset
+INFO:fontTools.subset:Closing glyph list over 'MATH': 6 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Closed glyph list over 'MATH': 6 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Closing glyph list over 'GSUB': 6 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Closed glyph list over 'GSUB': 6 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Closing glyph list over 'glyf': 6 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Closed glyph list over 'glyf': 6 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Retaining 6 glyphs
+INFO:fontTools.subset:head subsetting not needed
+INFO:fontTools.subset:hhea subsetting not needed
+INFO:fontTools.subset:maxp subsetting not needed
+INFO:fontTools.subset:OS/2 subsetting not needed
+INFO:fontTools.subset:hmtx subsetted
+INFO:fontTools.subset:cmap subsetted
+INFO:fontTools.subset:fpgm subsetting not needed
+INFO:fontTools.subset:prep subsetting not needed
+INFO:fontTools.subset:cvt  subsetting not needed
+INFO:fontTools.subset:loca subsetting not needed
+INFO:fontTools.subset:post subsetted
+INFO:fontTools.subset:gasp subsetting not needed
+INFO:fontTools.subset:MATH subsetted
+INFO:fontTools.subset:GDEF subsetted
+INFO:fontTools.subset:GPOS subsetted
+INFO:fontTools.subset:GSUB subsetted
+INFO:fontTools.subset:name subsetting not needed
+INFO:fontTools.subset:glyf subsetted
+INFO:fontTools.subset:head pruned
+INFO:fontTools.subset:OS/2 Unicode ranges pruned: [31, 38]
+INFO:fontTools.subset:OS/2 CodePage ranges pruned: [0]
+INFO:fontTools.subset:glyf pruned
+INFO:fontTools.subset:GDEF pruned
+INFO:fontTools.subset:GPOS pruned
+INFO:fontTools.subset:GSUB pruned
+INFO:fontTools.subset:name pruned
+INFO:fontTools.subset:maxp pruned
+INFO:fontTools.subset:cmap pruned
+INFO:fontTools.subset:kern dropped
+INFO:fontTools.subset:post pruned
+INFO:fontTools.subset:FFTM dropped
+INFO:fontTools.subset:GPOS pruned
+INFO:fontTools.subset:GSUB pruned
+INFO:fontTools.subset:glyf pruned
+INFO:fontTools.subset:Added gid0 to subset
+INFO:fontTools.subset:Added first four glyphs to subset
+INFO:fontTools.subset:Closing glyph list over 'MATH': 49 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'H', 'M', 'N', 'O', 'P', 'S', 'T', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'five', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nine', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'r', 's', 'six', 'slash', 'space', 't', 'three', 'two', 'u', 'v', 'w', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 18, 19, 20, 21, 22, 23, 24, 25, 27, 28, 36, 37, 40, 41, 43, 48, 49, 50, 51, 54, 55, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 90, 92]
+INFO:fontTools.subset:Closed glyph list over 'MATH': 55 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'H', 'M', 'N', 'O', 'P', 'S', 'T', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'five', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nine', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'r', 's', 'six', 'slash', 'space', 't', 'three', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'v', 'w', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 18, 19, 20, 21, 22, 23, 24, 25, 27, 28, 36, 37, 40, 41, 43, 48, 49, 50, 51, 54, 55, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 90, 92, 3506, 3507, 3508, 3509, 3510, 3511]
+INFO:fontTools.subset:Closing glyph list over 'GSUB': 55 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'H', 'M', 'N', 'O', 'P', 'S', 'T', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'five', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nine', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'r', 's', 'six', 'slash', 'space', 't', 'three', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'v', 'w', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 18, 19, 20, 21, 22, 23, 24, 25, 27, 28, 36, 37, 40, 41, 43, 48, 49, 50, 51, 54, 55, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 90, 92, 3506, 3507, 3508, 3509, 3510, 3511]
+INFO:fontTools.subset:Closed glyph list over 'GSUB': 60 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'H', 'M', 'N', 'O', 'P', 'S', 'T', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'fi', 'five', 'fl', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nine', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'r', 's', 'six', 'slash', 'space', 't', 'three', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'uniFB00', 'uniFB03', 'uniFB04', 'v', 'w', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 18, 19, 20, 21, 22, 23, 24, 25, 27, 28, 36, 37, 40, 41, 43, 48, 49, 50, 51, 54, 55, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 90, 92, 3506, 3507, 3508, 3509, 3510, 3511, 5038, 5039, 5040, 5041, 5042]
+INFO:fontTools.subset:Closing glyph list over 'glyf': 60 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'H', 'M', 'N', 'O', 'P', 'S', 'T', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'fi', 'five', 'fl', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nine', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'r', 's', 'six', 'slash', 'space', 't', 'three', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'uniFB00', 'uniFB03', 'uniFB04', 'v', 'w', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 18, 19, 20, 21, 22, 23, 24, 25, 27, 28, 36, 37, 40, 41, 43, 48, 49, 50, 51, 54, 55, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 90, 92, 3506, 3507, 3508, 3509, 3510, 3511, 5038, 5039, 5040, 5041, 5042]
+INFO:fontTools.subset:Closed glyph list over 'glyf': 60 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'H', 'M', 'N', 'O', 'P', 'S', 'T', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'fi', 'five', 'fl', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nine', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'r', 's', 'six', 'slash', 'space', 't', 'three', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'uniFB00', 'uniFB03', 'uniFB04', 'v', 'w', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 18, 19, 20, 21, 22, 23, 24, 25, 27, 28, 36, 37, 40, 41, 43, 48, 49, 50, 51, 54, 55, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 90, 92, 3506, 3507, 3508, 3509, 3510, 3511, 5038, 5039, 5040, 5041, 5042]
+INFO:fontTools.subset:Retaining 60 glyphs
+INFO:fontTools.subset:head subsetting not needed
+INFO:fontTools.subset:hhea subsetting not needed
+INFO:fontTools.subset:maxp subsetting not needed
+INFO:fontTools.subset:OS/2 subsetting not needed
+INFO:fontTools.subset:hmtx subsetted
+INFO:fontTools.subset:cmap subsetted
+INFO:fontTools.subset:fpgm subsetting not needed
+INFO:fontTools.subset:prep subsetting not needed
+INFO:fontTools.subset:cvt  subsetting not needed
+INFO:fontTools.subset:loca subsetting not needed
+INFO:fontTools.subset:post subsetted
+INFO:fontTools.subset:gasp subsetting not needed
+INFO:fontTools.subset:MATH subsetted
+INFO:fontTools.subset:GDEF subsetted
+INFO:fontTools.subset:GPOS subsetted
+INFO:fontTools.subset:GSUB subsetted
+INFO:fontTools.subset:name subsetting not needed
+INFO:fontTools.subset:glyf subsetted
+INFO:fontTools.subset:head pruned
+INFO:fontTools.subset:OS/2 Unicode ranges pruned: [0]
+INFO:fontTools.subset:OS/2 CodePage ranges pruned: [0]
+INFO:fontTools.subset:glyf pruned
+INFO:fontTools.subset:GDEF pruned
+INFO:fontTools.subset:GPOS pruned
+INFO:fontTools.subset:GSUB pruned
+INFO:fontTools.subset:name pruned
+INFO:fontTools.subset:maxp pruned
+INFO:fontTools.subset:cmap pruned
+INFO:fontTools.subset:kern dropped
+INFO:fontTools.subset:post pruned
+INFO:fontTools.subset:FFTM dropped
+INFO:fontTools.subset:GPOS pruned
+INFO:fontTools.subset:GSUB pruned
+INFO:fontTools.subset:glyf pruned
+INFO:fontTools.subset:Added gid0 to subset
+INFO:fontTools.subset:Added first four glyphs to subset
+INFO:fontTools.subset:Closing glyph list over 'MATH': 6 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Closed glyph list over 'MATH': 6 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Closing glyph list over 'GSUB': 6 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Closed glyph list over 'GSUB': 6 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Closing glyph list over 'glyf': 6 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Closed glyph list over 'glyf': 6 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Retaining 6 glyphs
+INFO:fontTools.subset:head subsetting not needed
+INFO:fontTools.subset:hhea subsetting not needed
+INFO:fontTools.subset:maxp subsetting not needed
+INFO:fontTools.subset:OS/2 subsetting not needed
+INFO:fontTools.subset:hmtx subsetted
+INFO:fontTools.subset:cmap subsetted
+INFO:fontTools.subset:fpgm subsetting not needed
+INFO:fontTools.subset:prep subsetting not needed
+INFO:fontTools.subset:cvt  subsetting not needed
+INFO:fontTools.subset:loca subsetting not needed
+INFO:fontTools.subset:post subsetted
+INFO:fontTools.subset:gasp subsetting not needed
+INFO:fontTools.subset:MATH subsetted
+INFO:fontTools.subset:GDEF subsetted
+INFO:fontTools.subset:GPOS subsetted
+INFO:fontTools.subset:GSUB subsetted
+INFO:fontTools.subset:name subsetting not needed
+INFO:fontTools.subset:glyf subsetted
+INFO:fontTools.subset:head pruned
+INFO:fontTools.subset:OS/2 Unicode ranges pruned: [31, 38]
+INFO:fontTools.subset:OS/2 CodePage ranges pruned: [0]
+INFO:fontTools.subset:glyf pruned
+INFO:fontTools.subset:GDEF pruned
+INFO:fontTools.subset:GPOS pruned
+INFO:fontTools.subset:GSUB pruned
+INFO:fontTools.subset:name pruned
+Checking cached dataset: ett_h1_h48
+INFO:fontTools.subset:maxp pruned
+INFO:fontTools.subset:cmap pruned
+INFO:fontTools.subset:kern dropped
+INFO:fontTools.subset:post pruned
+INFO:fontTools.subset:FFTM dropped
+INFO:fontTools.subset:GPOS pruned
+INFO:fontTools.subset:GSUB pruned
+INFO:fontTools.subset:glyf pruned
+INFO:fontTools.subset:Added gid0 to subset
+INFO:fontTools.subset:Added first four glyphs to subset
+INFO:fontTools.subset:Closing glyph list over 'MATH': 47 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'H', 'L', 'M', 'N', 'O', 'P', 'S', 'T', 'U', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'r', 's', 'six', 'slash', 'space', 't', 'two', 'u', 'v', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 18, 19, 20, 21, 23, 25, 27, 36, 37, 40, 41, 43, 47, 48, 49, 50, 51, 54, 55, 56, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 92]
+INFO:fontTools.subset:Closed glyph list over 'MATH': 53 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'H', 'L', 'M', 'N', 'O', 'P', 'S', 'T', 'U', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'r', 's', 'six', 'slash', 'space', 't', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'v', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 18, 19, 20, 21, 23, 25, 27, 36, 37, 40, 41, 43, 47, 48, 49, 50, 51, 54, 55, 56, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 92, 3506, 3507, 3508, 3509, 3510, 3511]
+INFO:fontTools.subset:Closing glyph list over 'GSUB': 53 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'H', 'L', 'M', 'N', 'O', 'P', 'S', 'T', 'U', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'r', 's', 'six', 'slash', 'space', 't', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'v', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 18, 19, 20, 21, 23, 25, 27, 36, 37, 40, 41, 43, 47, 48, 49, 50, 51, 54, 55, 56, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 92, 3506, 3507, 3508, 3509, 3510, 3511]
+INFO:fontTools.subset:Closed glyph list over 'GSUB': 58 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'H', 'L', 'M', 'N', 'O', 'P', 'S', 'T', 'U', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'fi', 'fl', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'r', 's', 'six', 'slash', 'space', 't', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'uniFB00', 'uniFB03', 'uniFB04', 'v', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 18, 19, 20, 21, 23, 25, 27, 36, 37, 40, 41, 43, 47, 48, 49, 50, 51, 54, 55, 56, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 92, 3506, 3507, 3508, 3509, 3510, 3511, 5038, 5039, 5040, 5041, 5042]
+INFO:fontTools.subset:Closing glyph list over 'glyf': 58 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'H', 'L', 'M', 'N', 'O', 'P', 'S', 'T', 'U', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'fi', 'fl', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'r', 's', 'six', 'slash', 'space', 't', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'uniFB00', 'uniFB03', 'uniFB04', 'v', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 18, 19, 20, 21, 23, 25, 27, 36, 37, 40, 41, 43, 47, 48, 49, 50, 51, 54, 55, 56, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 92, 3506, 3507, 3508, 3509, 3510, 3511, 5038, 5039, 5040, 5041, 5042]
+INFO:fontTools.subset:Closed glyph list over 'glyf': 58 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'H', 'L', 'M', 'N', 'O', 'P', 'S', 'T', 'U', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'fi', 'fl', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'r', 's', 'six', 'slash', 'space', 't', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'uniFB00', 'uniFB03', 'uniFB04', 'v', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 18, 19, 20, 21, 23, 25, 27, 36, 37, 40, 41, 43, 47, 48, 49, 50, 51, 54, 55, 56, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 92, 3506, 3507, 3508, 3509, 3510, 3511, 5038, 5039, 5040, 5041, 5042]
+INFO:fontTools.subset:Retaining 58 glyphs
+INFO:fontTools.subset:head subsetting not needed
+INFO:fontTools.subset:hhea subsetting not needed
+INFO:fontTools.subset:maxp subsetting not needed
+INFO:fontTools.subset:OS/2 subsetting not needed
+INFO:fontTools.subset:hmtx subsetted
+INFO:fontTools.subset:cmap subsetted
+INFO:fontTools.subset:fpgm subsetting not needed
+INFO:fontTools.subset:prep subsetting not needed
+INFO:fontTools.subset:cvt  subsetting not needed
+INFO:fontTools.subset:loca subsetting not needed
+INFO:fontTools.subset:post subsetted
+INFO:fontTools.subset:gasp subsetting not needed
+INFO:fontTools.subset:MATH subsetted
+INFO:fontTools.subset:GDEF subsetted
+INFO:fontTools.subset:GPOS subsetted
+INFO:fontTools.subset:GSUB subsetted
+INFO:fontTools.subset:name subsetting not needed
+INFO:fontTools.subset:glyf subsetted
+INFO:fontTools.subset:head pruned
+INFO:fontTools.subset:OS/2 Unicode ranges pruned: [0]
+INFO:fontTools.subset:OS/2 CodePage ranges pruned: [0]
+INFO:fontTools.subset:glyf pruned
+INFO:fontTools.subset:GDEF pruned
+INFO:fontTools.subset:GPOS pruned
+INFO:fontTools.subset:GSUB pruned
+INFO:fontTools.subset:name pruned
+INFO:fontTools.subset:maxp pruned
+INFO:fontTools.subset:cmap pruned
+INFO:fontTools.subset:kern dropped
+INFO:fontTools.subset:post pruned
+INFO:fontTools.subset:FFTM dropped
+INFO:fontTools.subset:GPOS pruned
+INFO:fontTools.subset:GSUB pruned
+INFO:fontTools.subset:glyf pruned
+INFO:fontTools.subset:Added gid0 to subset
+INFO:fontTools.subset:Added first four glyphs to subset
+INFO:fontTools.subset:Closing glyph list over 'MATH': 6 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Closed glyph list over 'MATH': 6 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Closing glyph list over 'GSUB': 6 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Closed glyph list over 'GSUB': 6 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Closing glyph list over 'glyf': 6 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Closed glyph list over 'glyf': 6 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Retaining 6 glyphs
+INFO:fontTools.subset:head subsetting not needed
+INFO:fontTools.subset:hhea subsetting not needed
+INFO:fontTools.subset:maxp subsetting not needed
+INFO:fontTools.subset:OS/2 subsetting not needed
+INFO:fontTools.subset:hmtx subsetted
+INFO:fontTools.subset:cmap subsetted
+INFO:fontTools.subset:fpgm subsetting not needed
+INFO:fontTools.subset:prep subsetting not needed
+INFO:fontTools.subset:cvt  subsetting not needed
+INFO:fontTools.subset:loca subsetting not needed
+INFO:fontTools.subset:post subsetted
+INFO:fontTools.subset:gasp subsetting not needed
+INFO:fontTools.subset:MATH subsetted
+INFO:fontTools.subset:GDEF subsetted
+INFO:fontTools.subset:GPOS subsetted
+INFO:fontTools.subset:GSUB subsetted
+INFO:fontTools.subset:name subsetting not needed
+INFO:fontTools.subset:glyf subsetted
+INFO:fontTools.subset:head pruned
+INFO:fontTools.subset:OS/2 Unicode ranges pruned: [31, 38]
+INFO:fontTools.subset:OS/2 CodePage ranges pruned: [0]
+INFO:fontTools.subset:glyf pruned
+INFO:fontTools.subset:GDEF pruned
+INFO:fontTools.subset:GPOS pruned
+INFO:fontTools.subset:GSUB pruned
+INFO:fontTools.subset:name pruned
+Checking cached dataset: ett_h1_h96
+Checking cached dataset: ett_h2_h48
+Checking cached dataset: ett_m1_h48
+Checking cached dataset: ett_m2_h48
+Checking cached dataset: ecl_h48
+Checking cached dataset: traffic_h48
+INFO:fontTools.subset:maxp pruned
+INFO:fontTools.subset:cmap pruned
+INFO:fontTools.subset:kern dropped
+INFO:fontTools.subset:post pruned
+INFO:fontTools.subset:FFTM dropped
+INFO:fontTools.subset:GPOS pruned
+INFO:fontTools.subset:GSUB pruned
+INFO:fontTools.subset:glyf pruned
+INFO:fontTools.subset:Added gid0 to subset
+INFO:fontTools.subset:Added first four glyphs to subset
+INFO:fontTools.subset:Closing glyph list over 'MATH': 47 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'M', 'N', 'O', 'P', 'S', 'T', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nine', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'period', 'r', 's', 'six', 'slash', 'space', 't', 'three', 'two', 'u', 'v', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 17, 18, 19, 20, 21, 22, 23, 25, 27, 28, 36, 37, 40, 41, 48, 49, 50, 51, 54, 55, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 92]
+INFO:fontTools.subset:Closed glyph list over 'MATH': 53 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'M', 'N', 'O', 'P', 'S', 'T', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nine', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'period', 'r', 's', 'six', 'slash', 'space', 't', 'three', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'v', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 17, 18, 19, 20, 21, 22, 23, 25, 27, 28, 36, 37, 40, 41, 48, 49, 50, 51, 54, 55, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 92, 3506, 3507, 3508, 3509, 3510, 3511]
+INFO:fontTools.subset:Closing glyph list over 'GSUB': 53 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'M', 'N', 'O', 'P', 'S', 'T', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nine', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'period', 'r', 's', 'six', 'slash', 'space', 't', 'three', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'v', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 17, 18, 19, 20, 21, 22, 23, 25, 27, 28, 36, 37, 40, 41, 48, 49, 50, 51, 54, 55, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 92, 3506, 3507, 3508, 3509, 3510, 3511]
+INFO:fontTools.subset:Closed glyph list over 'GSUB': 58 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'M', 'N', 'O', 'P', 'S', 'T', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'fi', 'fl', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nine', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'period', 'r', 's', 'six', 'slash', 'space', 't', 'three', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'uniFB00', 'uniFB03', 'uniFB04', 'v', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 17, 18, 19, 20, 21, 22, 23, 25, 27, 28, 36, 37, 40, 41, 48, 49, 50, 51, 54, 55, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 92, 3506, 3507, 3508, 3509, 3510, 3511, 5038, 5039, 5040, 5041, 5042]
+INFO:fontTools.subset:Closing glyph list over 'glyf': 58 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'M', 'N', 'O', 'P', 'S', 'T', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'fi', 'fl', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nine', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'period', 'r', 's', 'six', 'slash', 'space', 't', 'three', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'uniFB00', 'uniFB03', 'uniFB04', 'v', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 17, 18, 19, 20, 21, 22, 23, 25, 27, 28, 36, 37, 40, 41, 48, 49, 50, 51, 54, 55, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 92, 3506, 3507, 3508, 3509, 3510, 3511, 5038, 5039, 5040, 5041, 5042]
+INFO:fontTools.subset:Closed glyph list over 'glyf': 58 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'M', 'N', 'O', 'P', 'S', 'T', 'V', 'a', 'b', 'c', 'd', 'e', 'eight', 'f', 'fi', 'fl', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nine', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'period', 'r', 's', 'six', 'slash', 'space', 't', 'three', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'uniFB00', 'uniFB03', 'uniFB04', 'v', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 17, 18, 19, 20, 21, 22, 23, 25, 27, 28, 36, 37, 40, 41, 48, 49, 50, 51, 54, 55, 57, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 92, 3506, 3507, 3508, 3509, 3510, 3511, 5038, 5039, 5040, 5041, 5042]
+INFO:fontTools.subset:Retaining 58 glyphs
+INFO:fontTools.subset:head subsetting not needed
+INFO:fontTools.subset:hhea subsetting not needed
+INFO:fontTools.subset:maxp subsetting not needed
+INFO:fontTools.subset:OS/2 subsetting not needed
+INFO:fontTools.subset:hmtx subsetted
+INFO:fontTools.subset:cmap subsetted
+INFO:fontTools.subset:fpgm subsetting not needed
+INFO:fontTools.subset:prep subsetting not needed
+INFO:fontTools.subset:cvt  subsetting not needed
+INFO:fontTools.subset:loca subsetting not needed
+INFO:fontTools.subset:post subsetted
+INFO:fontTools.subset:gasp subsetting not needed
+INFO:fontTools.subset:MATH subsetted
+INFO:fontTools.subset:GDEF subsetted
+INFO:fontTools.subset:GPOS subsetted
+INFO:fontTools.subset:GSUB subsetted
+INFO:fontTools.subset:name subsetting not needed
+INFO:fontTools.subset:glyf subsetted
+INFO:fontTools.subset:head pruned
+INFO:fontTools.subset:OS/2 Unicode ranges pruned: [0]
+INFO:fontTools.subset:OS/2 CodePage ranges pruned: [0]
+INFO:fontTools.subset:glyf pruned
+INFO:fontTools.subset:GDEF pruned
+INFO:fontTools.subset:GPOS pruned
+INFO:fontTools.subset:GSUB pruned
+INFO:fontTools.subset:name pruned
+INFO:fontTools.subset:maxp pruned
+INFO:fontTools.subset:cmap pruned
+INFO:fontTools.subset:kern dropped
+INFO:fontTools.subset:post pruned
+INFO:fontTools.subset:FFTM dropped
+INFO:fontTools.subset:GPOS pruned
+INFO:fontTools.subset:GSUB pruned
+INFO:fontTools.subset:glyf pruned
+INFO:fontTools.subset:Added gid0 to subset
+INFO:fontTools.subset:Added first four glyphs to subset
+INFO:fontTools.subset:Closing glyph list over 'MATH': 7 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space', 'uniFB03']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228, 5041]
+INFO:fontTools.subset:Closed glyph list over 'MATH': 7 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space', 'uniFB03']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228, 5041]
+INFO:fontTools.subset:Closing glyph list over 'GSUB': 7 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space', 'uniFB03']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228, 5041]
+INFO:fontTools.subset:Closed glyph list over 'GSUB': 7 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space', 'uniFB03']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228, 5041]
+INFO:fontTools.subset:Closing glyph list over 'glyf': 7 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space', 'uniFB03']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228, 5041]
+INFO:fontTools.subset:Closed glyph list over 'glyf': 7 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space', 'uniFB03']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228, 5041]
+INFO:fontTools.subset:Retaining 7 glyphs
+INFO:fontTools.subset:head subsetting not needed
+INFO:fontTools.subset:hhea subsetting not needed
+INFO:fontTools.subset:maxp subsetting not needed
+INFO:fontTools.subset:OS/2 subsetting not needed
+INFO:fontTools.subset:hmtx subsetted
+INFO:fontTools.subset:cmap subsetted
+INFO:fontTools.subset:fpgm subsetting not needed
+INFO:fontTools.subset:prep subsetting not needed
+INFO:fontTools.subset:cvt  subsetting not needed
+INFO:fontTools.subset:loca subsetting not needed
+INFO:fontTools.subset:post subsetted
+INFO:fontTools.subset:gasp subsetting not needed
+INFO:fontTools.subset:MATH subsetted
+INFO:fontTools.subset:GDEF subsetted
+INFO:fontTools.subset:GPOS subsetted
+INFO:fontTools.subset:GSUB subsetted
+INFO:fontTools.subset:name subsetting not needed
+INFO:fontTools.subset:glyf subsetted
+INFO:fontTools.subset:head pruned
+INFO:fontTools.subset:OS/2 Unicode ranges pruned: [31, 38, 62]
+INFO:fontTools.subset:OS/2 CodePage ranges pruned: [0]
+INFO:fontTools.subset:glyf pruned
+INFO:fontTools.subset:GDEF pruned
+INFO:fontTools.subset:GPOS pruned
+INFO:fontTools.subset:GSUB pruned
+INFO:fontTools.subset:name pruned
+Checking cached dataset: weather_h48
+INFO:fontTools.subset:maxp pruned
+INFO:fontTools.subset:cmap pruned
+INFO:fontTools.subset:kern dropped
+INFO:fontTools.subset:post pruned
+INFO:fontTools.subset:FFTM dropped
+INFO:fontTools.subset:GPOS pruned
+INFO:fontTools.subset:GSUB pruned
+INFO:fontTools.subset:glyf pruned
+INFO:fontTools.subset:Added gid0 to subset
+INFO:fontTools.subset:Added first four glyphs to subset
+INFO:fontTools.subset:Closing glyph list over 'MATH': 50 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'V', 'W', 'a', 'b', 'c', 'd', 'e', 'f', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'period', 'question', 'r', 's', 'six', 'slash', 'space', 't', 'three', 'two', 'u', 'v', 'w', 'x', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 17, 18, 19, 20, 21, 22, 23, 25, 34, 36, 37, 40, 41, 48, 49, 50, 51, 53, 54, 55, 57, 58, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 90, 91, 92]
+INFO:fontTools.subset:Closed glyph list over 'MATH': 56 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'V', 'W', 'a', 'b', 'c', 'd', 'e', 'f', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'period', 'question', 'r', 's', 'six', 'slash', 'space', 't', 'three', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'v', 'w', 'x', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 17, 18, 19, 20, 21, 22, 23, 25, 34, 36, 37, 40, 41, 48, 49, 50, 51, 53, 54, 55, 57, 58, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 90, 91, 92, 3506, 3507, 3508, 3509, 3510, 3511]
+INFO:fontTools.subset:Closing glyph list over 'GSUB': 56 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'V', 'W', 'a', 'b', 'c', 'd', 'e', 'f', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'period', 'question', 'r', 's', 'six', 'slash', 'space', 't', 'three', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'v', 'w', 'x', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 17, 18, 19, 20, 21, 22, 23, 25, 34, 36, 37, 40, 41, 48, 49, 50, 51, 53, 54, 55, 57, 58, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 90, 91, 92, 3506, 3507, 3508, 3509, 3510, 3511]
+INFO:fontTools.subset:Closed glyph list over 'GSUB': 61 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'V', 'W', 'a', 'b', 'c', 'd', 'e', 'f', 'fi', 'fl', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'period', 'question', 'r', 's', 'six', 'slash', 'space', 't', 'three', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'uniFB00', 'uniFB03', 'uniFB04', 'v', 'w', 'x', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 17, 18, 19, 20, 21, 22, 23, 25, 34, 36, 37, 40, 41, 48, 49, 50, 51, 53, 54, 55, 57, 58, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 90, 91, 92, 3506, 3507, 3508, 3509, 3510, 3511, 5038, 5039, 5040, 5041, 5042]
+INFO:fontTools.subset:Closing glyph list over 'glyf': 61 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'V', 'W', 'a', 'b', 'c', 'd', 'e', 'f', 'fi', 'fl', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'period', 'question', 'r', 's', 'six', 'slash', 'space', 't', 'three', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'uniFB00', 'uniFB03', 'uniFB04', 'v', 'w', 'x', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 17, 18, 19, 20, 21, 22, 23, 25, 34, 36, 37, 40, 41, 48, 49, 50, 51, 53, 54, 55, 57, 58, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 90, 91, 92, 3506, 3507, 3508, 3509, 3510, 3511, 5038, 5039, 5040, 5041, 5042]
+INFO:fontTools.subset:Closed glyph list over 'glyf': 61 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'A', 'B', 'E', 'F', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'V', 'W', 'a', 'b', 'c', 'd', 'e', 'f', 'fi', 'fl', 'four', 'g', 'h', 'i', 'l', 'm', 'n', 'nonmarkingreturn', 'o', 'one', 'p', 'parenleft', 'parenright', 'period', 'question', 'r', 's', 'six', 'slash', 'space', 't', 'three', 'two', 'u', 'uni239B', 'uni239C', 'uni239D', 'uni239E', 'uni239F', 'uni23A0', 'uniFB00', 'uniFB03', 'uniFB04', 'v', 'w', 'x', 'y', 'zero']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 11, 12, 17, 18, 19, 20, 21, 22, 23, 25, 34, 36, 37, 40, 41, 48, 49, 50, 51, 53, 54, 55, 57, 58, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 90, 91, 92, 3506, 3507, 3508, 3509, 3510, 3511, 5038, 5039, 5040, 5041, 5042]
+INFO:fontTools.subset:Retaining 61 glyphs
+INFO:fontTools.subset:head subsetting not needed
+INFO:fontTools.subset:hhea subsetting not needed
+INFO:fontTools.subset:maxp subsetting not needed
+INFO:fontTools.subset:OS/2 subsetting not needed
+INFO:fontTools.subset:hmtx subsetted
+INFO:fontTools.subset:cmap subsetted
+INFO:fontTools.subset:fpgm subsetting not needed
+INFO:fontTools.subset:prep subsetting not needed
+INFO:fontTools.subset:cvt  subsetting not needed
+INFO:fontTools.subset:loca subsetting not needed
+INFO:fontTools.subset:post subsetted
+INFO:fontTools.subset:gasp subsetting not needed
+INFO:fontTools.subset:MATH subsetted
+INFO:fontTools.subset:GDEF subsetted
+INFO:fontTools.subset:GPOS subsetted
+INFO:fontTools.subset:GSUB subsetted
+INFO:fontTools.subset:name subsetting not needed
+INFO:fontTools.subset:glyf subsetted
+INFO:fontTools.subset:head pruned
+INFO:fontTools.subset:OS/2 Unicode ranges pruned: [0]
+INFO:fontTools.subset:OS/2 CodePage ranges pruned: [0]
+INFO:fontTools.subset:glyf pruned
+INFO:fontTools.subset:GDEF pruned
+INFO:fontTools.subset:GPOS pruned
+INFO:fontTools.subset:GSUB pruned
+INFO:fontTools.subset:name pruned
+INFO:fontTools.subset:maxp pruned
+INFO:fontTools.subset:cmap pruned
+INFO:fontTools.subset:kern dropped
+INFO:fontTools.subset:post pruned
+INFO:fontTools.subset:FFTM dropped
+INFO:fontTools.subset:GPOS pruned
+INFO:fontTools.subset:GSUB pruned
+INFO:fontTools.subset:glyf pruned
+INFO:fontTools.subset:Added gid0 to subset
+INFO:fontTools.subset:Added first four glyphs to subset
+INFO:fontTools.subset:Closing glyph list over 'MATH': 6 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Closed glyph list over 'MATH': 6 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Closing glyph list over 'GSUB': 6 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Closed glyph list over 'GSUB': 6 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Closing glyph list over 'glyf': 6 glyphs before
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Closed glyph list over 'glyf': 6 glyphs after
+INFO:fontTools.subset:Glyph names: ['.notdef', '.null', 'emdash', 'minus', 'nonmarkingreturn', 'space']
+INFO:fontTools.subset:Glyph IDs:   [0, 1, 2, 3, 2806, 3228]
+INFO:fontTools.subset:Retaining 6 glyphs
+INFO:fontTools.subset:head subsetting not needed
+INFO:fontTools.subset:hhea subsetting not needed
+INFO:fontTools.subset:maxp subsetting not needed
+INFO:fontTools.subset:OS/2 subsetting not needed
+INFO:fontTools.subset:hmtx subsetted
+INFO:fontTools.subset:cmap subsetted
+INFO:fontTools.subset:fpgm subsetting not needed
+INFO:fontTools.subset:prep subsetting not needed
+INFO:fontTools.subset:cvt  subsetting not needed
+INFO:fontTools.subset:loca subsetting not needed
+INFO:fontTools.subset:post subsetted
+INFO:fontTools.subset:gasp subsetting not needed
+INFO:fontTools.subset:MATH subsetted
+INFO:fontTools.subset:GDEF subsetted
+INFO:fontTools.subset:GPOS subsetted
+INFO:fontTools.subset:GSUB subsetted
+INFO:fontTools.subset:name subsetting not needed
+INFO:fontTools.subset:glyf subsetted
+INFO:fontTools.subset:head pruned
+INFO:fontTools.subset:OS/2 Unicode ranges pruned: [31, 38]
+INFO:fontTools.subset:OS/2 CodePage ranges pruned: [0]
+INFO:fontTools.subset:glyf pruned
+INFO:fontTools.subset:GDEF pruned
+INFO:fontTools.subset:GPOS pruned
+INFO:fontTools.subset:GSUB pruned
+INFO:fontTools.subset:name pruned
+Checking cached dataset: exchange_h48
+Traceback (most recent call last):
+  File "/home/ubuntu/timestransfer/scripts/build_thesis_artifacts.py", line 291, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/home/ubuntu/timestransfer/scripts/build_thesis_artifacts.py", line 134, in main
+    assert g.ds.astype(str).tolist()==loaded_test.ds.astype(str).tolist()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

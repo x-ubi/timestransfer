@@ -1,0 +1,37 @@
+80% interval coverage (nominal 0.80)
+              cov_timesfm_2p5  cov_chronos2  ...  cov_vincentization  cov_mixture
+dataset                                      ...                                 
+ecl_h48                 0.784         0.743  ...               0.786        0.737
+ett_h1_h48              0.744         0.755  ...               0.791        0.716
+ett_h1_h96              0.758         0.776  ...               0.828        0.752
+ett_h2_h48              0.791         0.768  ...               0.830        0.782
+ett_m1_h48              0.777         0.755  ...               0.849        0.769
+ett_m2_h48              0.849         0.778  ...               0.876        0.829
+exchange_h48            0.807         0.749  ...               0.877        0.772
+ili_h48                 0.869         0.733  ...               0.896        0.905
+m4_hourly               0.830         0.739  ...               0.828        0.788
+traffic_h48             0.803         0.748  ...               0.811        0.778
+weather_h48             0.840         0.785  ...               0.851        0.819
+
+[11 rows x 5 columns]
+Scaled quantile loss relative to the best single FM per task
+              ql_timesfm_2p5  ql_chronos2  ...  ql_vincentization  ql_mixture
+dataset                                    ...                               
+ecl_h48                1.060        1.000  ...              1.032       1.016
+ett_h1_h48             1.056        1.000  ...              0.993       0.994
+ett_h1_h96             1.030        1.000  ...              0.990       0.986
+ett_h2_h48             1.071        1.000  ...              1.020       1.005
+ett_m1_h48             1.174        1.000  ...              1.066       1.042
+ett_m2_h48             1.077        1.000  ...              1.099       1.040
+exchange_h48           1.031        1.000  ...              1.208       1.057
+ili_h48                1.000        2.573  ...              1.748       1.546
+m4_hourly              1.000        1.074  ...              0.944       0.933
+traffic_h48            1.000        1.018  ...              1.004       0.986
+weather_h48            1.062        1.000  ...              0.978       0.971
+
+[11 rows x 5 columns]
+timesfm_2p5     geomean ratio to best single FM: 1.0501
+chronos2        geomean ratio to best single FM: 1.0985
+tabpfn_ts       geomean ratio to best single FM: 1.2689
+vincentization  geomean ratio to best single FM: 1.0818
+mixture         geomean ratio to best single FM: 1.0426

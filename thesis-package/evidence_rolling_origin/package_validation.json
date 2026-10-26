@@ -1,0 +1,22 @@
+{
+  "main_score_cells_and_winners_checked": 396,
+  "missing_cells_for_skipped_autoarima": 12,
+  "aggregate_rows_checked": 9,
+  "relative_mase_cells_checked": 85,
+  "window_spread_cells_checked": 96,
+  "correlation_tables_checked": 2,
+  "context_scores_checked": 48,
+  "flag_deltas_checked": 40,
+  "selection_ids_and_scores_checked": 6,
+  "requested_contexts_and_flags_verified": 44,
+  "rendered_tex_files": 28,
+  "citations_resolved": 23,
+  "todos_by_file": {
+    "tex/2-literature.tex": 5,
+    "tex/experiments.tex": 4
+  },
+  "unique_labels": 53,
+  "source_hashes_verified": 38,
+  "build_pdf_exists_and_no_unresolved_references_or_missing_glyphs": true,
+  "overfull_boxes": 1
+}

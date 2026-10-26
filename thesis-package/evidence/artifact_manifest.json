@@ -1,0 +1,346 @@
+{
+  "command": ".venv/bin/python scripts/build_thesis_artifacts.py",
+  "input_sha256": {
+    "configs/experiment.yaml": "89362041bfbd5c31be112b5b7c4504b4ad69ca1fb94aef519164bde64b921329",
+    "configs/timesfm_tuning.yaml": "0860089970813684402f9242f88508f8ef0d73f709bb004f0f96fc69f055dda3",
+    "data/longhorizon2/all_six_datasets/ECL/Y_df.csv": "7e45845d54c5219bad0ae6bc1b5316cf8ff9cead5d33fa998a5a51c2e4a497ad",
+    "data/longhorizon2/all_six_datasets/ETTh1/Y_df.csv": "f18de3ad269cef59bb07b5438d79bb3042d3be49bdeecf01c1cd6d29695ee066",
+    "data/longhorizon2/all_six_datasets/ETTh2/Y_df.csv": "a3dc2c597b9218c7ce1cd55eb77b283fd459a1d09d753063f944967dd6b9218b",
+    "data/longhorizon2/all_six_datasets/ETTm1/Y_df.csv": "6ce1759b1a18e3328421d5d75fadcb316c449fcd7cec32820c8dafda71986c9e",
+    "data/longhorizon2/all_six_datasets/ETTm2/Y_df.csv": "db973ca252c6410a30d0469b13d696cf919648d0f3fd588c60f03fdbdbadd1fd",
+    "data/longhorizon2/all_six_datasets/Exchange/Y_df.csv": "48b4d9d3d508f5104162e85b9a6042e3557fde11aa9f2944eba8c0d0efc89842",
+    "data/longhorizon2/all_six_datasets/ILI/Y_df.csv": "93601f64d2566dc796ca4305adad8b8560c2db1a1ff04543c3bd813a7263570a",
+    "data/longhorizon2/all_six_datasets/TrafficL/Y_df.csv": "cb06463d56fa17d87f47027cd9389ceae82a69eddee51cdb61480e120dab0b16",
+    "data/longhorizon2/all_six_datasets/Weather/Y_df.csv": "61d73a7e72bbb1ca64555297559afefb84e09fd6a0db13f587ae09c08060c6d9",
+    "data/m4/datasets/Hourly-test.csv": "71a57fccb15e534d973626ada4fb87febf789e9317715b7cc6dd3b5f90db6f42",
+    "data/m4/datasets/Hourly-train.csv": "ea59b7783573c49077a835ab6465c7d66f1474783360f310988a9a737fbca62f",
+    "data/m4/datasets/Hourly.p": "b6690b63814139efde9d2b9710b4df6f54291c71333708857c650cae14f98ef6",
+    "outputs/analysis/feature_metric_correlations.csv": "3c0e354b6f7683e57979996333cd463bde07700e3a4a5d660728dd64281b0631",
+    "outputs/analysis/series_features.csv": "2a7aebd3cfa3e11c2673f7bf41fedda1ca38cd1e4a5089a05e0f091d4e420ff4",
+    "outputs/analysis/series_features_with_metrics.csv": "99eaf238ead5f40df125da1ef0c01c736d507e85f93b120838ed9f79f84b1cef",
+    "outputs/forecasts/all_datasets_all_models.parquet": "cd4ddac06c2239fbe11a31ae2c0267d4ca3b359992313da1f563692f9af7decf",
+    "outputs/metadata/environment.json": "13ae247c91a3ef4c78517aa4928e8e905313c066b5beada9e2a708e2b6f2d17f",
+    "outputs/metrics/mase_scales.csv": "fe7f9d72942eeffda7a5dd6a596946d4da58609eeb3c811847bd295f1d1286c4",
+    "outputs/metrics/metrics.csv": "77351c1cdc1b87fa78110866f87256250afda01960a2c10d6a2a50a13f748f84",
+    "outputs/timesfm_tuning/forecasts/all_datasets_all_models.parquet": "76dc2a5e198ef8f993516b593ce5f55674e4b09114e79382267b9ab5ad8c725f",
+    "outputs/timesfm_tuning/metadata/environment.json": "4557bdba60f66763232992e4bb6e2a3bd14181dec8288e69bc58a10ae2fad381",
+    "outputs/timesfm_tuning/metrics/mase_scales.csv": "48c19697f9667789f93df149b8e498143bc38d056c07e2cbceb67347f2406520",
+    "outputs/timesfm_tuning/metrics/metrics.csv": "494083c5b116b913914c1522e3c633116e80679aab21f6aad610d44567c4fdee",
+    "scripts/build_thesis_artifacts.py": "81784b9211fb7588db9952c4008f47c6fb732fa1a916dacace3be9db978b3dd6",
+    "src/timestransfer/data.py": "47b4f62f989b81720e6191cc26a166f3014456af3dcbde127dd816b1f8db50e1",
+    "src/timestransfer/features.py": "9f6a94c73a186db4630bcb1b1683de84288a3579d4d97174117fc680dbb1abce",
+    "src/timestransfer/models.py": "43ca7dbfb11500ab78f4065ea5651b7f51da624f312377740faf24939fec867d",
+    "src/timestransfer/runner.py": "4fd174665cd36d145fe37d0a1057c8d201ea98d3598754eb46876c7226cab9a0",
+    "src/timestransfer/metrics.py": "2f32654f092e5a6bb6898036563edf821082796c5e1a3a4c488bd2fabbcf8c2a",
+    "src/timestransfer/series_features.py": "cb09cf1a3ad0aefd15c3c67fc173b55a5c1bbbeda99c232cc1df771676fe4db0",
+    "src/timestransfer/analysis.py": "8e8ed8710c2073d8bcb1c8529763821e3cd0a3cd6b3e0de84b1fdf0b1e8491fd",
+    "src/timestransfer/forecast_plots.py": "eec627f92ae00af4f16bb78770f1e222e1b433ca39bf3a71e3580aed84184c60",
+    "src/timestransfer/metadata.py": "c2cf7f37fd0ed4fffc6e9187ca0dc775a7f81bf88fe246a991dffa946619fabe"
+  },
+  "artifacts": [
+    {
+      "output": "thesis/tables/experiments/smape_1.tex",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "overall smape; task order fixed; 2 decimals; exact unrounded minima"
+    },
+    {
+      "output": "thesis/tables/experiments/smape_2.tex",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "overall smape; task order fixed; 2 decimals; exact unrounded minima"
+    },
+    {
+      "output": "thesis/tables/experiments/mase_1.tex",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "overall mase; task order fixed; 3 decimals; exact unrounded minima"
+    },
+    {
+      "output": "thesis/tables/experiments/mase_2.tex",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "overall mase; task order fixed; 3 decimals; exact unrounded minima"
+    },
+    {
+      "output": "thesis/tables/experiments/mae_1.tex",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "overall mae; task order fixed; 3 decimals; exact unrounded minima"
+    },
+    {
+      "output": "thesis/tables/experiments/mae_2.tex",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "overall mae; task order fixed; 3 decimals; exact unrounded minima"
+    },
+    {
+      "output": "thesis/tables/experiments/rmse_1.tex",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "overall rmse; task order fixed; 3 decimals; exact unrounded minima"
+    },
+    {
+      "output": "thesis/tables/experiments/rmse_2.tex",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "overall rmse; task order fixed; 3 decimals; exact unrounded minima"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_1.pdf",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/m4/datasets/Hourly.p",
+        "data/m4/datasets/Hourly-train.csv",
+        "data/m4/datasets/Hourly-test.csv"
+      ],
+      "transformation": "m4_hourly/H187; best ranked TimesFM test sMAPE; ties by string ID; history=96; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_1.png",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/m4/datasets/Hourly.p",
+        "data/m4/datasets/Hourly-train.csv",
+        "data/m4/datasets/Hourly-test.csv"
+      ],
+      "transformation": "m4_hourly/H187; best ranked TimesFM test sMAPE; ties by string ID; history=96; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_2.pdf",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/m4/datasets/Hourly.p",
+        "data/m4/datasets/Hourly-train.csv",
+        "data/m4/datasets/Hourly-test.csv"
+      ],
+      "transformation": "m4_hourly/H349; worst ranked TimesFM test sMAPE; ties by string ID; history=96; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_2.png",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/m4/datasets/Hourly.p",
+        "data/m4/datasets/Hourly-train.csv",
+        "data/m4/datasets/Hourly-test.csv"
+      ],
+      "transformation": "m4_hourly/H349; worst ranked TimesFM test sMAPE; ties by string ID; history=96; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_3.pdf",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/longhorizon2/all_six_datasets/ETTh1/Y_df.csv"
+      ],
+      "transformation": "ett_h1_h48/HUFL; median ranked TimesFM test sMAPE; ties by string ID; history=96; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_3.png",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/longhorizon2/all_six_datasets/ETTh1/Y_df.csv"
+      ],
+      "transformation": "ett_h1_h48/HUFL; median ranked TimesFM test sMAPE; ties by string ID; history=96; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_4.pdf",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/longhorizon2/all_six_datasets/TrafficL/Y_df.csv"
+      ],
+      "transformation": "traffic_h48/193; median ranked TimesFM test sMAPE; ties by string ID; history=96; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_4.png",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/longhorizon2/all_six_datasets/TrafficL/Y_df.csv"
+      ],
+      "transformation": "traffic_h48/193; median ranked TimesFM test sMAPE; ties by string ID; history=96; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_5.pdf",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/longhorizon2/all_six_datasets/Weather/Y_df.csv"
+      ],
+      "transformation": "weather_h48/max. PAR (\ufffdmol/m\ufffd/s); worst ranked TimesFM test sMAPE; ties by string ID; history=432; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_5.png",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/longhorizon2/all_six_datasets/Weather/Y_df.csv"
+      ],
+      "transformation": "weather_h48/max. PAR (\ufffdmol/m\ufffd/s); worst ranked TimesFM test sMAPE; ties by string ID; history=432; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_6.pdf",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/longhorizon2/all_six_datasets/ILI/Y_df.csv"
+      ],
+      "transformation": "ili_h48/AGE 5-24; median ranked TimesFM test sMAPE; ties by string ID; history=156; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_6.png",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/longhorizon2/all_six_datasets/ILI/Y_df.csv"
+      ],
+      "transformation": "ili_h48/AGE 5-24; median ranked TimesFM test sMAPE; ties by string ID; history=156; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']"
+    },
+    {
+      "output": "thesis/tables/experiments/raw_lengths.tex",
+      "inputs": [
+        "evidence/dataset_inventory.csv"
+      ],
+      "transformation": "available versus loader-retained counts; repeated ETTh1/96 omitted"
+    },
+    {
+      "output": "thesis/tables/experiments/datasets.tex",
+      "inputs": [
+        "data/longhorizon2/all_six_datasets/ECL/Y_df.csv",
+        "data/longhorizon2/all_six_datasets/ETTh1/Y_df.csv",
+        "data/longhorizon2/all_six_datasets/ETTh2/Y_df.csv",
+        "data/longhorizon2/all_six_datasets/ETTm1/Y_df.csv",
+        "data/longhorizon2/all_six_datasets/ETTm2/Y_df.csv",
+        "data/longhorizon2/all_six_datasets/Exchange/Y_df.csv",
+        "data/longhorizon2/all_six_datasets/ILI/Y_df.csv",
+        "data/longhorizon2/all_six_datasets/TrafficL/Y_df.csv",
+        "data/longhorizon2/all_six_datasets/Weather/Y_df.csv",
+        "data/m4/datasets/Hourly-test.csv",
+        "data/m4/datasets/Hourly-train.csv",
+        "data/m4/datasets/Hourly.p",
+        "configs/experiment.yaml"
+      ],
+      "transformation": "exact loader and final-horizon split; per-series inventory in evidence"
+    },
+    {
+      "output": "thesis/tables/experiments/boundaries.tex",
+      "inputs": [
+        "evidence/series_inventory.csv"
+      ],
+      "transformation": "first and last timestamps of each split"
+    },
+    {
+      "output": "thesis/img/experiments/horizon_smape.pdf",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "horizon scope; fixed tasks and four models; smape; same test trajectories"
+    },
+    {
+      "output": "thesis/img/experiments/horizon_smape.png",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "horizon scope; fixed tasks and four models; smape; same test trajectories"
+    },
+    {
+      "output": "thesis/img/experiments/horizon_mase.pdf",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "horizon scope; fixed tasks and four models; mase; same test trajectories"
+    },
+    {
+      "output": "thesis/img/experiments/horizon_mase.png",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "horizon scope; fixed tasks and four models; mase; same test trajectories"
+    },
+    {
+      "output": "thesis/tables/experiments/correlations_smape.tex",
+      "inputs": [
+        "outputs/analysis/series_features_with_metrics.csv"
+      ],
+      "transformation": "Spearman smape; within-task complete pairs; fixed three large panels and two features"
+    },
+    {
+      "output": "thesis/tables/experiments/correlations_mase.tex",
+      "inputs": [
+        "outputs/analysis/series_features_with_metrics.csv"
+      ],
+      "transformation": "Spearman mase; within-task complete pairs; fixed three large panels and two features"
+    },
+    {
+      "output": "thesis/img/experiments/feature_scatter.pdf",
+      "inputs": [
+        "outputs/analysis/series_features_with_metrics.csv"
+      ],
+      "transformation": "TimesFM; three large panels; ACF and STL vs sMAPE; no significance filtering"
+    },
+    {
+      "output": "thesis/img/experiments/feature_scatter.png",
+      "inputs": [
+        "outputs/analysis/series_features_with_metrics.csv"
+      ],
+      "transformation": "TimesFM; three large panels; ACF and STL vs sMAPE; no significance filtering"
+    },
+    {
+      "output": "thesis/img/experiments/timesfm_context.pdf",
+      "inputs": [
+        "outputs/timesfm_tuning/metrics/metrics.csv"
+      ],
+      "transformation": "six contexts; per-task sMAPE left blue / MASE right orange; independent axes"
+    },
+    {
+      "output": "thesis/img/experiments/timesfm_context.png",
+      "inputs": [
+        "outputs/timesfm_tuning/metrics/metrics.csv"
+      ],
+      "transformation": "six contexts; per-task sMAPE left blue / MASE right orange; independent axes"
+    },
+    {
+      "output": "thesis/tables/experiments/flags_smape.tex",
+      "inputs": [
+        "outputs/timesfm_tuning/metrics/metrics.csv"
+      ],
+      "transformation": "smape(ablation) - smape(ctx1024), within tuning run"
+    },
+    {
+      "output": "thesis/tables/experiments/flags_mase.tex",
+      "inputs": [
+        "outputs/timesfm_tuning/metrics/metrics.csv"
+      ],
+      "transformation": "mase(ablation) - mase(ctx1024), within tuning run"
+    },
+    {
+      "output": "thesis/tables/experiments/contexts.tex",
+      "inputs": [
+        "outputs/timesfm_tuning/metrics/metrics.csv"
+      ],
+      "transformation": "six contexts, four tasks, overall scores"
+    },
+    {
+      "output": "thesis/tables/experiments/selections.tex",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "IDs ranked by TimesFM sMAPE then string ID, test-selected diagnostics"
+    }
+  ],
+  "note": "Evidence paths refer to derived package artifacts; hashes identify present inputs, not historical checkpoint revisions."
+}

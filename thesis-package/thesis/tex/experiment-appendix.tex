@@ -1,0 +1,63 @@
+\clearpage
+\section{Supplementary experimental tables}\label{sec:inventory}
+\subsection{Dataset boundaries and variable inventory}
+Table~\ref{tab:boundaries} gives exact loaded boundaries. These are shared by every variable in each non-M4 task. M4 uses integer indices: its training endpoint is either 700 or 960, and the corresponding final 48 test positions end at 748 or 1,008. The supplementary evidence includes one row per task/series with lengths, endpoints, finite-value checks, zero and negative counts, extrema and the MASE denominator.
+\input{tables/experiments/boundaries}
+
+\input{tables/experiments/raw_lengths}
+
+Weather headers and interpretable units are listed in Table~\ref{tab:weatherunits}. Names are interpreted against the station documentation~\cite{jena_weather}; the file's final \texttt{OT} header does not preserve a physical identity. Damaged encoding in radiation unit strings is corrected only for display, without changing stored IDs or values.
+\begin{table}[!htbp]\centering\small
+\caption{Complete Weather variable inventory. Units follow identifiable source headers and station documentation; no unit conversion is applied.}\label{tab:weatherunits}
+\begin{tabular}{lll}\hline
+Header stem & Meaning & Unit \\\hline
+p & Pressure & mbar \\
+T & Air temperature & $^\circ$C \\
+Tpot & Potential temperature & K \\
+Tdew & Dew-point temperature & $^\circ$C \\
+rh & Relative humidity & \% \\
+VPmax & Saturation vapour pressure & mbar \\
+VPact & Actual vapour pressure & mbar \\
+VPdef & Vapour pressure deficit & mbar \\
+sh & Specific humidity & g/kg \\
+H2OC & Water-vapour concentration & mmol/mol \\
+rho & Air density & g/m$^3$ \\
+wv & Wind speed & m/s \\
+max. wv & Maximum wind speed & m/s \\
+wd & Wind direction & degrees \\
+rain & Precipitation & mm \\
+raining & Rain duration & s \\
+SWDR & Shortwave downward radiation & W/m$^2$ \\
+PAR & Photosynthetically active radiation & $\mu$mol/m$^2$/s \\
+max. PAR & Maximum PAR & $\mu$mol/m$^2$/s \\
+Tlog & Logger temperature & $^\circ$C \\
+OT & Renamed final variable & Unverified \\\hline
+\end{tabular}\end{table}
+
+\subsection{Tabular lag inventory}
+The exact lag sets below accompany the feature definition in Section~\ref{sec:protocol}. A range such as 1--48 includes every integer in that range; the additional lags are individual observations. The row cap is 10,000 for every task.
+\begin{table}[!htbp]\centering\small
+\caption{Configured lag indices relative to each supervised cutoff.}\label{tab:lags}
+\begin{tabular}{p{.26\linewidth}p{.63\linewidth}}\hline
+Task family & Lag indices \\\hline
+M4 Hourly & 1--48; 72, 96, 120, 144, 168 \\
+Hourly ETT, ECL, Traffic & 1--48; 72, 96, 168, 336, 720 \\
+Quarter-hourly ETT & 1--24; 48, 72, 96, 192, 288, 672, 1,344 \\
+Weather & 1--24; 36, 48, 72, 144, 288, 1,008 \\
+Exchange & 1--14; 21, 28, 30, 60, 90, 180, 365 \\
+ILI & 1--8; 13, 26, 52, 104 \\\hline
+\end{tabular}\end{table}
+
+\clearpage
+\subsection{Complete raw-scale scores and sensitivity grid}\label{sec:fullscores}
+The following tables report all saved overall MAE and RMSE values. Comparisons should be made within a task; physical units can also differ between its variables. A bold value is the minimum before rounding, and exact ties share emphasis.
+\input{tables/experiments/mae_1}
+\input{tables/experiments/mae_2}
+\input{tables/experiments/rmse_1}
+\input{tables/experiments/rmse_2}
+\clearpage
+\begin{figure}[!htbp]\centering
+\includegraphics[width=\linewidth]{img/experiments/horizon_mase.pdf}
+\caption{MASE at each forecast step for the same tasks and models as Figure~\ref{fig:horizons}. Denominators use the full training series.}\label{fig:horizonmase}
+\end{figure}
+\input{tables/experiments/contexts}

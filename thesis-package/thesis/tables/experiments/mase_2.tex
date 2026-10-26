@@ -1,0 +1,18 @@
+\begin{table}[!htbp]
+\centering
+\caption{MASE by task, part 2 ($\downarrow$). Bold: minimum before rounding; exact ties share bold. Bolt denotes Chronos-Bolt; SNaive denotes SeasonalNaive.}
+\label{tab:mase2}
+\small
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lrrrrrrrrr}
+\hline
+Task & Linear & TabPFN & TimesFM & Bolt & Prophet & ARIMA & ETS & Theta & SNaive \\
+\hline
+ECL & 2.645 & 1.735 & 1.294 & \textbf{1.028} & 1.823 & 5.020 & 1.483 & 1.998 & 1.405 \\
+Traffic & 1.188 & 1.078 & 0.648 & \textbf{0.604} & 1.429 & 1.957 & 1.563 & 1.443 & 0.869 \\
+Weather & 3.605 & 0.213 & \textbf{0.118} & 0.132 & 0.444 & 0.190 & 0.176 & 0.142 & 0.298 \\
+Exchange & \textbf{5.560} & 7.422 & 6.928 & 6.564 & 14.571 & 7.446 & 6.720 & 7.935 & 8.779 \\
+ILI & 3.540 & 3.714 & \textbf{0.605} & 3.231 & 3.393 & 2.080 & 2.013 & 2.349 & 3.783 \\
+\hline
+\end{tabular}
+\end{table}

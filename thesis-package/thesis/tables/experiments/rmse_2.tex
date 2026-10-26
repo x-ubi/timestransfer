@@ -1,0 +1,22 @@
+\begin{table}[!htbp]
+\centering
+\caption{RMSE by task, part 2 ($\downarrow$). Bold: minimum before rounding; exact ties share bold. Bolt denotes Chronos-Bolt; SNaive denotes SeasonalNaive.}
+\label{tab:rmse2}
+\small
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lrrrrr}
+\hline
+Model & ECL & Traffic & Weather & Exchange & ILI \\
+\hline
+Linear & 2063.501 & 0.027 & 78.885 & \textbf{0.013} & 116089.705 \\
+TabPFN & 1592.584 & 0.027 & 3.749 & 0.016 & 138383.274 \\
+TimesFM & 1145.911 & \textbf{0.023} & \textbf{3.379} & 0.015 & \textbf{27044.639} \\
+Bolt & \textbf{1063.677} & 0.023 & 3.949 & 0.017 & 247314.932 \\
+Prophet & 3910.971 & 0.034 & 5.518 & 0.042 & 55325.852 \\
+ARIMA & 4283.475 & 0.039 & 12.833 & 0.014 & 242914.900 \\
+ETS & 1248.904 & 0.037 & 4.879 & 0.014 & 242898.684 \\
+Theta & 3254.215 & 0.037 & 4.309 & 0.014 & 217083.225 \\
+SNaive & 1305.738 & 0.030 & 7.295 & 0.019 & 91707.688 \\
+\hline
+\end{tabular}
+\end{table}

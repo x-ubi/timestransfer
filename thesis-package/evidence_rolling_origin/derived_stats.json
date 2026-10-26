@@ -1,0 +1,511 @@
+{
+ "coverage.main_forecast_rows": 3609600,
+ "coverage.tuning_forecast_rows": 1185360,
+ "coverage.scored_combinations": 96,
+ "coverage.skipped": 3,
+ "agg.relmase.linear_regression": 1.7566180194503171,
+ "agg.relmae.linear_regression": 1.5990602230546629,
+ "agg.ntasks.linear_regression": 11,
+ "beats_snaive_tasks.linear_regression": 2,
+ "agg.relmase.tabpfn_ts": 0.8404430608203388,
+ "agg.relmae.tabpfn_ts": 0.8713088283591907,
+ "agg.ntasks.tabpfn_ts": 11,
+ "beats_snaive_tasks.tabpfn_ts": 9,
+ "agg.relmase.timesfm_2p5": 0.7482681510284054,
+ "agg.relmae.timesfm_2p5": 0.7809270354550923,
+ "agg.ntasks.timesfm_2p5": 11,
+ "beats_snaive_tasks.timesfm_2p5": 9,
+ "agg.relmase.chronos2": 0.7850898144403827,
+ "agg.relmae.chronos2": 0.8372610024346526,
+ "agg.ntasks.chronos2": 11,
+ "beats_snaive_tasks.chronos2": 10,
+ "agg.relmase.prophet": 1.4510547738762334,
+ "agg.relmae.prophet": 1.3937823220258987,
+ "agg.ntasks.prophet": 11,
+ "beats_snaive_tasks.prophet": 1,
+ "agg.relmase.auto_arima": 0.9264983470219506,
+ "agg.relmae.auto_arima": 0.9674910387112388,
+ "agg.ntasks.auto_arima": 8,
+ "beats_snaive_tasks.auto_arima": 6,
+ "agg.relmase.auto_ets": 1.211881258253617,
+ "agg.relmae.auto_ets": 1.3432012461070224,
+ "agg.ntasks.auto_ets": 11,
+ "beats_snaive_tasks.auto_ets": 3,
+ "agg.relmase.auto_theta": 1.1625854985124575,
+ "agg.relmae.auto_theta": 1.138230169877968,
+ "agg.ntasks.auto_theta": 11,
+ "beats_snaive_tasks.auto_theta": 4,
+ "agg.relmase.seasonal_naive": 1.0,
+ "agg.relmae.seasonal_naive": 1.0,
+ "agg.ntasks.seasonal_naive": 11,
+ "beats_snaive_tasks.seasonal_naive": 0,
+ "agg8.relmase.linear_regression": 1.544585318625513,
+ "agg8.relmase.tabpfn_ts": 0.8724482973900413,
+ "agg8.relmase.timesfm_2p5": 0.722986388032695,
+ "agg8.relmase.chronos2": 0.8162836057488846,
+ "agg8.relmase.prophet": 1.4489093518145653,
+ "agg8.relmase.auto_arima": 0.9264983470219506,
+ "agg8.relmase.auto_ets": 1.2564066874475597,
+ "agg8.relmase.auto_theta": 1.2576002054704403,
+ "agg8.relmase.seasonal_naive": 1.0,
+ "winner_mase.m4_hourly": "timesfm_2p5",
+ "winner_smape.m4_hourly": "chronos2",
+ "best_nonsnaive_relmase.m4_hourly": 0.5757598406739529,
+ "fm_ratio_max_min.m4_hourly": 1.1209753835372875,
+ "winner_fm.m4_hourly": "timesfm_2p5",
+ "winner_mase.ett_h1_h48": "seasonal_naive",
+ "winner_smape.ett_h1_h48": "seasonal_naive",
+ "best_nonsnaive_relmase.ett_h1_h48": 1.0376087792262936,
+ "fm_ratio_max_min.ett_h1_h48": 1.0374366798474333,
+ "winner_fm.ett_h1_h48": "tabpfn_ts",
+ "winner_mase.ett_h1_h96": "auto_arima",
+ "winner_smape.ett_h1_h96": "auto_arima",
+ "best_nonsnaive_relmase.ett_h1_h96": 0.8764810587203438,
+ "fm_ratio_max_min.ett_h1_h96": 1.0942431083457125,
+ "winner_fm.ett_h1_h96": "chronos2",
+ "winner_mase.ett_h2_h48": "timesfm_2p5",
+ "winner_smape.ett_h2_h48": "seasonal_naive",
+ "best_nonsnaive_relmase.ett_h2_h48": 0.9104455510224676,
+ "fm_ratio_max_min.ett_h2_h48": 1.089681431718568,
+ "winner_fm.ett_h2_h48": "timesfm_2p5",
+ "winner_mase.ett_m1_h48": "tabpfn_ts",
+ "winner_smape.ett_m1_h48": "tabpfn_ts",
+ "best_nonsnaive_relmase.ett_m1_h48": 0.7904095749224493,
+ "fm_ratio_max_min.ett_m1_h48": 1.2546409573155692,
+ "winner_fm.ett_m1_h48": "tabpfn_ts",
+ "winner_mase.ett_m2_h48": "chronos2",
+ "winner_smape.ett_m2_h48": "seasonal_naive",
+ "best_nonsnaive_relmase.ett_m2_h48": 0.8060690033396999,
+ "fm_ratio_max_min.ett_m2_h48": 1.2139058668405691,
+ "winner_fm.ett_m2_h48": "chronos2",
+ "winner_mase.ecl_h48": "chronos2",
+ "winner_smape.ecl_h48": "chronos2",
+ "best_nonsnaive_relmase.ecl_h48": 0.6322602257566744,
+ "fm_ratio_max_min.ecl_h48": 1.3067979253333453,
+ "winner_fm.ecl_h48": "chronos2",
+ "winner_mase.traffic_h48": "chronos2",
+ "winner_smape.traffic_h48": "timesfm_2p5",
+ "best_nonsnaive_relmase.traffic_h48": 0.715555460959668,
+ "fm_ratio_max_min.traffic_h48": 1.1342173803920264,
+ "winner_fm.traffic_h48": "chronos2",
+ "winner_mase.weather_h48": "chronos2",
+ "winner_smape.weather_h48": "seasonal_naive",
+ "best_nonsnaive_relmase.weather_h48": 0.5120458128006655,
+ "fm_ratio_max_min.weather_h48": 1.344982690326613,
+ "winner_fm.weather_h48": "chronos2",
+ "winner_mase.exchange_h48": "linear_regression",
+ "winner_smape.exchange_h48": "chronos2",
+ "best_nonsnaive_relmase.exchange_h48": 0.8460298928296355,
+ "fm_ratio_max_min.exchange_h48": 1.1863021390568342,
+ "winner_fm.exchange_h48": "chronos2",
+ "winner_mase.ili_h48": "timesfm_2p5",
+ "winner_smape.ili_h48": "timesfm_2p5",
+ "best_nonsnaive_relmase.ili_h48": 0.2750568473681465,
+ "fm_ratio_max_min.ili_h48": 3.0600233705619244,
+ "winner_fm.ili_h48": "timesfm_2p5",
+ "metric_disagreement_tasks": [
+  "m4_hourly",
+  "ett_h2_h48",
+  "ett_m2_h48",
+  "traffic_h48",
+  "weather_h48",
+  "exchange_h48"
+ ],
+ "n_metric_disagreement_tasks": 6,
+ "fm_mase_wins": 8,
+ "loto_order.m4_hourly": [
+  "timesfm_2p5",
+  "chronos2",
+  "tabpfn_ts"
+ ],
+ "loto.m4_hourly.timesfm_2p5": 0.7681372912389722,
+ "loto.m4_hourly.chronos2": 0.8006220239587667,
+ "loto.m4_hourly.tabpfn_ts": 0.8681682940427339,
+ "loto_order.ett_h1_h48": [
+  "timesfm_2p5",
+  "chronos2",
+  "tabpfn_ts"
+ ],
+ "loto.ett_h1_h48.timesfm_2p5": 0.7231786187761605,
+ "loto.ett_h1_h48.chronos2": 0.7604873111675776,
+ "loto.ett_h1_h48.tabpfn_ts": 0.8226895487091892,
+ "loto_order.ett_h1_h96": [
+  "timesfm_2p5",
+  "chronos2",
+  "tabpfn_ts"
+ ],
+ "loto.ett_h1_h96.timesfm_2p5": 0.7235584843146887,
+ "loto.ett_h1_h96.chronos2": 0.7697209604240699,
+ "loto.ett_h1_h96.tabpfn_ts": 0.827020498489826,
+ "loto_order.ett_h2_h48": [
+  "timesfm_2p5",
+  "chronos2",
+  "tabpfn_ts"
+ ],
+ "loto.ett_h2_h48.timesfm_2p5": 0.7337322171172607,
+ "loto.ett_h2_h48.chronos2": 0.7732664638076387,
+ "loto.ett_h2_h48.tabpfn_ts": 0.8266159338212768,
+ "loto_order.ett_m1_h48": [
+  "timesfm_2p5",
+  "chronos2",
+  "tabpfn_ts"
+ ],
+ "loto.ett_m1_h48.timesfm_2p5": 0.7274879785857467,
+ "loto.ett_m1_h48.chronos2": 0.7781099402149362,
+ "loto.ett_m1_h48.tabpfn_ts": 0.845617390923827,
+ "loto_order.ett_m2_h48": [
+  "timesfm_2p5",
+  "chronos2",
+  "tabpfn_ts"
+ ],
+ "loto.ett_m2_h48.timesfm_2p5": 0.7425809664140974,
+ "loto.ett_m2_h48.chronos2": 0.783022163839566,
+ "loto.ett_m2_h48.tabpfn_ts": 0.8277580294111526,
+ "loto_order.ecl_h48": [
+  "timesfm_2p5",
+  "chronos2",
+  "tabpfn_ts"
+ ],
+ "loto.ecl_h48.timesfm_2p5": 0.7539658480270355,
+ "loto.ecl_h48.chronos2": 0.8022721031742341,
+ "loto.ecl_h48.tabpfn_ts": 0.8418770982691434,
+ "loto_order.traffic_h48": [
+  "timesfm_2p5",
+  "chronos2",
+  "tabpfn_ts"
+ ],
+ "loto.traffic_h48.timesfm_2p5": 0.7493615178941222,
+ "loto.traffic_h48.chronos2": 0.7924045255762197,
+ "loto.traffic_h48.tabpfn_ts": 0.8433836267669316,
+ "loto_order.weather_h48": [
+  "timesfm_2p5",
+  "chronos2",
+  "tabpfn_ts"
+ ],
+ "loto.weather_h48.timesfm_2p5": 0.754502069140755,
+ "loto.weather_h48.chronos2": 0.8193706348380687,
+ "loto.weather_h48.tabpfn_ts": 0.8738415720777034,
+ "loto_order.exchange_h48": [
+  "timesfm_2p5",
+  "chronos2",
+  "tabpfn_ts"
+ ],
+ "loto.exchange_h48.timesfm_2p5": 0.7330613762720994,
+ "loto.exchange_h48.chronos2": 0.7788793148405986,
+ "loto.exchange_h48.tabpfn_ts": 0.825274615457147,
+ "loto_order.ili_h48": [
+  "chronos2",
+  "timesfm_2p5",
+  "tabpfn_ts"
+ ],
+ "loto.ili_h48.timesfm_2p5": 0.8270290037530682,
+ "loto.ili_h48.chronos2": 0.7796443874933046,
+ "loto.ili_h48.tabpfn_ts": 0.8444014052293364,
+ "loto_n_timesfm_first": 10,
+ "cv.median": 0.30957676505082454,
+ "cv.min": 0.014519565716189219,
+ "cv.max": 1.0660242057197098,
+ "cv.n_pairs": 96,
+ "cv.median_task.ecl_h48": 0.6449294287058847,
+ "cv.median_task.ett_h1_h48": 0.22705112618220355,
+ "cv.median_task.ett_h1_h96": 0.19434177844066353,
+ "cv.median_task.ett_h2_h48": 0.37811064966052343,
+ "cv.median_task.ett_m1_h48": 0.349789294777871,
+ "cv.median_task.ett_m2_h48": 0.35200894122388887,
+ "cv.median_task.exchange_h48": 0.3126763301144882,
+ "cv.median_task.ili_h48": 0.44803473723506965,
+ "cv.median_task.m4_hourly": 0.0409344494595736,
+ "cv.median_task.traffic_h48": 0.297228651782974,
+ "cv.median_task.weather_h48": 0.29755934987704397,
+ "cv.median_model.auto_arima": 0.3267231257332307,
+ "cv.median_model.auto_ets": 0.3449078267697673,
+ "cv.median_model.auto_theta": 0.25765741672025616,
+ "cv.median_model.chronos2": 0.3346938958024479,
+ "cv.median_model.linear_regression": 0.2299992668887126,
+ "cv.median_model.prophet": 0.19423677180895466,
+ "cv.median_model.seasonal_naive": 0.364972807368626,
+ "cv.median_model.tabpfn_ts": 0.36235735736400204,
+ "cv.median_model.timesfm_2p5": 0.35467076278597476,
+ "windows.n_task_windows": 55,
+ "windows.pooled_winner_wins": 25,
+ "windows.tasks_pooled_winner_all5": [
+  "ili_h48"
+ ],
+ "windows.tasks_pooled_fm_all5": [
+  "exchange_h48",
+  "ili_h48"
+ ],
+ "windows.snaive_lowest": 6,
+ "windows.window0_winner_differs": [
+  "m4_hourly",
+  "ett_h2_h48",
+  "ett_m1_h48",
+  "weather_h48"
+ ],
+ "windows.n_window0_winner_differs": 4,
+ "windows.n_distinct_winners_per_task": {
+  "m4_hourly": 2,
+  "ett_h1_h48": 4,
+  "ett_h1_h96": 3,
+  "ett_h2_h48": 4,
+  "ett_m1_h48": 3,
+  "ett_m2_h48": 4,
+  "ecl_h48": 3,
+  "traffic_h48": 3,
+  "weather_h48": 3,
+  "exchange_h48": 4,
+  "ili_h48": 1
+ },
+ "windows.below_snaive.timesfm_2p5": 40,
+ "windows.scored.timesfm_2p5": 55,
+ "windows.below_snaive.chronos2": 41,
+ "windows.scored.chronos2": 55,
+ "windows.below_snaive.tabpfn_ts": 39,
+ "windows.scored.tabpfn_ts": 55,
+ "windows.below_snaive.auto_arima": 26,
+ "windows.scored.auto_arima": 40,
+ "windows.relmase_range.m4_hourly.timesfm_2p5": [
+  0.5434849023457408,
+  0.6148308008793049
+ ],
+ "windows.relmase_range.m4_hourly.chronos2": [
+  0.6009059517967048,
+  0.6825837472990367
+ ],
+ "windows.relmase_range.m4_hourly.tabpfn_ts": [
+  0.5587381146683943,
+  0.6542013982009618
+ ],
+ "windows.relmase_range.ett_h1_h48.timesfm_2p5": [
+  0.9201128159440474,
+  1.547912227747824
+ ],
+ "windows.relmase_range.ett_h1_h48.chronos2": [
+  0.8578480605450914,
+  2.0696947279895763
+ ],
+ "windows.relmase_range.ett_h1_h48.tabpfn_ts": [
+  0.9172115854402043,
+  1.3961453273998246
+ ],
+ "windows.relmase_range.ett_h1_h96.timesfm_2p5": [
+  0.8215294752450029,
+  1.3899581157286074
+ ],
+ "windows.relmase_range.ett_h1_h96.chronos2": [
+  0.7916341609694363,
+  1.3590558369841492
+ ],
+ "windows.relmase_range.ett_h1_h96.tabpfn_ts": [
+  0.7794921155071286,
+  1.2578278398292615
+ ],
+ "windows.relmase_range.ett_h2_h48.timesfm_2p5": [
+  0.7928981724754701,
+  1.073662677321444
+ ],
+ "windows.relmase_range.ett_h2_h48.chronos2": [
+  0.8093309086144744,
+  0.9880370768930467
+ ],
+ "windows.relmase_range.ett_h2_h48.tabpfn_ts": [
+  0.9048665100080157,
+  1.0670150435604355
+ ],
+ "windows.relmase_range.ett_m1_h48.timesfm_2p5": [
+  0.41228342922555045,
+  3.852668126634269
+ ],
+ "windows.relmase_range.ett_m1_h48.chronos2": [
+  0.39465608008075875,
+  3.527782064510709
+ ],
+ "windows.relmase_range.ett_m1_h48.tabpfn_ts": [
+  0.5144531275718466,
+  1.4909579434841118
+ ],
+ "windows.relmase_range.ett_m2_h48.timesfm_2p5": [
+  0.4428964190767268,
+  1.2620714103048047
+ ],
+ "windows.relmase_range.ett_m2_h48.chronos2": [
+  0.4264138740244576,
+  1.2132435660508063
+ ],
+ "windows.relmase_range.ett_m2_h48.tabpfn_ts": [
+  0.7333828767084511,
+  1.5081458084353883
+ ],
+ "windows.relmase_range.ecl_h48.timesfm_2p5": [
+  0.4482268988229798,
+  0.947956849111622
+ ],
+ "windows.relmase_range.ecl_h48.chronos2": [
+  0.36515141783842936,
+  0.9501663719295406
+ ],
+ "windows.relmase_range.ecl_h48.tabpfn_ts": [
+  0.6484052451882716,
+  0.9628848362956421
+ ],
+ "windows.relmase_range.traffic_h48.timesfm_2p5": [
+  0.4306331271628415,
+  1.2429347809781752
+ ],
+ "windows.relmase_range.traffic_h48.chronos2": [
+  0.47673169754997746,
+  1.0686437625031315
+ ],
+ "windows.relmase_range.traffic_h48.tabpfn_ts": [
+  0.5351743262803442,
+  1.0726129900178238
+ ],
+ "windows.relmase_range.weather_h48.timesfm_2p5": [
+  0.3945675293016977,
+  0.7913837643273564
+ ],
+ "windows.relmase_range.weather_h48.chronos2": [
+  0.4352611143353212,
+  0.611506206936437
+ ],
+ "windows.relmase_range.weather_h48.tabpfn_ts": [
+  0.42872172465808817,
+  0.6774684802723138
+ ],
+ "windows.relmase_range.exchange_h48.timesfm_2p5": [
+  0.7109376641370122,
+  1.186129335481971
+ ],
+ "windows.relmase_range.exchange_h48.chronos2": [
+  0.668790937581708,
+  1.055634843134371
+ ],
+ "windows.relmase_range.exchange_h48.tabpfn_ts": [
+  0.8382909918443495,
+  1.3053279364212564
+ ],
+ "windows.relmase_range.ili_h48.timesfm_2p5": [
+  0.15986676604708888,
+  0.5116970517149216
+ ],
+ "windows.relmase_range.ili_h48.chronos2": [
+  0.7000339098714321,
+  1.0910078792240825
+ ],
+ "windows.relmase_range.ili_h48.tabpfn_ts": [
+  0.6422162631923778,
+  0.8771401043571753
+ ],
+ "weather.zero_inflated_snaive_smape_range": [
+  0.0,
+  19.79556868547521
+ ],
+ "weather.zero_inflated_chronos2_smape_range": [
+  90.69757802798576,
+  192.4999604582456
+ ],
+ "weather.chronos2_lower_smape_series": 16,
+ "weather.chronos2_lower_mase_series": 20,
+ "weather.n_series": 21,
+ "weather.other16_mean_smape.seasonal_naive": 24.97965448414007,
+ "weather.other16_mean_smape.chronos2": 17.405473554413618,
+ "weather.zero_inflated_test_zero_share_range": [
+  0.5625,
+  1.0
+ ],
+ "etth2.hull_smape": {
+  "seasonal_naive": 83.84818179533038,
+  "chronos2": 163.474684434106,
+  "timesfm_2p5": 162.36777598386874
+ },
+ "linear.spearman_qa_ratio.ecl_h48": 0.08667445059667007,
+ "linear.worse_than_snaive.ecl_h48": 258,
+ "linear.n_series.ecl_h48": 321,
+ "linear.median_series_mase.ecl_h48": 2.9692018928064225,
+ "linear.median_q_over_a.ecl_h48": 0.076766601109689,
+ "linear.spearman_qa_ratio.ett_h1_h48": -0.21428571428571433,
+ "linear.worse_than_snaive.ett_h1_h48": 7,
+ "linear.n_series.ett_h1_h48": 7,
+ "linear.median_series_mase.ett_h1_h48": 1.1082236102901255,
+ "linear.median_q_over_a.ett_h1_h48": 0.2857506981724284,
+ "linear.spearman_qa_ratio.ett_h1_h96": -0.9285714285714288,
+ "linear.worse_than_snaive.ett_h1_h96": 7,
+ "linear.n_series.ett_h1_h96": 7,
+ "linear.median_series_mase.ett_h1_h96": 1.087531145024209,
+ "linear.median_q_over_a.ett_h1_h96": 0.28416997835127666,
+ "linear.spearman_qa_ratio.ett_h2_h48": -0.6785714285714287,
+ "linear.worse_than_snaive.ett_h2_h48": 5,
+ "linear.n_series.ett_h2_h48": 7,
+ "linear.median_series_mase.ett_h2_h48": 0.8838569001129647,
+ "linear.median_q_over_a.ett_h2_h48": 0.19471061785526464,
+ "linear.spearman_qa_ratio.ett_m1_h48": -0.21428571428571433,
+ "linear.worse_than_snaive.ett_m1_h48": 6,
+ "linear.n_series.ett_m1_h48": 7,
+ "linear.median_series_mase.ett_m1_h48": 0.7736266259370429,
+ "linear.median_q_over_a.ett_m1_h48": 0.2844313034785607,
+ "linear.spearman_qa_ratio.ett_m2_h48": 0.39285714285714296,
+ "linear.worse_than_snaive.ett_m2_h48": 3,
+ "linear.n_series.ett_m2_h48": 7,
+ "linear.median_series_mase.ett_m2_h48": 0.4943912337607973,
+ "linear.median_q_over_a.ett_m2_h48": 0.19337407214808047,
+ "linear.spearman_qa_ratio.exchange_h48": 0.19047619047619052,
+ "linear.worse_than_snaive.exchange_h48": 1,
+ "linear.n_series.exchange_h48": 8,
+ "linear.median_series_mase.exchange_h48": 4.056631282589627,
+ "linear.median_q_over_a.exchange_h48": 0.004206189105915155,
+ "linear.spearman_qa_ratio.ili_h48": -0.5,
+ "linear.worse_than_snaive.ili_h48": 7,
+ "linear.n_series.ili_h48": 7,
+ "linear.median_series_mase.ili_h48": 2.862511706575748,
+ "linear.median_q_over_a.ili_h48": 0.3642144116002345,
+ "linear.spearman_qa_ratio.m4_hourly": -0.9187857863710871,
+ "linear.worse_than_snaive.m4_hourly": 402,
+ "linear.n_series.m4_hourly": 414,
+ "linear.median_series_mase.m4_hourly": 4.722920493970327,
+ "linear.median_q_over_a.m4_hourly": 0.06049610257527151,
+ "linear.spearman_qa_ratio.traffic_h48": 0.11743495073292905,
+ "linear.worse_than_snaive.traffic_h48": 748,
+ "linear.n_series.traffic_h48": 862,
+ "linear.median_series_mase.traffic_h48": 1.1927269441676285,
+ "linear.median_q_over_a.traffic_h48": 0.258585141714505,
+ "linear.spearman_qa_ratio.weather_h48": -0.32857142857142857,
+ "linear.worse_than_snaive.weather_h48": 19,
+ "linear.n_series.weather_h48": 21,
+ "linear.median_series_mase.weather_h48": 1.4198852112737634,
+ "linear.median_q_over_a.weather_h48": 0.24194012755028924,
+ "linear.weather_top3_ids": [
+  "p (mbar)",
+  "Tpot (K)",
+  "rho (g/m**3)"
+ ],
+ "linear.weather_top3_share": 0.7508310456757583,
+ "linear.weather_top3_q_over_a_max": 0.012310881589056683,
+ "linear.weather.p (mbar).mase": 35.93089045317387,
+ "linear.weather.p (mbar).a": 990.0002009611184,
+ "linear.weather.p (mbar).q_over_a": 0.004721229978508428,
+ "linear.weather.Tpot (K).mase": 16.99937972906895,
+ "linear.weather.Tpot (K).a": 284.80379907687046,
+ "linear.weather.Tpot (K).q_over_a": 0.00992666055781102,
+ "linear.weather.rho (g/m**3).mase": 13.829841193489049,
+ "linear.weather.rho (g/m**3).a": 1210.8619191976752,
+ "linear.weather.rho (g/m**3).q_over_a": 0.012310881589056683,
+ "linear.m4_max_series": "H187",
+ "linear.m4_max_series_mase": 255.94523200372325,
+ "linear.m4_max_series_q_over_a": 0.0005621711048067616,
+ "tuning.best_ctx.smape.m4_hourly": 1024,
+ "tuning.best_ctx.mase.m4_hourly": 2048,
+ "tuning.flip_mase_worse_windows.m4_hourly": 5,
+ "tuning.window_best_ctx_distinct.m4_hourly": 4,
+ "tuning.best_ctx.smape.ett_h1_h48": 1024,
+ "tuning.best_ctx.mase.ett_h1_h48": 1024,
+ "tuning.flip_mase_worse_windows.ett_h1_h48": 4,
+ "tuning.window_best_ctx_distinct.ett_h1_h48": 3,
+ "tuning.best_ctx.smape.ett_m1_h48": 512,
+ "tuning.best_ctx.mase.ett_m1_h48": 512,
+ "tuning.flip_mase_worse_windows.ett_m1_h48": 0,
+ "tuning.window_best_ctx_distinct.ett_m1_h48": 3,
+ "tuning.best_ctx.smape.weather_h48": 8192,
+ "tuning.best_ctx.mase.weather_h48": 16256,
+ "tuning.flip_mase_worse_windows.weather_h48": 4,
+ "tuning.window_best_ctx_distinct.weather_h48": 3
+}

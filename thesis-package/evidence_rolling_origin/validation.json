@@ -1,0 +1,35 @@
+{
+  "main": {
+    "forecast_rows": 3609600,
+    "metric_rows_recomputed": {
+      "overall": 96,
+      "window": 480,
+      "series": 14977,
+      "horizon": 5040
+    },
+    "all_metrics_match": true
+  },
+  "tuning": {
+    "forecast_rows": 1185360,
+    "metric_rows_recomputed": {
+      "overall": 44,
+      "window": 220,
+      "series": 4939,
+      "horizon": 2112
+    },
+    "all_metrics_match": true
+  },
+  "relative_aggregate_and_spread_recomputed": {
+    "relative_rows": 96,
+    "aggregate_models": 9,
+    "spread_rows": 96
+  },
+  "loader_alignment": {
+    "tasks": 11,
+    "windows": 5,
+    "targets_and_timestamps_match": true,
+    "per_window_mase_scales_match": 8340
+  },
+  "tuning_baseline_max_abs_diff_vs_main_timesfm": 0.0,
+  "feature_join_and_original_correlations_match": true
+}

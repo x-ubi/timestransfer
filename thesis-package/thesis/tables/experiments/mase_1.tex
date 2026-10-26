@@ -1,0 +1,19 @@
+\begin{table}[!htbp]
+\centering
+\caption{MASE by task, part 1 ($\downarrow$). Bold: minimum before rounding; exact ties share bold. Bolt denotes Chronos-Bolt; SNaive denotes SeasonalNaive.}
+\label{tab:mase1}
+\small
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lrrrrrrrrr}
+\hline
+Task & Linear & TabPFN & TimesFM & Bolt & Prophet & ARIMA & ETS & Theta & SNaive \\
+\hline
+M4 Hourly & 9.488 & 1.684 & \textbf{0.734} & 0.835 & 1.626 & 16.922 & 1.606 & 2.456 & 1.193 \\
+ETTh1/48 & 1.062 & 1.094 & 0.568 & 0.606 & 1.357 & 0.752 & 0.757 & 1.349 & \textbf{0.367} \\
+ETTh1/96 & 1.248 & 1.103 & 0.904 & 0.845 & 1.399 & 0.980 & 1.026 & 1.394 & \textbf{0.720} \\
+ETTh2/48 & 0.684 & 0.718 & 0.665 & 0.604 & 1.257 & 0.595 & \textbf{0.590} & 0.689 & 0.620 \\
+ETTm1/48 & 1.028 & 0.723 & 0.457 & 0.432 & 1.367 & 0.923 & 1.087 & 0.951 & \textbf{0.394} \\
+ETTm2/48 & 0.425 & 0.453 & 0.278 & 0.312 & 1.269 & 0.283 & \textbf{0.270} & 0.429 & 0.628 \\
+\hline
+\end{tabular}
+\end{table}

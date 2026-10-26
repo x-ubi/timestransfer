@@ -1,0 +1,184 @@
+% !TEX program = xelatex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Bachelor's & Master's Thesis Template             %%
+%% Copyleft by Artur M. Brodzki & Piotr Woźniak      %%
+%% Faculty of Electronics and Information Technology %%
+%% Warsaw University of Technology, 2019-2020        %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[
+    left=2.5cm, % Sadly, generic margin parameter
+    right=2.5cm, % doesnt't work, as it is
+    top=2.5cm, % superseded by more specific
+    bottom=3cm, % left...bottom parameters.
+    bindingoffset=6mm, % Optional binding offset.
+    nohyphenation=false % You may turn off hyphenation, if don't like.
+]{eiti/eiti-thesis}
+\usepackage{fontspec}
+\usepackage{todonotes}
+% \setmainfont{Helvetica}
+
+% ------------------------------------------------------------
+% Override mwart section formatting with titlesec
+% ------------------------------------------------------------
+\usepackage{titlesec}
+
+% 1) Sekcja: numer + odstęp + tytuł, bez kropki
+\titleformat{\section}[hang] % styl wiszący, jak w oryginale
+{\Large\bfseries} % font dla całego nagłówka
+{\thesection} % etykieta: sam numer
+{1em} % odstęp między numerem a tytułem
+{\thispagestyle{plain}}
+
+% 2) Podrozdziały
+\titleformat{\subsection}[hang]
+{\large\bfseries} % nieco mniejszy font
+{\thesubsection} % numer „1.2”
+{1em} % odstęp
+{}
+
+% 3) Pod‐podrozdziały
+\titleformat{\subsubsection}[hang]
+{\normalsize\bfseries}% normalny font tekstu
+{\thesubsubsection} % numer „1.2.3”
+{1em} % odstęp
+{}
+
+% 4) Paragraphy (run-in)
+\titleformat{\paragraph}[runin]
+{\normalsize\bfseries}
+{\theparagraph}
+{1em}
+{}
+[]
+
+\titlespacing*{\paragraph}
+{0pt}{2.0ex plus .5ex minus .2ex}{1em}
+
+% ------------------------------------------------------------
+% Fancyhdr: oddzielne definicje dla 'headings' i 'plain'
+% ------------------------------------------------------------
+\makeatletter
+% 1) style dla kolejnych stron w sekcji
+\fancypagestyle{headings}{ \fancyhf{} % wyczyść wszystko
+\renewcommand{\headrulewidth}{1pt} % linia pod nagłówkiem
+\fancyhead[RO,LE]{\nouppercase{\thesection\quad\leftmark}} \fancyfoot[LE,RO]{\thepage} }
+
+% 2) style dla pierwszej strony (plain) — bez nagłówka!
+\fancypagestyle{plain}{ \fancyhf{} % wyczyść nagłówki i stopki
+\renewcommand{\headrulewidth}{0pt} % żadnej linii
+\fancyfoot[LE,RO]{\thepage} % tylko numer strony
+}
+\pagestyle{headings} % Ustawiamy domyślny styl na 'headings'
+\makeatother
+
+\langeng % Dla języka angielskiego mamy \langeng
+\graphicspath{{img/}} % Katalog z obrazkami.
+\addbibresource{bibliografia.bib} % Plik .bib z bibliografią
+
+\begin{document}
+    % \setmainfont{Times New Roman}
+    %--------------------------------------
+    % Strona tytułowa
+    %--------------------------------------
+    \MasterThesis % Dla pracy inżynierskiej mamy \EngineerThesis
+    \instytut{Informatyki} \kierunek{Informatyka} \specjalnosc{Sztuczna Inteligencja}
+    \title{ Transfer learning in time series modeling }
+    \engtitle{ % Tytuł po angielsku do angielskiego streszczenia
+    Unnecessarily long and complicated thesis' title \\ difficult to read, understand and pronounce }
+    \author{Jan Budziński}
+    \album{310609} \promotor{dr inż. Paweł Zawistowski }
+    \date{\the\year}
+    \maketitle
+
+    %--------------------------------------
+    % Streszczenie po polsku
+    %--------------------------------------
+    % \cleardoublepage % Zaczynamy od nieparzystej strony
+    % \streszczenie \lipsum[1-3]
+    % \slowakluczowe XXX, XXX, XXX
+
+    %--------------------------------------
+    % Streszczenie po angielsku
+    %--------------------------------------
+    % \newpage
+    % \abstract \kant[1-3]
+    % \keywords XXX, XXX, XXX
+
+    %--------------------------------------
+    % Oświadczenie o autorstwie
+    %--------------------------------------
+    \cleardoublepage % Zaczynamy od nieparzystej strony
+    \pagestyle{plain}
+    \makeauthorship
+
+    %--------------------------------------
+    % Spis treści
+    %--------------------------------------
+    \cleardoublepage % Zaczynamy od nieparzystej strony
+    \tableofcontents
+
+    %--------------------------------------
+    % Rozdziały
+    %--------------------------------------
+    \cleardoublepage % Zaczynamy od nieparzystej strony
+    \pagestyle{headings}
+
+    %\input{tex/1-wstep}         % Wygodnie jest trzymać każdy rozdział w osobnym pliku.
+    \input{tex/intro}
+    \input{tex/2-literature}
+    %\input{tex/2-de-finibus}    % Umożliwia to również łatwą migrację do nowej wersji szablonu:
+    %\input{tex/3-code-listings} % wystarczy podmienić swoje pliki main.tex i eiti-thesis.cls
+    % na nowe wersje, a cały tekst pracy pozostaje nienaruszony.
+    \input{tex/timesfm}
+    \input{tex/experiments}
+    \input{tex/results}
+    \input{tex/summary}
+
+    % \newpage % Rozdziały zaczynamy od nowej strony
+    % \section{Summatio} % Można też pisać rozdziały w jednym pliku.
+
+    %--------------------------------------------
+    % Literatura
+    %--------------------------------------------
+    \cleardoublepage % Zaczynamy od nieparzystej strony
+    \printbibliography
+
+    %--------------------------------------------
+    % Spisy (opcjonalne)
+    %--------------------------------------------
+    \newpage
+    \pagestyle{plain}
+
+    % Wykaz symboli i skrótów.
+    % Pamiętaj, żeby posortować symbole alfabetycznie
+    % we własnym zakresie. Ponieważ mało kto używa takiego wykazu,
+    % uznałem, że robienie automatycznie sortowanej listy
+    % na poziomie LaTeXa to za duży overkill.
+    % Makro \acronymlist generuje właściwy tytuł sekcji,
+    % w zależności od języka.
+    % Makro \acronym dodaje skrót/symbol do listy,
+    % zapewniając podstawowe formatowanie.
+    % //AB
+    \vspace{0.8cm}
+    \acronymlist \acronym{EiTI}{Wydział Elektroniki i Technik Informacyjnych}
+    \acronym{PW}{Politechnika Warszawska} \acronym{WEIRD}{ang. \emph{Western, Educated, Industrialized, Rich and Democratic}}
+
+    \listoffigurestoc % Spis rysunków.
+    \vspace{1cm} % vertical space
+    \listoftablestoc % Spis tabel.
+    \vspace{1cm} % vertical space
+    \listofappendicestoc % Spis załączników
+
+    % Załączniki
+    % \newpage
+    % \appendix
+    % {Nazwa załącznika 1}
+
+    % \newpage
+    % \appendix
+    % {Nazwa załącznika 2}
+    % Używając powyższych spisów jako szablonu,
+    % możesz tu dodać swój własny wykaz bądź listę,
+    % np. spis algorytmów.
+\end{document} % Dobranoc.

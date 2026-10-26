@@ -1,0 +1,158 @@
+[
+  {
+    "figure": "forecast_1",
+    "dataset": "m4_hourly",
+    "unique_id": "H187",
+    "rule": "best",
+    "reference_model": "timesfm_2p5",
+    "window": 0,
+    "rank_1based": 1,
+    "n_series": 414,
+    "history_points": 96,
+    "origin": "960",
+    "window0_smape": {
+      "timesfm_2p5": 0.14904005313616694,
+      "chronos2": 0.18572024646914428,
+      "tabpfn_ts": 0.09849790965682946,
+      "seasonal_naive": 0.08723148903716783,
+      "prophet": 0.31499837403658953
+    },
+    "pooled_smape": {
+      "timesfm_2p5": 0.1166060717094478,
+      "chronos2": 0.1518036336327115,
+      "tabpfn_ts": 0.0726277768068871,
+      "seasonal_naive": 0.0493096615218386,
+      "prophet": 0.3186986713592078
+    }
+  },
+  {
+    "figure": "forecast_2",
+    "dataset": "m4_hourly",
+    "unique_id": "H349",
+    "rule": "worst",
+    "reference_model": "timesfm_2p5",
+    "window": 0,
+    "rank_1based": 414,
+    "n_series": 414,
+    "history_points": 96,
+    "origin": "960",
+    "window0_smape": {
+      "timesfm_2p5": 84.70664056806633,
+      "chronos2": 85.74891659657781,
+      "tabpfn_ts": 83.29725807135974,
+      "seasonal_naive": 83.00672857335944,
+      "prophet": 102.41730439341552
+    },
+    "pooled_smape": {
+      "timesfm_2p5": 32.74631308685698,
+      "chronos2": 30.65528896211459,
+      "tabpfn_ts": 32.154757160485346,
+      "seasonal_naive": 40.33642175791324,
+      "prophet": 44.11776643156971
+    }
+  },
+  {
+    "figure": "forecast_3",
+    "dataset": "ett_h1_h48",
+    "unique_id": "HUFL",
+    "rule": "median",
+    "reference_model": "timesfm_2p5",
+    "window": 0,
+    "rank_1based": 4,
+    "n_series": 7,
+    "history_points": 96,
+    "origin": "2018-02-18 23:00:00",
+    "window0_smape": {
+      "timesfm_2p5": 26.540432693025377,
+      "chronos2": 50.75485803105375,
+      "tabpfn_ts": 30.39520694878168,
+      "seasonal_naive": 8.885186199989013,
+      "prophet": 71.83939286121112
+    },
+    "pooled_smape": {
+      "timesfm_2p5": 57.32702021377536,
+      "chronos2": 61.41380562203982,
+      "tabpfn_ts": 56.009042205424144,
+      "seasonal_naive": 44.4224340228217,
+      "prophet": 77.14753522909429
+    }
+  },
+  {
+    "figure": "forecast_4",
+    "dataset": "traffic_h48",
+    "unique_id": "193",
+    "rule": "median",
+    "reference_model": "timesfm_2p5",
+    "window": 0,
+    "rank_1based": 432,
+    "n_series": 862,
+    "history_points": 96,
+    "origin": "2018-06-30 01:00:00",
+    "window0_smape": {
+      "timesfm_2p5": 18.653965382903277,
+      "chronos2": 22.817067300188086,
+      "tabpfn_ts": 20.365445209282196,
+      "seasonal_naive": 20.067813725323457,
+      "prophet": 80.5388257902341
+    },
+    "pooled_smape": {
+      "timesfm_2p5": 21.57031305575025,
+      "chronos2": 24.38481146446193,
+      "tabpfn_ts": 28.11976170282841,
+      "seasonal_naive": 33.40705739734876,
+      "prophet": 89.37416300282084
+    }
+  },
+  {
+    "figure": "forecast_5",
+    "dataset": "weather_h48",
+    "unique_id": "max. PAR (\ufffdmol/m\ufffd/s)",
+    "rule": "worst",
+    "reference_model": "timesfm_2p5",
+    "window": 0,
+    "rank_1based": 21,
+    "n_series": 21,
+    "history_points": 432,
+    "origin": "2020-12-31 16:00:00",
+    "window0_smape": {
+      "timesfm_2p5": 158.4625775809206,
+      "chronos2": 190.8835940260475,
+      "tabpfn_ts": 189.79423359961928,
+      "seasonal_naive": 3.7853767765758373,
+      "prophet": 41.27436724619418
+    },
+    "pooled_smape": {
+      "timesfm_2p5": 92.6372998053258,
+      "chronos2": 127.90817875042214,
+      "tabpfn_ts": 129.92506402652927,
+      "seasonal_naive": 17.288859575542013,
+      "prophet": 91.2059650994705
+    }
+  },
+  {
+    "figure": "forecast_6",
+    "dataset": "ili_h48",
+    "unique_id": "AGE 5-24",
+    "rule": "median",
+    "reference_model": "timesfm_2p5",
+    "window": 0,
+    "rank_1based": 4,
+    "n_series": 7,
+    "history_points": 156,
+    "origin": "2019-07-30 00:00:00",
+    "window0_smape": {
+      "timesfm_2p5": 9.952162771159102,
+      "chronos2": 75.17494949290729,
+      "tabpfn_ts": 77.42852547200701,
+      "seasonal_naive": 83.94787042344352,
+      "prophet": 112.74281906371574
+    },
+    "pooled_smape": {
+      "timesfm_2p5": 14.18262799400268,
+      "chronos2": 37.95740122365136,
+      "tabpfn_ts": 35.0319302645831,
+      "seasonal_naive": 41.28936792374979,
+      "prophet": 56.35728918794423
+    }
+  }
+]

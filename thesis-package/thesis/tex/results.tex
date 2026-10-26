@@ -1,0 +1,109 @@
+\clearpage
+\section{Results}\label{sec:results}
+
+\subsection{Coverage and quantitative comparison}
+The main run contains all 99 configured combinations: eleven tasks times nine models. All completed successfully, including every one of the 321 ECL and 862 Traffic series. The 723,600 saved forecast rows contain no duplicate task/model/series/step keys or nonfinite targets or predictions. Recalculation reproduces all four metrics in 99 overall, 15,012 per-series and 5,184 per-horizon rows. The TimesFM study similarly contains 44 successful combinations and 237,072 forecast rows. These checks establish internal consistency of saved results; they are not independent executions of the forecasting models.
+
+Tables~\ref{tab:smape1}--\ref{tab:mase2} contain the complete task--model comparison. Appendix~\ref{sec:fullscores} supplies all MAE and RMSE scores. The panels are intentionally kept separate because their units and forecast durations differ. Foundation models are often competitive, but their advantage is neither universal nor invariant to the metric.
+
+\input{tables/experiments/smape_1}
+\input{tables/experiments/smape_2}
+\input{tables/experiments/mase_1}
+\input{tables/experiments/mase_2}
+
+On M4 Hourly, Chronos-Bolt has the lowest sMAPE (8.35 versus TimesFM's 8.61), whereas TimesFM has the lowest MASE (0.734 versus 0.835). ECL and Traffic favour Bolt on both metrics. For Traffic, its sMAPE of 25.35 is below SeasonalNaive's 31.49 and TimesFM's 32.71; nevertheless TimesFM's MASE of 0.648 is below SeasonalNaive's 0.869. These comparisons show that percentage error and train-scaled absolute error can assign different importance to the same series and observations.
+
+ETT provides counterexamples to an unconditional foundation-model advantage. SeasonalNaive is best on both metrics for ETTh1/48, ETTh1/96 and ETTm1/48. For ETTh1/48 its sMAPE is 23.21, compared with 32.96 for TimesFM, and its MASE is 0.367 versus 0.568. At ETTh1/96 the errors increase for all three of SeasonalNaive, TimesFM and Bolt. This is not a controlled horizon-only comparison: the origin is also moved 48 observations earlier and the training period changes. AutoARIMA is best by sMAPE on ETTh2/48, while AutoETS is best by MASE there and by both metrics on ETTm2/48.
+
+Weather is especially sensitive to the metric: Bolt's sMAPE is 19.53, SeasonalNaive's 22.02 and TimesFM's 39.88, but TimesFM attains the lowest MASE, 0.118. This apparent reversal is compatible with a mixture of physical units, near-zero targets and distinct train-derived scales; the qualitative examples below inspect one such case. On Exchange, linear regression is best on both metrics. Even its MASE of 5.560 exceeds one, despite sMAPE of only 1.85, illustrating how a small percentage error can still be large relative to typical lag-one training changes. On ILI, TimesFM leads strongly: 16.21 sMAPE and 0.605 MASE, compared with the next-best sMAPE of 30.76 for AutoETS. The seven related surveillance variables do not constitute seven independent replications of that advantage.
+
+Prophet completes every task but is never best in these overall tables. Its sMAPE is 18.06 on M4, 64.91 on ETTh1/48 and 73.04 on ILI. On Weather it improves on TimesFM by sMAPE (34.74 versus 39.88), while performing substantially worse by MASE (0.444 versus 0.118). The automatic fitting setup, limited histories and absence of application-specific calendar adjustments constrain interpretation. The results assess this configuration of Prophet, not the full range of analyst-specified models that it supports. TabPFN likewise has no overall minimum in either metric, but improves on the common linear representation on M4, ECL and Traffic. Its weaker results elsewhere cannot establish the performance of published TabPFN-TS, whose adaptation is different.
+
+\subsection{Error across the forecast horizon}\label{sec:horizonresults}
+Figure~\ref{fig:horizons} displays selected sMAPE profiles for M4, ETTh1/96, Traffic and Weather, with corresponding MASE profiles in Appendix~\ref{sec:fullscores}. Each point aggregates the same series at a different step of the same held-out trajectories. The curves are not repeated independent experiments, and a local peak can reflect the values or seasonal phase encountered at that step. Accordingly they should not be interpreted as confidence bands or as an estimate averaged over random forecast origins. The task-level metrics summarize the entire curves; selecting only a favourable prefix would change the evaluation question.
+
+The profiles are visibly non-monotone. On M4, TimesFM and Bolt remain close while Prophet and SeasonalNaive show larger excursions. ETTh1/96 has recurring peaks and troughs across the four-day continuation, with Prophet often above the other displayed curves. Traffic shows a pronounced late rise for Prophet, while Weather has comparatively irregular TimesFM percentage errors and a generally lower Bolt curve. These patterns localize the aggregate differences without establishing a universal relationship between horizon length and error.
+
+\begin{figure}[!htbp]\centering
+\includegraphics[width=\linewidth]{img/experiments/horizon_smape.pdf}
+\caption{Per-step sMAPE of four selected comparators. All models' complete overall scores are given in the preceding tables.}\label{fig:horizons}
+\end{figure}
+
+\subsection{Observed histories and forecast continuations}\label{sec:qualitative}
+Six diagnostic examples are selected from saved predictions. Within a task, series are sorted by TimesFM test sMAPE, with string ID breaking ties; ``median'' means the middle sorted series (upper middle for an even count). M4 contributes its best and worst series, ETTh1 and Traffic their median series, Weather its worst and ILI its median. This is deliberate selection using test errors, not a random representative sample. Table~\ref{tab:selections} discloses the IDs and all displayed per-series scores. Four model curves retain visibility while including Prophet. Each plot contains at least three nominal seasonal cycles or twice the horizon in training history, whichever is larger; zero marks the final training observation, and the black line is the actual continuation.
+
+\input{tables/experiments/selections}
+
+\begin{figure}[p]\centering
+\includegraphics[width=\linewidth]{img/experiments/forecast_1.pdf}
+\includegraphics[width=\linewidth]{img/experiments/forecast_2.pdf}
+\caption{M4 Hourly: H187 (best TimesFM test sMAPE; rank 1/414) and H349 (worst; rank 414/414). Origins are integer position 960, with 96 historical observations shown. The examples expose both a predictable continuation and a continuation with much smaller peaks than the recent history.}\label{fig:m4examples}
+\end{figure}
+
+In H187, low TimesFM error does not imply that TimesFM is the best model: SeasonalNaive obtains 0.087 sMAPE compared with 0.149 for TimesFM. At the other extreme, H349's actual test peaks are much smaller than its recent historical peaks. All four displayed methods extrapolate larger recurring peaks and incur high error; TimesFM's sMAPE is 84.71 and Prophet's 102.42. This is evidence of a failure on this continuation, not proof of a particular unobserved intervention or regime-change mechanism.
+
+\begin{figure}[p]\centering
+\includegraphics[width=\linewidth]{img/experiments/forecast_3.pdf}
+\includegraphics[width=\linewidth]{img/experiments/forecast_4.pdf}
+\caption{ETTh1/48: HUFL (rank 4/7), origin 2018-02-18 23:00; Traffic: ID 193 (rank 432/862), archive origin 2018-06-30 01:00. Both show 96 historical observations. TimesFM is the reference for selection, regardless of which comparator performs best.}\label{fig:ettexamples}
+\end{figure}
+
+ETTh1 HUFL is a clear counterexample: SeasonalNaive follows the repeated daily continuation more closely (8.89 sMAPE) than TimesFM (26.54), Bolt (40.36) or Prophet (71.84). Traffic ID 193 instead favours Bolt (15.63), followed by TimesFM (18.65) and SeasonalNaive (20.07), while Prophet has 80.54. The examples demonstrate why a diagnostic figure should show actual values and temporal alignment, rather than only aggregate error.
+
+\begin{figure}[p]\centering
+\includegraphics[width=\linewidth]{img/experiments/forecast_5.pdf}
+\includegraphics[width=\linewidth]{img/experiments/forecast_6.pdf}
+\caption{Weather: maximum PAR (rank 21/21), origin 2020-12-31 16:00, 432 training observations; the right panel enlarges the continuation. ILI: AGE 5--24 (rank 4/7), archive origin 2019-07-30, 156 training observations. The Weather header's damaged unit characters are omitted in the display ID; the exact stored ID is preserved in the evidence manifest.}\label{fig:weatheriliexamples}
+\end{figure}
+
+The Weather maximum-PAR example has a near-zero evening continuation after pronounced daytime peaks. SeasonalNaive obtains 3.79 sMAPE; TimesFM and Bolt obtain 158.46 and 187.96. The enlarged continuation makes visible discrepancies that are barely visible on the historical amplitude scale. This does not contradict small absolute errors on other variables, nor TimesFM's leading overall Weather MASE. On ILI AGE 5--24 the actual continuation remains much lower than the strongest preceding seasonal peaks. TimesFM follows that lower trajectory more closely (9.95 sMAPE), while Bolt, SeasonalNaive and Prophet obtain 74.00, 83.95 and 112.74. Because the archive's surveillance-date mapping is not verified, no particular public-health event is assigned as the cause.
+
+\clearpage
+\subsection{Characteristics associated with error}\label{sec:correlations}
+The analysis contains 1,668 task--series entries and 15,012 feature--model rows. ETTh1 appears at two horizons, and most entries come from Traffic, M4 and ECL. Tables~\ref{tab:corrsmape} and \ref{tab:corrmase} focus on those three larger panels, using seasonal ACF and STL seasonal strength rather than selecting correlations by statistical significance. Figure~\ref{fig:features} shows the individual TimesFM observations. ECL contributes 320 valid pairs, since ID 182 has an all-zero final 10,000-observation tail and hence undefined ACF and STL strengths; its full training MASE denominator is nonetheless positive.
+
+\input{tables/experiments/correlations_smape}
+\input{tables/experiments/correlations_mase}
+
+For M4, the association between seasonal regularity and sMAPE is strong and negative for all displayed models. TimesFM has $\rho=-0.827$ for seasonal ACF and $-0.859$ for STL strength, with comparable values for Bolt and SeasonalNaive. In ECL and Traffic, the corresponding TimesFM associations are much weaker: seasonal ACF gives $-0.084$ and $-0.072$. Thus the M4 pattern does not support a universal relationship of that magnitude across domains.
+
+The additional MASE analysis changes this interpretation substantially. On M4, TimesFM's correlation with STL seasonal strength becomes 0.031; on ECL it becomes 0.502. MASE divides each series' error by its own training naive error, whereas sMAPE divides individual errors by target/prediction magnitudes. A relationship between seasonal structure and the MASE denominator can therefore contribute to the observed sign changes. This is a possible statistical explanation, not an experimentally established causal mechanism. The data support metric-specific associations, not a claim that increasing seasonality would improve or worsen a model's forecasts.
+
+The small ETT and ILI panels each contain only seven related variables; Weather has 21 and Exchange eight. Their full descriptive correlations remain in the evidence package but do not justify population-level inference. Pooled correlations additionally combine frequencies, domains, repeated ETTh1 tasks and unequal panel sizes. Without uncertainty estimation or a dependence-aware sampling design, neither pooled nor within-panel coefficients establish significance, causal effects or a reliable rule for model selection.
+
+\begin{figure}[!htbp]\centering
+\includegraphics[width=.95\linewidth]{img/experiments/feature_scatter.pdf}
+\caption{TimesFM per-series test sMAPE against train-only seasonal ACF and STL seasonal strength. Each point is one valid series-feature pair; axes and sample sizes differ across tasks.}\label{fig:features}
+\end{figure}
+
+\clearpage
+\subsection{TimesFM sensitivity results}\label{sec:sensitivityresults}
+Figure~\ref{fig:contexts} presents both sMAPE and MASE for every context setting; Appendix~\ref{sec:fullscores} tabulates the values. Larger context is not uniformly better. M4 changes from 8.664 sMAPE at 512 to 8.606 at 1,024 and remains unchanged at displayed precision for longer contexts. There are no additional real observations beyond 960, so this is effective-history saturation rather than evidence against the use of long context on longer series.
+
+ETTh1 improves from 37.274 at 512 to 31.569 at 2,048, but reaches 33.920 at 16,256; its best observed context is 2,048 under both metrics. ETTm1 is best by sMAPE at 512 (35.345) but by MASE at 4,096 (0.4308). Weather reaches its lowest observed sMAPE at 8,192 (33.724), yet its lowest MASE at 4,096 (0.1148). These are descriptions of this test grid, not validation-based selections for deployment or unbiased improvements over the main comparison.
+
+\begin{figure}[!htbp]\centering
+\includegraphics[width=\linewidth]{img/experiments/timesfm_context.pdf}
+\caption{Context sensitivity with fixed checkpoint identifier. Blue circles use the left sMAPE axis; orange squares use the right MASE axis. The two vertical scales are independent. Grid positions are equally spaced categories, not a linear context-length scale.}\label{fig:contexts}
+\end{figure}
+
+\input{tables/experiments/flags_smape}
+\input{tables/experiments/flags_mase}
+
+Disabling flip invariance has the clearest nonzero effect. Relative to the common baseline, it raises sMAPE by 0.373 percentage points on M4 and 2.911 on ETTh1, but lowers it by 2.905 on ETTm1 and 6.944 on Weather. Weather again has a metric conflict: MASE increases by 0.0023. Disabling positive inference raises Weather sMAPE by 1.389 points but changes MASE by only about $1.31\times10^{-5}$, which rounds to zero in Table~\ref{tab:flagsmase}. The independent wrapper clipping still operates, so this is not a complete removal of positivity handling.
+
+Disabling normalization produces absolute task-level sMAPE differences below $2\times10^{-6}$ points. Disabling the continuous quantile head or crossing repair produces exactly equal saved overall point scores in these tasks. The inspected point-return path uses the median channel, while these operations modify other quantile channels, providing an implementation-level explanation for the latter null effects. They do not test quantile quality or establish general irrelevance of those settings. The historical requested-versus-effective configuration limitation from Section~\ref{sec:sensitivity} also applies.
+
+\subsection{Discussion, pretraining overlap and limitations}\label{sec:limitations}
+The completed benchmark demonstrates substantial task and metric dependence. Bolt is strong on the large ECL and Traffic panels, TimesFM is strong on ILI and selected MASE comparisons, and simple or fitted statistical models lead several ETT tasks. Linear regression is competitive on Exchange. Neither architecture size nor pretraining alone explains the entire ranking, and the present design cannot identify which component causes a performance difference.
+
+\paragraph{What zero-shot means here.}
+TimesFM and Bolt undergo no target-data weight updates in this project. That operational fact does not establish that their pretrained checkpoints never saw these targets. The original TimesFM paper includes M4 in its training corpus~\cite{timesfm_paper}. The 2.5 card instead lists GiftEvalPretrain, Wikimedia Pageviews, Google Trends and synthetic/augmented data~\cite{timesfm_card}. These are version-specific disclosures; neither establishes exact exposure of this benchmark's final targets for the unpinned checkpoint used here.
+
+The original Chronos paper separates M4 Hourly and Electricity Hourly as in-domain evaluation, while ETT and Traffic belong to its zero-shot partition. Its Weather entry is daily Australian weather, not the ten-minute Jena panel~\cite{chronos_paper}. The Bolt card explicitly claims no training exposure to its 27-dataset zero-shot benchmark~\cite{chronos_bolt_card}; this is relevant author-provided exclusion evidence, not an independent audit of the exact local arrays or checkpoint revision. No verified mapping establishes overlap or exclusion for every evaluated version, particularly renamed/relabelled Weather and ILI columns. TabPFN-TS describes synthetic tabular pretraining~\cite{tabpfn_ts}, but that paper does not identify the exact package-default weights used by this project's TabPFN 8.0.8. The appropriate conclusion is therefore pretrained inference with qualified provenance, rather than a blanket claim of either contamination or clean unseen-domain generalization.
+
+\paragraph{Evaluation limits.}
+One final origin can coincide with an unusually easy or difficult continuation. No sampling distribution for performance differences is estimated. Equal observation horizons represent radically different durations, and the repeated ETTh1 tasks overlap. ETT, Weather and ILI variables can be dependent. Large panels dominate pooled feature analyses, but not the task-separated result tables. Different history budgets, constrained AutoARIMA search, automatic Prophet settings, and a custom pooled TabPFN adaptation are additional comparison limits. Forecasts remain numerically reproducible from stored artifacts even though dirty source provenance and unpinned checkpoints prevent a claim of exact historical model reconstruction.
+
+\paragraph{Extensions supported as future work.}
+A validation period followed by a separate test would be needed to select contexts or flags. Multiple rolling origins and dependence-aware uncertainty estimates would be needed to assess stability of rankings. Equalized-history comparisons, broader statistical searches and a direct implementation of published TabPFN-TS would isolate adaptation and budget effects. Fine-tuning, XReg, probabilistic calibration and evaluation on independently verified unseen data are prospective experiments. None is necessary to describe the saved benchmark, and none is claimed as a completed contribution here.

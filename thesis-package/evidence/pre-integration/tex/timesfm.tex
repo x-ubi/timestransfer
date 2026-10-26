@@ -1,0 +1,154 @@
+\newpage
+\section{Foundation Model}
+
+To be able to apply the transfer learning approach, I first needed a high quality
+foundation model. As a base for the experiments carried out in this thesis, I
+use the TimesFM architecture. \\TimesFM is a state-of-the-art foundation model
+for time series forecasting based on the Transformer.
+
+% Is this even necessary? Idk, i will keep it brief for now to not spend too much on it if it isnt
+\subsection {Transformer Architecture}
+
+The Transformer is the most widely used architecture in present-day machine learning. It was initially invented for NLP tasks; however, since its inception, it has been adopted by most branches of the field, proving superior in most tasks. Its main advantage is the ability to process large sequences of data in parallel. This improves training speed and allows for a high degree of scalability, which in turn highly increases the possible performance. It is based on the self-attention mechanism that makes the model learn contextual relationships between all the elements in an input, which is well fitting for a problem such as time series forecasting. The original Transformer is an encoder-decoder model, however many of the new ideas that build on it switch to an encoder-only or decoder-only approach. It uses tokenized input sequences for training for a number of key reasons, including the use of embeddings, the creation of a finite token vocabulary, and ease of incorporating positional information into tokenized data.
+
+\subsection{TimesFM}
+
+TimesFM is a decoder-only approach to the problem of time series forecasting. The goal of the model is to generate a sequence of future values based on the given context. The model is designed to handle variable context lengths and prediction horizons, without being tied to a specific use case. As a foundation model, TimesFM aims to outperform or achieve comparable zero-shot results to other state-of-the-art models’ performance on previously seen data. In principle, the model uses a GPT-like decoder-only architecture, training on time series data analogous to tokens used in large language models. However, it introduces novel improvements to allow for better generalized learning on data of variable domain, granularity, context, and horizon lengths, designed with consideration to the specificity of time series data.
+
+\subsubsection{Input patching and embedding}
+
+TimesFM does not operate on individual time steps. Instead, similar to other recently developed long-horizon forecasting models,  it splits an entire sequence of data into fixed-length contiguous non-overlapping patches. This process is similar to the tokenization of text data and it makes the input sequence length shorter by a factor of the patch length, which greatly increases inference speed and improves forecasting performance. 
+For a context window of $ N $ time steps, $ \frac{N}{\mathit{input\_patch\_len}}$ patches are created, with the last patch being padded with zeros if $ N $ is not an exact multiple. Every patch is then passed by an input residual block, a multilayer perceptron with one hidden layer and a skip connection. This transforms the patch into an embedding of dimension $ \mathit{d_{model}} $, which represents the model's latent dimensionality. In addition to the input data, the residual block is also supplied with a binary padding mask. For any data point $ y $, a corresponding mask element $ m $ signifies whether the input should be read and interpreted by the model or not. This allows the model to omit training on any gaps in data or purposely hidden parts of the input. The padding is primarily used for random patch masking necessary for the model to learn on different context lengths, which will be further explained below. After the residual block, a positional encoding is added to the processed embedding. This ensures the model properly recognizes the temporal position of each element in the input sequence. TimesFM uses sinusoidal positional encodings akin to the original Transformer. The final input is provided to decoder layers described in a further subsection.
+The entire input processing can be denoted as follows:
+\\\textbf{Throughout the whole process.}
+\begin{itemize}
+    \item $ L $ --- length of the input time series,
+    \item $ p $ --- patch length,
+    \item $ N = \lfloor\frac{L}{p}\rfloor$ --- number of patches,
+    \item $ y_{1:L} = (y_1,\ y_2,\ \ldots,\ y_L)$ --- raw input values,
+    \item $ m_{1:L} = \left( m_1,\ m_2,\ \ldots,\ m_L \right) \in \{0,\ 1\}^L $ --- binary mask.
+\end{itemize}
+\begin{enumerate}
+    \item \textbf{Partition into patches.}\\
+        For $ i = 1,\ 2,\ \ldots, \ N $, the $ i $--th patch of length $ p $ is defined by
+        \[ \tilde{y}_i = \left( y_{p(i-1)+1}:y_{pi} \in \mathbb{R}^p \right),\]
+        similarly, the mask vector over that patch is defined by
+        \[ \tilde{m}_i=\left( m_{p(i-1)+1}:m_{pi} \in \left\{ 0,\ 1 \right\}^p \right).\]
+    \item \textbf{Patch masking.}\\
+        Masking each element in the input data based on the binary padding can be denoted as
+        \[ x_i = \tilde{y}_i\ \odot\ (1-\tilde{m}_i),\]
+        where $\odot$ is the element-wise product.
+    \item \textbf{Residual block embedding.}\\
+        Each masked patch is processed into an embedding with an MLP defined as
+        \[MLP(x) = W_2 \sigma(W_1x+b_1) + b_2,\]
+        where
+        \begin{itemize}
+            \item $ h $ -- hidden size,
+            \item $ W_1 \in \mathbb{R}^{h\times p},\ b_1\in \mathbb{R}^h $,
+            \item $ W_2 \in \mathbb{R}^{d_{model}\times h},\ b_2 \in \mathbb{R}^{d_{model}}, $
+            \item $ \sigma $ --- point-wise nonlinearity, e.g. ReLU. % should i expand on ReLU?
+        \end{itemize}
+        The residual block then outputs
+        \[e_i = x_i + MLP(x_i) \in \mathbb{R}^{d_{model}}.\]
+    \item \textbf{Positional encoding addition.}\\
+        For $ j \in \{0,\ 1, \ldots\} $, positional encoding is defined by
+        \[PE(j)_{2k}=sin\left(j / 10000^{\frac{2k}{d_{model}}}\right),\]
+        \[PE(j)_{2k+1}=cos\left(j / 10000^{\frac{2k}{d_{model}}}\right).\]
+        The final token provided to the decoder can be denoted as
+        \[t_i = e_i+PE(i).\]
+\end{enumerate}
+
+\subsubsection{Handling variable context and horizon lengths}
+
+A fundamental requirement for a foundation time series zero-shot forecasting model is the ability to handle historical contexts and predict the future behavior of sequences of lengths indeterminate at training time. TimesFM addresses this in its architectural design and pretraining process so that during inference it can accept any context length up to a set limit and produce forecasts of arbitrary horizon. It is designed to work autoregressively; thus, it iteratively feeds its own outputs back as input data to create further predictions up to a requested forecast length. It is also trained on data of varied context length, granularity, and origin. Furthermore, it uses special randomized masking during training to prepare the model for receiving data of any length, from 1 to maximum context length. Both of these procedures are described further below.
+
+\subsubsection{Randomized context masking}
+
+A model trained on data of a predetermined sequence length is bound to specialize in forecasting for that specific length only. Even despite dividing the data into multiple patches, such a model might only be able to make correct predictions for horizons that are multiples of the patch length. In order to generalize effectively across every possible context length up to a given maximum, TimesFM applies a randomized masking strategy to ensure the model sees examples of data of all possible sizes during training. During the input preprocessing, a mask of a randomly chosen length is applied to the beginning of every input. The mask spans across part of the first patch of data. This means the model cannot use that data to train on, effectively presenting it with data of a shorter context than the full sequence. Over the course of training, the mask length is uniformly sampled with each new batch, ensuring that the neural network encounters a variety of effective context lengths $\in \bigl[1,\ C_{max}\bigr]$, where $C_{max}$ is the set maximum context length. Because of this, TimesFM learns to handle forecasting based on data with little to no history as well as a complete context.
+
+\subsubsection{Decoder layers with causal attention}
+
+The core of the TimesFM model comprises stacked Transformer decoder layers that operate on the sequence of patches. Each full layer consists of input normalization, followed by a multi-head self-attention and a feed-forward network, both of which are wrapped in a residual connection.
+With the model in causal decoder-only mode, the outputs it produces for each patch in the sequence are based solely on the current and preceding tokens, without access to latter parts of the input. This is, yet again, similar to the GPT architecture, and is crucial for a time series forecasting application, as the succeeding tokens in a temporal environment represent events from the future. The causality is enforced in the self-attention layers by masking out all future patches. The output of the decoder can be denoted as
+
+\[ o_i = \mathrm{Decoder}((t_1, \dot{m}_1),\ \ldots,\ (t_i, \dot{m_i}))\]
+
+where:
+\begin{itemize}
+    \item $ i \in \{1,\ 2,\ \ldots,\ N\}$
+    \item $\dot{m_i} = \mathrm{min}\{\tilde{m}_i\}.$ 
+\end{itemize}
+
+\subsubsection{Long output patches}
+
+TimesFM produces forecasts in an autoregressive fashion, predicting one patch forward at a time. While it has been shown that for long-term forecasting, predicting all future time steps with a single forecast yields better results than doing so autoregressively with multiple iterations, this is not possible for a foundation model that is meant for variable horizon forecasting. To combat the suboptimal conditions of the task environment, the model is allowed to output patches of data that are longer than their input counterparts. Because of this, the number of autoregressive steps that need to be taken is greatly reduced, thus lessening the negative impact of multiple iterations. The output patch length has one data-driven constraint: it cannot be so long as to exceed the input sequences' entire lengths, which could lead to a collapse in performance. This becomes an issue mainly for time series of high granularity, such as monthly or yearly data. The increased output patch length is achieved by appending another residual block after the decoder layers. It is similar in design to the one responsible for input preprocessing.
+
+\begin{figure}[!h]
+	\label{fig:timesfm}
+	\centering \includegraphics[width=\linewidth]{img/timesfm.jpg}
+	\caption{TimesFM architecture.}
+\end{figure}
+% \begin{itemize}
+
+%     \item \textbf{Data patching} --- During training, the input times series data is split into fixed-length patches. This is done in order to mimic the tokenization present in large language models. An earlier work [NNSK22] has shown data patching leads to performance improvements in long-term forecasting. Furthermore, data partitioning speeds up inference as the model behaves autoregressively and sees less datapoints per each inference step.
+
+%     \item \textbf{Randomized masking} --- A significant challenge in designing a foundation model is the need to make it work properly at any input length. With constant size inputs fed to the model during training, a notable drop in performance could be observed for time series of any length other than a multiple of the predefined patch length. To combat this, a mask of randomly chosen size is applied to the beginning of each input during training. This can block out parts of the initial patch or even entire patches, effectively feeding inputs of all possible lengths from 1 up to the entire sequence length into the model, thus leading to greater adaptability and uniform performance regardless of sequence length.
+
+% \end{itemize}
+
+\newpage
+\subsection{Pretraining}
+
+\subsubsection{Datasets}
+
+A fundamental part of any AI model design is the choice of the dataset. Similarly to the LLMs training procedure, where a large text corpus is assembled to allow the model to generalize to anything it can be shown during inference, a time series foundation model should include as vast and diverse a set of different sequences as possible. Because of this, it is necessary to include data from many different sources. The guiding principles for choosing individual datasets for the purpose of building a corpus are:
+
+\begin{itemize}
+    \item \textbf{Sufficient volume.} A dataset should have enough datapoints to be a non-negligible part of the entire corpus and to contain non-trivial observable patterns. This way, the model can extract information that helps it generalize to a broad spectrum of information.
+    \item \textbf{Varied seasonality.} The corpus should include datasets of varied levels of seasonality to make it observe different one-off trends emerging and dying out or being preserved over longer periods of time, as well as seasonal patterns that show up regularly.
+    \item \textbf{Frequency coverage.} The data present in the general corpus should vary in granularity to cover different frequencies of time series. This can range from minute and hourly intervals up to monthly or yearly data.
+    \item \textbf{Breadth of domain.} Time series are used in a variety of domains. A complete time series corpus is required to contain data originating from as many sources as possible.
+    \item \textbf{Pattern completeness.} With real world data availability being limited, it is possible many feasible patterns and trends will be missing from an organic dataset. To ensure the presence of as many patterns as can exist in time series, the corpus should be augmented with synthetic data with randomly generated trends that mimic the real world data.
+\end{itemize}
+Based on the above, the datasets chosen for the corpus are as follows:
+\\\textbf{Wikipedia Pageviews (2012–2023)}
+
+Millions of Wikimedia pages are crawled hourly; their request counts reflect viral spikes, weekly cycles localized to working days, and gradual popularity decay. By aggregating the raw logs to 10‑minute, hourly, daily, weekly, and monthly cadences, about 370 billion points are obtained, giving the model ample exposure to sharp discontinuities as well as long seasonal waveforms. % next will be the google dataset IF i manage to get it. if i dont, then i will look into other sets.
+\\\textbf{Retail Demand}
+
+The open Favorita supermarket dataset contributes >100k daily SKU‑level series.  It introduces promotion‑induced spikes, pricing effects, and local holiday calendars – phenomena under‑represented in web traffic logs.
+\\\textbf{Urban Traffic Sets}
+
+LibCity merges multiple sensor grids (taxi demand, bike‑sharing, road volume) at 15‑minute resolution. Together with the classic UCI Electricity and METR‑LA Traffic datasets, these feeds provide strong daily and weekly periodicity plus weather‑driven variance, essential for energy‑load forecasting benchmarks.
+\\\textbf{M4 Forecasting Archive}
+
+To ensure the model learns macro scales, the entire M4 archive (yearly, quarterly, monthly, weekly, daily, hourly) is used. These 100k series encapsulate demographic trends, economic cycles, and business seasonality beyond the timespan of most high-frequency logs.
+\\\textbf{High‑Resolution Weather (10‑Minute)}
+
+Forty‑two environmental stations sampled every 10 minutes yield sinusoidal temperature/irradiance curves modulated by noise and abrupt storm onsets – a training ground for long‑period seasonality with stochastic deviations.
+\\\textbf{Fully Synthetic Generator (20\% of mini‑batches)}
+
+Because no public dataset simultaneously exposes all desired behaviors, the real world data is augmented with synthetic time series. Each 2048‑step series is an additive/multiplicative mix of:
+
+\begin{itemize}
+    \item ARMA(p,q) noise (1≤p,q≤8),
+    \item pure sinusoids with random periods 4...1024,
+    \item piece‑wise linear or exponential trends with 2–8 breakpoints,
+    \item step functions to mimic regime changes.
+\end{itemize}
+The synthetic slice guarantees representation of very long periods, perfectly clean periodicity, and controlled trend reversals that are scarce in the crawled data.
+
+\subsubsection{Batch mixing}
+
+During pretraining, 80\% of windows are sampled from real datasets and 20\% from the synthetic pool. Within the real portion, the loader first chooses a granularity bucket (sub‑hourly, hourly, daily, weekly, monthly+) uniformly, then picks a dataset inside that bucket in proportion to its series count. This two‑level scheme prevents the dominant Wikipedia corpus from overwhelming smaller but information‑dense sets such as M4 Yearly.
+
+\subsubsection{Varied context length for different frequencies}
+
+To balance GPU memory with covering as much data as possible, the context window is limited to 512 points for sub‑daily data, 256 for weekly, and 64 for ≥monthly. Shorter series are right‑padded ($m = 1$); longer ones are scanned with sliding windows so that every segment eventually appears in training.
+
+\subsubsection{Normalization}
+
+Every window is standardized by subtracting the mean and dividing by the standard deviation of its first patch (reversible‑instance normalization).  This per‑series scaling prevents extreme‑value dominance and is undone after inference.
+
+
+\subsection{Training procedure}

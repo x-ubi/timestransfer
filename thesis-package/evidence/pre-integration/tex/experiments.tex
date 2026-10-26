@@ -1,0 +1,120 @@
+\newpage
+\section{Experiments}
+\setcounter{subsection}{-1}
+
+% \subsection{Overview and scientific goals}
+% In this chapter I present a hypothesis-driven experimental program studying transfer learning in time-series forecasting using TimesFM as the primary foundation model. I prioritize reproducible evaluation on public benchmarks and compute-aware adaptation methods. I do not attempt to recreate proprietary pretraining assets (e.g., Google Trends), but instead quantify transfer behavior using open checkpoints and public datasets \cite{timesfm_das2024,timesfm_repo,timesfm_hf_v25}.
+
+% \subsection{Assumptions and constraints}
+% I assume a solo research setting with limited or uncertain compute. I therefore define three compute tiers: (i) low: single GPU (e.g., RTX 3060 / T4) or CPU-only, (ii) medium: 2--4 GPUs, (iii) high: cluster access (e.g., A100). I report both performance and compute (GPU-hours, peak memory), using the official TimesFM system requirements as reference for inference-scale memory/speed \cite{timesfm_sysreq}.
+% I assume I do not have access to proprietary Google Trends pretraining data; I therefore rely on open checkpoints and non-leaking public datasets for any continued-pretraining experiments \cite{timesfm_hf_v25,gifteval_aksu2024}.
+
+% \subsection{Datasets}
+% I evaluate on the following public benchmarks:
+% (i) the Monash forecasting repository \cite{monash_godahewa2021},
+% (ii) Darts benchmark datasets and tooling \cite{darts_herzen2022},
+% (iii) the ETT benchmarks from ETDataset \cite{etdataset_zhou},
+% (iv) GIFT-Eval for modern foundation-model evaluation, and GiftEvalPretrain for leakage-free continued pretraining \cite{gifteval_aksu2024}.
+
+% \subsection{Models, metrics, and statistical tests}
+% \paragraph{Models.}
+% My primary models are TimesFM v1.0 and v2.5 open checkpoints \cite{timesfm_hf_v1,timesfm_hf_v25}. For context, I include Chronos as an external pretrained probabilistic baseline \cite{chronos_ansari2024}.
+
+% \paragraph{Metrics.}
+% For point forecasting I report MAE and MASE \cite{hyndman2006mase}. For probabilistic forecasting I report CRPS and quantile loss (pinball/WQL) and assess calibration via empirical coverage and sharpness \cite{gneiting2007scoring}.
+
+% \paragraph{Statistical testing.}
+% For uncertainty estimates I use paired bootstrap confidence intervals. For paired forecast comparison I use the Diebold--Mariano test on matched loss differentials, with multiple-comparisons correction where applicable \cite{diebold1995dm}.
+
+% \subsection{Experiment suite (E1--E10)}
+% \paragraph{E1 (Zero-shot replication).}
+% I replicate a paper-aligned zero-shot evaluation across Monash/Darts/ETT. For Monash I follow the TimesFM paper and filter datasets with missing values (resulting in 18 datasets) and report scaled MAE relative to a naive last-value baseline \cite{timesfm_das2024}. For ETT I report horizons 96 and 192, using both rolling windows (stride 1) when feasible and a compute-controlled disjoint-window evaluation (stride set to horizon) as in the TimesFM long-horizon benchmark documentation \cite{timesfm_longhorizon}.
+
+% \paragraph{E2 (Context-length sweep).}
+% I quantify sensitivity to context length (forecasting-as-prompting) by sweeping context lengths from 64 up to the model’s supported long-context limit, holding other settings fixed \cite{timesfm_repo,timesfm_hf_v25}.
+
+% \paragraph{E3 (Robustness benchmark).}
+% I apply controlled corruptions to the context only (missingness, block missingness, outliers, level shifts) and measure degradation relative to clean performance.
+
+% \paragraph{E4 (Probabilistic calibration).}
+% Using TimesFM 2.5 quantiles, I evaluate raw quantiles versus conformalized quantile regression (CQR) calibration \cite{romano2019cqr}, isotonic calibration, and head-only fine-tuning of uncertainty heads. I report CRPS and calibration diagnostics \cite{gneiting2007scoring}.
+
+% \paragraph{E5 (Covariates via XReg).}
+% I evaluate covariate integration using TimesFM’s documented XReg approach, comparing ``TimesFM + XReg'' and ``XReg + TimesFM'' under explicit covariate-availability regimes to prevent leakage \cite{timesfm_xreg}.
+
+% \paragraph{E6 (Residual adapters).}
+% I train lightweight residual correction models (ridge/GBDT) on top of frozen TimesFM forecasts to test compute-frugal adaptation.
+
+% \paragraph{E7 (Data-efficiency fine-tuning: full vs PEFT).}
+% I compare full fine-tuning to head-only tuning and PEFT methods (LoRA, adapters) across multiple data fractions, and I quantify catastrophic forgetting on a held-out benchmark subset. I explicitly handle the architectural constraint that TimesFM outputs 128 prediction heads by computing loss on the first $H \le 128$ heads when training shorter horizons \cite{timesfm_discussion_214,hu2021lora,houlsby2019adapters}.
+
+% \paragraph{E8 (Embedding transfer: UCR classification).}
+% I extract frozen TimesFM embeddings and train lightweight classifiers on UCR datasets, comparing to feature-engineering baselines such as tsfresh \cite{dau2019ucr,christ2018tsfresh}.
+
+% \paragraph{E9 (Anomaly detection).}
+% I implement forecast-residual anomaly detection with optional uncertainty-aware scoring and evaluate on NAB and a public anomaly dataset release \cite{nab_lavin2015}.
+
+% \paragraph{E10 (Limited continued pretraining).}
+% I perform compute-bounded continued pretraining (full or LoRA-based) on a leakage-free public pretraining set (GiftEvalPretrain) and evaluate gains and forgetting as a function of training steps \cite{gifteval_aksu2024,hu2021lora}.
+
+% \subsection{Comparison table and schedules}
+% \begin{table}[!h]
+% \centering
+% \caption{Summary of experiments (E1--E10).}
+% \label{ტაბ:exp_summary}
+% \begin{tabular}{p{0.06\linewidth} p{0.34\linewidth} p{0.22\linewidth} p{0.32\linewidth}}
+% \hline
+% \textbf{Label} & \textbf{Goal} & \textbf{Compute focus} & \textbf{Deliverables} \\
+% \hline
+% E1 & Zero-shot replication & inference-heavy & tables + DM heatmaps \\
+% E2 & Context sweep & inference-heavy & context--MAE curves \\
+% E3 & Robustness & inference-heavy & degradation plots \\
+% E4 & Calibration & mixed & reliability + CRPS \\
+% E5 & XReg covariates & light training & mode comparison \\
+% E6 & Residual adapters & light training & gains + diagnostics \\
+% E7 & FT vs PEFT + forgetting & training-heavy & data-efficiency + compute frontier \\
+% E8 & UCR embeddings & inference-heavy & classification table \\
+% E9 & Anomaly detection & rolling inference & NAB scores + PR curves \\
+% E10 & Continued pretraining & training-heavy & gain-vs-steps + forgetting \\
+% \hline
+% \end{tabular}
+% \end{table}
+
+% \paragraph{Mermaid Gantt schedules (planning artifacts).}
+% \begin{verbatim}
+% ```mermaid
+% gantt
+%   title Low compute plan (single GPU/CPU)
+%   dateFormat  YYYY-MM-DD
+%   axisFormat  %b %d
+%   section Setup
+%   Env + logging + manifests      :a1, 2026-03-30, 7d
+%   Data + protocol tests          :a2, after a1, 10d
+%   section Baselines
+%   E1                             :b1, after a2, 10d
+%   E2                             :b2, after b1, 7d
+%   E3                             :b3, after b2, 14d
+%   section Improvements
+%   E4                             :c1, after b3, 21d
+%   E5                             :c2, after c1, 10d
+%   E6                             :c3, after c2, 7d
+%   section Training-heavy
+%   E7                             :d1, after c3, 35d
+%   section Downstream
+%   E8                             :e1, after d1, 12d
+%   E9                             :e2, after e1, 21d
+%   section Continued pretraining
+%   E10                            :f1, after e2, 28d
+%   section Write-up
+%   Writing                         :g1, after f1, 14d
+% \end{verbatim}
+
+% \subsection{Reproducibility checklist}
+% \begin{itemize}
+%     \item I fix random seeds (Python/NumPy/PyTorch) and log them in every run directory.
+%     \item I log dataset manifests (dataset name, version/hash, split indices, horizon/context, stride, preprocessing rules).
+%     \item I log full TimesFM configuration (checkpoint ID and ForecastConfig fields).
+%     \item I store raw predictions and per-series/per-origin losses to enable exact recomputation of all metrics and DM tests.
+%     \item I log compute metadata (wall time, GPU-hours, peak VRAM/RAM, batch sizes).
+%     \item I track results with W&B and/or TensorBoard and store artifacts (predictions, configs, checkpoints).
+% \end{itemize}

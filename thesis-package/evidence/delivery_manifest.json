@@ -1,0 +1,558 @@
+{
+  "thesis_files": [
+    {
+      "output": "thesis/bibliografia.bib",
+      "sha256": "c06dcea05303d0e9d8aac5194e001a8ff6e62001166b71a15c16bed51d807b55",
+      "inputs": [
+        "docs/experiment-writing-agent-plan.md",
+        "evidence/ledger.md",
+        "evidence/pre-integration/bibliografia.bib"
+      ],
+      "transformation": "Authored/integrated evidence-backed prose or static source/configuration table; see ledger and acceptance audit.",
+      "command": "Editorial writing; python3 scripts/integrate_thesis_package.py"
+    },
+    {
+      "output": "thesis/img/experiments/feature_scatter.pdf",
+      "sha256": "c9cb8526c43404c3d50603b6217ceae1226b84c746116806be8cf4f1b9a2f0b4",
+      "inputs": [
+        "outputs/analysis/series_features_with_metrics.csv"
+      ],
+      "transformation": "TimesFM; three large panels; ACF and STL vs sMAPE; no significance filtering",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/img/experiments/feature_scatter.png",
+      "sha256": "1bcdf9e4cf926094ba3e52c7e8e3c9c862ac7cfcfb61b86caac4e58a661381d4",
+      "inputs": [
+        "outputs/analysis/series_features_with_metrics.csv"
+      ],
+      "transformation": "TimesFM; three large panels; ACF and STL vs sMAPE; no significance filtering",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_1.pdf",
+      "sha256": "114bbab0c506e8bcd5d7dcb3843fb47c3dd2ebbd8b91a65e2300715c830961bc",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/m4/datasets/Hourly.p",
+        "data/m4/datasets/Hourly-train.csv",
+        "data/m4/datasets/Hourly-test.csv"
+      ],
+      "transformation": "m4_hourly/H187; best ranked TimesFM test sMAPE; ties by string ID; history=96; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_1.png",
+      "sha256": "8e4a0fa9ae41096ee90ebd87c41501881c1e24d6092adca3f21ce4eb0a1cbc8e",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/m4/datasets/Hourly.p",
+        "data/m4/datasets/Hourly-train.csv",
+        "data/m4/datasets/Hourly-test.csv"
+      ],
+      "transformation": "m4_hourly/H187; best ranked TimesFM test sMAPE; ties by string ID; history=96; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_2.pdf",
+      "sha256": "35f6588b95dcf923b238d7be72e95cc641efecc51f590b9ec5a6256c07b9c736",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/m4/datasets/Hourly.p",
+        "data/m4/datasets/Hourly-train.csv",
+        "data/m4/datasets/Hourly-test.csv"
+      ],
+      "transformation": "m4_hourly/H349; worst ranked TimesFM test sMAPE; ties by string ID; history=96; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_2.png",
+      "sha256": "d784580551c6b833330b78f6ef3bc6114261ef5b36b970f455b773e5f1c9da00",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/m4/datasets/Hourly.p",
+        "data/m4/datasets/Hourly-train.csv",
+        "data/m4/datasets/Hourly-test.csv"
+      ],
+      "transformation": "m4_hourly/H349; worst ranked TimesFM test sMAPE; ties by string ID; history=96; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_3.pdf",
+      "sha256": "cc75e0ca3c86061809507fa47ffb715da524b973d60d9e870dfa360a5a23bcee",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/longhorizon2/all_six_datasets/ETTh1/Y_df.csv"
+      ],
+      "transformation": "ett_h1_h48/HUFL; median ranked TimesFM test sMAPE; ties by string ID; history=96; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_3.png",
+      "sha256": "b9b539755708d5bfa66c8eb2be5299d7d45e9ade4d22192ae0c36da0158f5e5e",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/longhorizon2/all_six_datasets/ETTh1/Y_df.csv"
+      ],
+      "transformation": "ett_h1_h48/HUFL; median ranked TimesFM test sMAPE; ties by string ID; history=96; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_4.pdf",
+      "sha256": "643bbc70763494a92c853050f354ec5112b069591edf9fbc64737d2873feadfd",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/longhorizon2/all_six_datasets/TrafficL/Y_df.csv"
+      ],
+      "transformation": "traffic_h48/193; median ranked TimesFM test sMAPE; ties by string ID; history=96; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_4.png",
+      "sha256": "031dc6a4af743ab7431153609cabe540465529580e974c8d4c812f5855124918",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/longhorizon2/all_six_datasets/TrafficL/Y_df.csv"
+      ],
+      "transformation": "traffic_h48/193; median ranked TimesFM test sMAPE; ties by string ID; history=96; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_5.pdf",
+      "sha256": "4ef199ed41f6318ef774c64d0d8d2af04a1fdbb46cb87466b532816fc821d907",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/longhorizon2/all_six_datasets/Weather/Y_df.csv"
+      ],
+      "transformation": "weather_h48/max. PAR (\ufffdmol/m\ufffd/s); worst ranked TimesFM test sMAPE; ties by string ID; history=432; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_5.png",
+      "sha256": "76f24eca351e4b3e463ac340a4091a1ea2e0d841e068a0dfcb44259da9fd0571",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/longhorizon2/all_six_datasets/Weather/Y_df.csv"
+      ],
+      "transformation": "weather_h48/max. PAR (\ufffdmol/m\ufffd/s); worst ranked TimesFM test sMAPE; ties by string ID; history=432; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_6.pdf",
+      "sha256": "bf04de7ac70caaad52f115a0da47193076d3a9ea9ab2cccb2df28460dd76dea0",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/longhorizon2/all_six_datasets/ILI/Y_df.csv"
+      ],
+      "transformation": "ili_h48/AGE 5-24; median ranked TimesFM test sMAPE; ties by string ID; history=156; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/img/experiments/forecast_6.png",
+      "sha256": "772c808439ce18ae981b9c499098dea48712a988e312a6011db6bd60b85a6875",
+      "inputs": [
+        "outputs/forecasts/all_datasets_all_models.parquet",
+        "outputs/metrics/metrics.csv",
+        "data/longhorizon2/all_six_datasets/ILI/Y_df.csv"
+      ],
+      "transformation": "ili_h48/AGE 5-24; median ranked TimesFM test sMAPE; ties by string ID; history=156; models=['timesfm_2p5', 'chronos_bolt', 'seasonal_naive', 'prophet']",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/img/experiments/horizon_mase.pdf",
+      "sha256": "cd2c20cf8601093e73a9b8f6842dc5aca0ee8ac5084db48c93a2d569141f3adb",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "horizon scope; fixed tasks and four models; mase; same test trajectories",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/img/experiments/horizon_mase.png",
+      "sha256": "a3ad07619e7f0ea03bc4a49b872e1dce05ee59ec61d52affc34e43eb331abc97",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "horizon scope; fixed tasks and four models; mase; same test trajectories",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/img/experiments/horizon_smape.pdf",
+      "sha256": "dac061515d538f465d86c022c249a793b7db96aa375d3e6b988e751291a1a116",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "horizon scope; fixed tasks and four models; smape; same test trajectories",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/img/experiments/horizon_smape.png",
+      "sha256": "14554f83e692e49bdf36e883f9e78ee9a5bccd1ce62cc2ff620d0153a1bb162a",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "horizon scope; fixed tasks and four models; smape; same test trajectories",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/img/experiments/timesfm_context.pdf",
+      "sha256": "45a0c0b5bd3153c7b8c85bfe5780cebe8f2a590bb949780cea1ac76e6af07f19",
+      "inputs": [
+        "outputs/timesfm_tuning/metrics/metrics.csv"
+      ],
+      "transformation": "six contexts; per-task sMAPE left blue / MASE right orange; independent axes",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/img/experiments/timesfm_context.png",
+      "sha256": "7eb16f8d614881d82edc46eb8f72c9bce53cd86cb2774d119cddaff6e6aedd80",
+      "inputs": [
+        "outputs/timesfm_tuning/metrics/metrics.csv"
+      ],
+      "transformation": "six contexts; per-task sMAPE left blue / MASE right orange; independent axes",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/main.tex",
+      "sha256": "4b84ac94d1621ed35ca49780e9ea06abe1a0ba8d5d4ac2c6a1337bc75390ad21",
+      "inputs": [
+        "docs/experiment-writing-agent-plan.md",
+        "evidence/ledger.md",
+        "evidence/pre-integration/main.tex"
+      ],
+      "transformation": "Authored/integrated evidence-backed prose or static source/configuration table; see ledger and acceptance audit.",
+      "command": "Editorial writing; python3 scripts/integrate_thesis_package.py"
+    },
+    {
+      "output": "thesis/tables/experiments/boundaries.tex",
+      "sha256": "d85553a38e395bbbefb256b334bdfe6b5d6087125f4be857a209769ed888cf4f",
+      "inputs": [
+        "evidence/series_inventory.csv"
+      ],
+      "transformation": "first and last timestamps of each split",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/tables/experiments/contexts.tex",
+      "sha256": "36e38a8e9a62dc1e8cbc522ac4ac3df4848c4054763976a1c4c4608c95d29550",
+      "inputs": [
+        "outputs/timesfm_tuning/metrics/metrics.csv"
+      ],
+      "transformation": "six contexts, four tasks, overall scores",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/tables/experiments/correlations_mase.tex",
+      "sha256": "1004159ea25413c49f6bf340a22e6d6c1e8843a42262155b5142d0d3c737437b",
+      "inputs": [
+        "outputs/analysis/series_features_with_metrics.csv"
+      ],
+      "transformation": "Spearman mase; within-task complete pairs; fixed three large panels and two features",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/tables/experiments/correlations_smape.tex",
+      "sha256": "c3d9361ba85313e451f2e369ccae3906c44c6f0fb21f63f93cba845969a17c2f",
+      "inputs": [
+        "outputs/analysis/series_features_with_metrics.csv"
+      ],
+      "transformation": "Spearman smape; within-task complete pairs; fixed three large panels and two features",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/tables/experiments/datasets.tex",
+      "sha256": "e18b7c134bb38e7d8fab0d5520116e076077472ec404e014757481057187c18b",
+      "inputs": [
+        "data/longhorizon2/all_six_datasets/ECL/Y_df.csv",
+        "data/longhorizon2/all_six_datasets/ETTh1/Y_df.csv",
+        "data/longhorizon2/all_six_datasets/ETTh2/Y_df.csv",
+        "data/longhorizon2/all_six_datasets/ETTm1/Y_df.csv",
+        "data/longhorizon2/all_six_datasets/ETTm2/Y_df.csv",
+        "data/longhorizon2/all_six_datasets/Exchange/Y_df.csv",
+        "data/longhorizon2/all_six_datasets/ILI/Y_df.csv",
+        "data/longhorizon2/all_six_datasets/TrafficL/Y_df.csv",
+        "data/longhorizon2/all_six_datasets/Weather/Y_df.csv",
+        "data/m4/datasets/Hourly-test.csv",
+        "data/m4/datasets/Hourly-train.csv",
+        "data/m4/datasets/Hourly.p",
+        "configs/experiment.yaml"
+      ],
+      "transformation": "exact loader and final-horizon split; per-series inventory in evidence",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/tables/experiments/flags_mase.tex",
+      "sha256": "433fbe3ecdc65ca82101dbb66b5774231a045ce9d9e4a8f1992c3a767999dd7a",
+      "inputs": [
+        "outputs/timesfm_tuning/metrics/metrics.csv"
+      ],
+      "transformation": "mase(ablation) - mase(ctx1024), within tuning run",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/tables/experiments/flags_smape.tex",
+      "sha256": "029f896f4cadb49b664bc603d07e48172659b2851aa1171a41ba2909c615d375",
+      "inputs": [
+        "outputs/timesfm_tuning/metrics/metrics.csv"
+      ],
+      "transformation": "smape(ablation) - smape(ctx1024), within tuning run",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/tables/experiments/mae_1.tex",
+      "sha256": "dd30f81cbee0fff9e75c298e658d47f8cbf002f2a76f7585b756f066b48dfe61",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "overall mae; task order fixed; 3 decimals; exact unrounded minima",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/tables/experiments/mae_2.tex",
+      "sha256": "5b42c37e1d41581a3b5ff702db527593b46b3ed830c1747a55107ee2d62aba53",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "overall mae; task order fixed; 3 decimals; exact unrounded minima",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/tables/experiments/mase_1.tex",
+      "sha256": "8b1c25805c2774d0dd8326b4b732db1cb637418ac3e1b20a0ebb19bc2e8f8a1d",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "overall mase; task order fixed; 3 decimals; exact unrounded minima",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/tables/experiments/mase_2.tex",
+      "sha256": "bdbd80603d20e65f3b040db7f0b769db4b760e32ce96b3040a1d7ef48a41b439",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "overall mase; task order fixed; 3 decimals; exact unrounded minima",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/tables/experiments/raw_lengths.tex",
+      "sha256": "0afc73b059bf112b05a67641f969f64f29c71fd07fedc54890fa5244cdfd3b4f",
+      "inputs": [
+        "evidence/dataset_inventory.csv"
+      ],
+      "transformation": "available versus loader-retained counts; repeated ETTh1/96 omitted",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/tables/experiments/rmse_1.tex",
+      "sha256": "3bdee9ceb7c3f1d8e1974e25503e26e061840c430088f7a1eac33f1c0f42c5c1",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "overall rmse; task order fixed; 3 decimals; exact unrounded minima",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/tables/experiments/rmse_2.tex",
+      "sha256": "cf351cc46f44372050e1831ac801d1cff4b12f3ff4b503a5a89e7efef730bdfa",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "overall rmse; task order fixed; 3 decimals; exact unrounded minima",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/tables/experiments/selections.tex",
+      "sha256": "368b766470f27009d458c2c7b47d22e083fa12d48a26f45273bb2ceb8bfb02cb",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "IDs ranked by TimesFM sMAPE then string ID, test-selected diagnostics",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/tables/experiments/smape_1.tex",
+      "sha256": "6ab794f033c73fe339d6db578c8cbaac21caed4540e6b14ddeab73919cef8875",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "overall smape; task order fixed; 2 decimals; exact unrounded minima",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/tables/experiments/smape_2.tex",
+      "sha256": "c530a08f9d2ea97e91eaea7f6671361bb7439fa61f683c90e612dd108a5f11c8",
+      "inputs": [
+        "outputs/metrics/metrics.csv"
+      ],
+      "transformation": "overall smape; task order fixed; 2 decimals; exact unrounded minima",
+      "command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/build_thesis_artifacts.py"
+    },
+    {
+      "output": "thesis/tex/2-literature.tex",
+      "sha256": "8a891a43528dc94e702ce02d2296b44b682fec9ef7f06ff73c50626e42195b88",
+      "inputs": [
+        "docs/experiment-writing-agent-plan.md",
+        "evidence/ledger.md",
+        "evidence/pre-integration/tex/2-literature.tex"
+      ],
+      "transformation": "Authored/integrated evidence-backed prose or static source/configuration table; see ledger and acceptance audit.",
+      "command": "Editorial writing; python3 scripts/integrate_thesis_package.py"
+    },
+    {
+      "output": "thesis/tex/experiment-appendix.tex",
+      "sha256": "7007f372a3939a54a0dcf9893820aece2af83e1d9be2f195cc96f39811b041a9",
+      "inputs": [
+        "docs/experiment-writing-agent-plan.md",
+        "evidence/ledger.md"
+      ],
+      "transformation": "Authored/integrated evidence-backed prose or static source/configuration table; see ledger and acceptance audit.",
+      "command": "Editorial writing; python3 scripts/integrate_thesis_package.py"
+    },
+    {
+      "output": "thesis/tex/experiments.tex",
+      "sha256": "d0bb4a5697074aef7288410764cd267bb401f45a6e763da0bbbfd6ce8c74cb3f",
+      "inputs": [
+        "docs/experiment-writing-agent-plan.md",
+        "evidence/ledger.md",
+        "evidence/pre-integration/tex/experiments.tex"
+      ],
+      "transformation": "Authored/integrated evidence-backed prose or static source/configuration table; see ledger and acceptance audit.",
+      "command": "Editorial writing; python3 scripts/integrate_thesis_package.py"
+    },
+    {
+      "output": "thesis/tex/intro.tex",
+      "sha256": "fe88937bb41ac4521b3cdaca35d126930656ed610a7a58c909cb54a459c984d9",
+      "inputs": [
+        "docs/experiment-writing-agent-plan.md",
+        "evidence/ledger.md",
+        "evidence/pre-integration/tex/intro.tex"
+      ],
+      "transformation": "Authored/integrated evidence-backed prose or static source/configuration table; see ledger and acceptance audit.",
+      "command": "Editorial writing; python3 scripts/integrate_thesis_package.py"
+    },
+    {
+      "output": "thesis/tex/results.tex",
+      "sha256": "f3d1c7dfcb9a88615f1bde9ae8918c25c9ea47c4dff37280e31b9b705566a008",
+      "inputs": [
+        "docs/experiment-writing-agent-plan.md",
+        "evidence/ledger.md",
+        "evidence/pre-integration/tex/results.tex"
+      ],
+      "transformation": "Authored/integrated evidence-backed prose or static source/configuration table; see ledger and acceptance audit.",
+      "command": "Editorial writing; python3 scripts/integrate_thesis_package.py"
+    },
+    {
+      "output": "thesis/tex/summary.tex",
+      "sha256": "c41d75411fa7b014b594e77b9e41ad2ac37294c06374037d72955cf30bc8f85d",
+      "inputs": [
+        "docs/experiment-writing-agent-plan.md",
+        "evidence/ledger.md",
+        "evidence/pre-integration/tex/summary.tex"
+      ],
+      "transformation": "Authored/integrated evidence-backed prose or static source/configuration table; see ledger and acceptance audit.",
+      "command": "Editorial writing; python3 scripts/integrate_thesis_package.py"
+    },
+    {
+      "output": "thesis/tex/timesfm.tex",
+      "sha256": "a06d2796f10cda3c2666f28496aafad03e1b8380d401ea14fe506ba2c77e621a",
+      "inputs": [
+        "docs/experiment-writing-agent-plan.md",
+        "evidence/ledger.md",
+        "evidence/pre-integration/tex/timesfm.tex"
+      ],
+      "transformation": "Authored/integrated evidence-backed prose or static source/configuration table; see ledger and acceptance audit.",
+      "command": "Editorial writing; python3 scripts/integrate_thesis_package.py"
+    }
+  ],
+  "derived_evidence": [
+    {
+      "output": "evidence/dataset_inventory.csv",
+      "sha256": "d831d6364389d54546027f33a842a8eac7af3a479275bca1b1bd3821e0dc17de",
+      "inputs": "cached data, project loader, configurations",
+      "transformation": "Counts and intervals after exact loading"
+    },
+    {
+      "output": "evidence/series_inventory.csv",
+      "sha256": "85e5bf7210af2f078138dbde61555e57d2c0cd962d121bdfa6230cb7c29f7d3d",
+      "inputs": "cached data, project loader, MASE scales",
+      "transformation": "Per-series split boundaries, missingness, extrema and denominator checks"
+    },
+    {
+      "output": "evidence/timestamp_gaps.json",
+      "sha256": "3eb3ef271acdfb33c1399e68f2a3af11601941c7d917e1db27b9ce3197c283a5",
+      "inputs": "cached data timestamps",
+      "transformation": "Differences from configured interval"
+    },
+    {
+      "output": "evidence/forecast_selections.json",
+      "sha256": "900a7cc51a487eff33ce19db36c30c05b0dd9f413b3fb772a2401162161a0b4b",
+      "inputs": "saved main per-series metrics and loaded train tails",
+      "transformation": "Test-sMAPE rank with string-ID tie handling"
+    },
+    {
+      "output": "evidence/correlations_smape.csv",
+      "sha256": "3c0e354b6f7683e57979996333cd463bde07700e3a4a5d660728dd64281b0631",
+      "inputs": "outputs/analysis/series_features_with_metrics.csv",
+      "transformation": "Within-task and pooled Spearman; original analysis reproduced"
+    },
+    {
+      "output": "evidence/correlations_mase.csv",
+      "sha256": "758b80fb266b42b1503595e4b94e2a7ee016ab5877540a14e04e6d8034bbe482",
+      "inputs": "outputs/analysis/series_features_with_metrics.csv",
+      "transformation": "Additional descriptive MASE Spearman; original outputs preserved"
+    },
+    {
+      "output": "evidence/flag_deltas.csv",
+      "sha256": "8d1f55de91635a83dc032f4c9813493516bc374fde0c143192be9f2d9d5192cf",
+      "inputs": "outputs/timesfm_tuning/metrics/metrics.csv",
+      "transformation": "Ablation minus common same-run context-1024 baseline"
+    },
+    {
+      "output": "evidence/validation.json",
+      "sha256": "09e00a58345fab2c1dfacc5bb59a47b8c14b48ab2a3dc4a134b46af2761c0960",
+      "inputs": "both forecast/metric runs, cached data and configurations",
+      "transformation": "Generator assertions; see artifact manifest and generator source"
+    },
+    {
+      "output": "evidence/package_validation.json",
+      "sha256": "9fa9228bf9dde14e5ac34682c6460ea52e6bc67b2857e915398dd9ed1b40e3b9",
+      "inputs": "generated LaTeX, saved CSVs, current source hashes, integrated build",
+      "transformation": "scripts/verify_thesis_package.py assertions"
+    }
+  ],
+  "generation_and_validation_code": {
+    "scripts/build_thesis_artifacts.py": "81784b9211fb7588db9952c4008f47c6fb732fa1a916dacace3be9db978b3dd6",
+    "scripts/finalize_thesis_package.py": "59e4d997655bc873f818ccd4e7237a0dd8ff14f8a35034b83a39cd3a83673aa4",
+    "scripts/integrate_thesis_package.py": "c52b78ba8a4f955ee354d93b25b1ec3166985425e7cea540079fea26417c94bc",
+    "scripts/verify_thesis_package.py": "baec477d01e5216ba21cadfac998231eb3030064f151e0c883f1f9d33d5e7d2e"
+  },
+  "original_thesis_dependencies": {
+    "eiti/eiti-thesis.cls": "2950fc9bd1a05a5b0ea9581111d6c6a322dbe1132bdcbaa60453d0c83462864c",
+    "img/timesfm.jpg": "0dfcc967d3f3144943b71241a210119a0ff0933d34a26662b480dba3754b85e0"
+  },
+  "source_hashes": "evidence/artifact_manifest.json",
+  "build": {
+    "command": "latexmk -xelatex -interaction=nonstopmode -halt-on-error -outdir=build/experiments main.tex",
+    "cwd": "/home/ubuntu/thesis",
+    "pdf": "/home/ubuntu/thesis/build/experiments/main.pdf",
+    "pdf_sha256": "e211e88cf71fa72fcdabe6a3e43b5d6d8139933cb70ebb67785cd9aeb221c54e",
+    "pages": 63,
+    "latex_log_sha256": "92c57b94a2bf081a496f59548e8dc9cb4d24254f9feaed3536ca9493615b5469",
+    "biber_log_sha256": "aa99a4f709285865c985d47232d11d3f89f7b87eb6e94d9bab16ff6207763592"
+  },
+  "validation_command": "MPLCONFIGDIR=/tmp/thesis-mpl .venv/bin/python scripts/verify_thesis_package.py --integrated /home/ubuntu/thesis --build-dir /home/ubuntu/thesis/build/experiments",
+  "finalize_command": "python3 scripts/finalize_thesis_package.py",
+  "notes": "Local integration only; no commits, pushes, benchmark reruns or Overleaf synchronization. Unknown archival provenance is documented, not inferred."
+}

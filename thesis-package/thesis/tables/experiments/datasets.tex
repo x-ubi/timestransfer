@@ -1,0 +1,24 @@
+\begin{table}[!htbp]
+\centering
+\caption{Evaluated data (datasetsforecast 1.0.1). LH2: cached LongHorizon2 archive, unnormalized. $s/m$: configured seasonal lag / MASE lag. *Exchange elapsed time refers to the archive labels.}
+\label{tab:datasets}
+\small
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lllrlll}
+\hline
+Task & Version & Step & Series & Train length & $H$ / duration & $s/m$ \\
+\hline
+M4 Hourly & M4 & h & 414 & 700--960 & 48 / 2 days & 24 / 24 \\
+ETTh1/48 & LH2 & h & 7 & 14352 & 48 / 2 days & 24 / 24 \\
+ETTh1/96 & LH2 & h & 7 & 14304 & 96 / 4 days & 24 / 24 \\
+ETTh2/48 & LH2 & h & 7 & 14352 & 48 / 2 days & 24 / 24 \\
+ETTm1/48 & LH2 & 15min & 7 & 57552 & 48 / 12 hours & 96 / 96 \\
+ETTm2/48 & LH2 & 15min & 7 & 57552 & 48 / 12 hours & 96 / 96 \\
+ECL & LH2 & h & 321 & 26256 & 48 / 2 days & 24 / 24 \\
+Traffic & LH2 & h & 862 & 17496 & 48 / 2 days & 24 / 24 \\
+Weather & LH2 & 10min & 21 & 52647 & 48 / 8 hours & 144 / 144 \\
+Exchange & LH2 & D & 8 & 7540 & 48 / 48 days* & 7 / 1 \\
+ILI & LH2 & W-TUE & 7 & 918 & 48 / 48 weeks & 52 / 52 \\
+\hline
+\end{tabular}
+\end{table}

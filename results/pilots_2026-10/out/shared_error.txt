@@ -1,0 +1,38 @@
+Share of member-error variance in the first principal component:
+  ecl_h48       0.909
+  ett_h1_h48    0.935
+  ett_h1_h96    0.940
+  ett_h2_h48    0.934
+  ett_m1_h48    0.888
+  ett_m2_h48    0.912
+  exchange_h48  0.966
+  ili_h48       0.848
+  m4_hourly     0.841
+  traffic_h48   0.917
+  weather_h48   0.937
+Correlation of a series' mean scaled error between consecutive windows:
+  ecl_h48       -0.16
+  ett_h1_h48    0.14
+  ett_h1_h96    0.17
+  ett_h2_h48    0.13
+  ett_m1_h48    0.37
+  ett_m2_h48    0.04
+  exchange_h48  0.25
+  ili_h48       0.03
+  m4_hourly     -0.06
+  traffic_h48   -0.00
+  weather_h48   -0.00
+MASE ratio (corrected / uncorrected equal mean):
+method        bias_shift_0.5  bias_shift_1.0
+dataset                                     
+ecl_h48                1.008           1.025
+ett_h1_h48             1.001           1.013
+ett_h1_h96             1.004           1.014
+ett_h2_h48             1.002           1.018
+ett_m1_h48             0.981           1.047
+ett_m2_h48             1.004           1.034
+exchange_h48           0.996           1.046
+ili_h48                1.004           1.022
+m4_hourly              1.015           1.060
+traffic_h48            1.026           1.078
+weather_h48            1.065           1.153

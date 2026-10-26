@@ -1,0 +1,7 @@
+\newpage
+\section{Introduction}
+This thesis studies the use of pretrained models for time-series forecasting through a completed benchmark of saved point predictions. Transfer is examined operationally through applying pretrained predictors to several data domains without updating their weights. This does not imply that every benchmark target is independently verified as absent from pretraining.
+
+The experimental contribution is a comparison of nine implementations across eleven dataset--horizon tasks, an analysis of associations between training-series characteristics and errors, and a separate TimesFM 2.5 inference-sensitivity study. The comparator set combines pretrained forecasting models, a pooled tabular adaptation and classical forecasting methods. The evaluation uses one final holdout per series, with four point-error metrics and qualitative inspection of actual continuations. It is a project-specific benchmark rather than a replication of a published evaluation protocol.
+
+The literature and foundation-model chapters provide background. Section~\ref{sec:experiments} specifies the implemented data preparation, model settings and scoring, and Section~\ref{sec:results} presents the measured results and limitations. Weight fine-tuning, cross-dataset adaptation and probabilistic evaluation remain prospective extensions.

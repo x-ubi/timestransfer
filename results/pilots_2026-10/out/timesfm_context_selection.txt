@@ -1,0 +1,27 @@
+    dataset  window               chosen  selected  ctx1024   oracle
+ ett_h1_h48       0  timesfm_2p5_ctx1024  0.567736 0.567736 0.542978
+ ett_h1_h48       1  timesfm_2p5_ctx1024  0.913938 0.913938 0.913938
+ ett_h1_h48       2  timesfm_2p5_ctx1024  0.937807 0.937807 0.866933
+ ett_h1_h48       3  timesfm_2p5_ctx1024  0.879953 0.879953 0.820148
+ ett_m1_h48       0   timesfm_2p5_ctx512  0.454520 0.457074 0.430759
+ ett_m1_h48       1   timesfm_2p5_ctx512  0.322722 0.551599 0.322722
+ ett_m1_h48       2   timesfm_2p5_ctx512  0.257594 0.290998 0.257594
+ ett_m1_h48       3  timesfm_2p5_ctx1024  0.806479 0.806479 0.264992
+  m4_hourly       0  timesfm_2p5_ctx2048  0.733622 0.733622 0.733622
+  m4_hourly       1  timesfm_2p5_ctx2048  0.731387 0.731387 0.731387
+  m4_hourly       2  timesfm_2p5_ctx2048  0.702621 0.702621 0.702621
+  m4_hourly       3   timesfm_2p5_ctx512  0.731759 0.727804 0.727804
+weather_h48       0 timesfm_2p5_ctx16256  0.136856 0.117568 0.114841
+weather_h48       1 timesfm_2p5_ctx16256  0.177390 0.333811 0.177390
+weather_h48       2 timesfm_2p5_ctx16256  0.198774 0.274795 0.186796
+weather_h48       3 timesfm_2p5_ctx16256  0.156153 0.199062 0.151494
+             selected  ctx1024  oracle  selected/ctx1024
+dataset                                                 
+ett_h1_h48      0.825    0.825   0.786             1.000
+ett_m1_h48      0.460    0.527   0.319             0.874
+m4_hourly       0.725    0.724   0.724             1.001
+weather_h48     0.167    0.231   0.158             0.723
+ett_h1_h48 mean error corr between context variants: 0.98
+ett_m1_h48 mean error corr between context variants: 0.88
+m4_hourly mean error corr between context variants: 0.99
+weather_h48 mean error corr between context variants: 0.86

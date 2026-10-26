@@ -1,0 +1,28 @@
+{
+  "main": {
+    "forecast_rows": 723600,
+    "metric_rows_recomputed": {
+      "overall": 99,
+      "series": 15012,
+      "horizon": 5184
+    },
+    "all_metrics_match": true
+  },
+  "tuning": {
+    "forecast_rows": 237072,
+    "metric_rows_recomputed": {
+      "overall": 44,
+      "series": 4939,
+      "horizon": 2112
+    },
+    "all_metrics_match": true
+  },
+  "loader_alignment": {
+    "tasks": 11,
+    "models_per_task": 9,
+    "targets_and_timestamps_match": true,
+    "train_mase_scales_match": 1668
+  },
+  "feature_join_and_original_correlations_match": true,
+  "timesfm_config_caveat": "Saved forecast_config is requested kwargs; current package rounds max_horizon to 128. Historical fallback path cannot be ruled out from logs alone."
+}

@@ -1,0 +1,238 @@
+\newpage
+\section{Literature overview}
+
+\subsection{SOTA in time series forecasting over time}
+
+Time series forecasting is a particularly challenging domain of problems. This is true for various reasons: the sparsity of the available data, the non-transferability of similar methods between different types of time series tasks, and the large amounts of hidden underlying relationships between datapoints. [EXPLANATION NEEDED]. For a short set of well defined individual time series, statistical models such as ARIMA, exponential smoothing, or state-space models can provide satisfactory forecasts. Unfortunately, most real instances of time series based problems fall beyond the scope of such simple solutions. In recent years, new methods have emerged in the machine learning space that have allowed for progress in solving problems of a more difficult nature. Deep neural networks have the ability to fit to large datasets and learn the hidden shared patterns between multiple series if given sufficient varied data. \todo[inline]{finish subsection later}
+
+\subsection{Transformers for forecasting}
+
+The Transformer architecture, introduced in 2017, has over time proven superior to other methods hitherto used in a variety of machine learning domains due to its self-attention mechanism, which, in comparison to RNNs, greatly reduces the time required to train models designed to observe and learn long-standing relationships in data. This is highly desirable in time series problems, especially in the context of long-horizon forecasting. \todo[inline]{citations}
+
+One of the early adopters was the Temporal Fusion Transformer \todo[inline]{citation} which used the original encoder-decoder attention combined with gating mechanisms and context vectors to perform interpretable forecasting of multivariate time series. Some of the further developments in adapting the Transformer architecture to time series forecasting included:
+
+\begin{itemize}
+    \item ProbSparse attention introduced in the Informer model, which enabled the increase of the input sequence length up to 720 datapoints by reducing the $O(L^2)$ cost,
+    \item an auto-correlation mechanism present in the Autoformer model that captured seasonality and trend patterns more effectively than regular attention which led to improved results on long-horizon forecasts,
+    \item a frequency-domain decomposition system from the FEDformer model that, in combination with Transformer blocks, attempted to allow the network to learn both global and seasonal trends in data.
+\end{itemize}
+
+Following these progressions, a notable breakthrough has been presented in the form of PatchTST. This model re-examined the tokenization process of time series data in Transformer training. The previously mentioned works used each time step separately, feeding it to the model as a single input token. PatchTST instead grouped the datapoints into patches and processed each channel independently. This strategy allowed the model to easily identify local trends within any given patch and learn the seasonal patterns between patches, which in turn greatly improved long-horizon forecasting accuracy. In benchmark testing, the model outperformed previous Transformer based solutions. Moreover, it also surpassed other approaches that were simpler in their design, yet thus far superior in specific applications.
+
+\paragraph{Why Transformers were adopted in forecasting.}
+Transformer architectures were originally motivated by the limitations of recurrent networks: sequential computation in RNNs constrains parallelism and makes training on long sequences expensive and unstable. Self-attention allows every position in a sequence to condition on other positions in a single layer, and it enables efficient parallel training. For time series forecasting, this is conceptually appealing because predictive information may be distributed across distant parts of the history (e.g., long seasonal cycles or delayed effects). In practice, however, applying vanilla self-attention to time series exposed two immediate challenges: (i) the quadratic time and memory complexity of attention with respect to sequence length, and (ii) the lack of a natural ``token'' granularity, since a single timestamp often carries less semantic meaning than a word in text.
+
+\paragraph{Attention complexity and the ``long sequence'' problem.}
+In a standard Transformer, attention computes a similarity score between all pairs of tokens. For an input of length $L$, this produces an $L \times L$ attention matrix, resulting in $O(L^2)$ time and memory complexity. In forecasting benchmarks, ``long'' frequently means contexts on the order of hundreds to low thousands of time steps. For example, popular long-horizon benchmark settings include lookback windows around $L \approx 720$ for hourly or sub-hourly data. While $L=720$ is small compared to NLP contexts, it is large enough for quadratic attention to become a practical bottleneck when training deep models, using large batch sizes, or scaling to many variables.
+
+\paragraph{Efficiency-oriented Transformers: sparse and logarithmic attention.}
+A major branch of the literature attempted to make attention more efficient rather than changing the forecasting formulation itself. Informer proposed ProbSparse attention, motivated by the observation that many query-key interactions contribute little to the final forecast. Instead of computing full attention, Informer selects a subset of queries deemed most ``informative'' and attends more sparsely, reducing runtime and enabling longer lookback windows in practice. Related attempts explored structured sparsity patterns and logarithmic memory scaling: LogSparse-style designs constrain which positions can attend to which others (often combining attention with local convolutions) to preserve local dependencies while reducing the full quadratic cost. In parallel, the broader sequence-modeling literature introduced efficient attention approximations (e.g., locality-sensitive hashing or low-rank projections), some of which inspired time series adaptations, though not all translated cleanly to forecasting settings where fine-grained temporal locality matters.
+
+\paragraph{Decomposition and autocorrelation: bringing classical ideas into Transformers.}
+A second branch of work argued that vanilla attention is not well matched to core time-series structure such as seasonality and trend. Autoformer embodies this perspective by integrating decomposition into the architecture. Instead of treating the series as an undifferentiated sequence, it separates trend and seasonal components (e.g., via moving-average style operations) and uses an Auto-Correlation mechanism to capture repeating temporal patterns. Intuitively, autocorrelation-based matching focuses on discovering delays (lags) at which the series aligns with itself; by aggregating information across the most relevant delays, the model can capture periodic dependencies more directly than dot-product attention over raw tokens. This approach aligns with a long tradition in time-series analysis where autocorrelation and partial autocorrelation are primary diagnostic tools for identifying seasonal structure.
+
+\paragraph{Frequency-domain Transformers: compressing global structure.}
+FEDformer extends the decomposition view by combining Transformer blocks with frequency-domain operations. The core motivation is that many time series exhibit strong low-frequency structure (slow trends) and a small number of dominant seasonal frequencies. Representing the series in a frequency basis (e.g., via Fourier components) can therefore provide a compressed view of global behavior. FEDformer performs a frequency-based decomposition and uses attention-like mechanisms in the transformed space, reducing computational burden while emphasizing global and seasonal patterns. From a methodological standpoint, these frequency-domain approaches can be interpreted as injecting a strong inductive bias: rather than forcing the model to discover periodic structure purely through learning, the architecture directly exposes a representation where periodicity is sparse and easier to model.
+
+\paragraph{Patching as a representation choice: ``a time series is worth 64 words''.}
+A crucial insight, later made explicit by PatchTST, is that the performance of Transformer forecasters depends at least as much on \textit{how} the input is represented as on the attention variant. PatchTST groups contiguous time steps into patches and uses patch embeddings as tokens. This has three important implications. First, it reduces the effective sequence length (from $L$ points to roughly $L/p$ patches), which quadratically reduces the attention cost. Second, it encourages the model to treat short local subsequences as meaningful units, analogous to subword or patch tokenization in NLP and vision. Third, it makes it feasible to attend to longer histories under fixed compute budgets without aggressive downsampling that discards information. PatchTST also promotes channel-independence in multivariate settings, processing each variable as its own token stream with shared weights, which can prevent unrelated variables from interfering early in the embedding stage.
+
+\paragraph{The ``linear baselines'' critique and what it implies.}
+Around the same time, the community observed that simple linear models can be surprisingly competitive on standard long-horizon benchmarks. This critique matters for thesis work because it clarifies what it means for a model to be ``SOTA'': improvements must be evaluated not only against previous Transformers, but also against strong non-Transformer baselines that benefit from normalization and appropriate problem formulation. PatchTST’s empirical results are therefore informative not just because it improves on prior Transformer variants, but because it demonstrates that an appropriate representation (patching) can recover the benefits of attention-based modeling in settings where naive Transformer tokenization may underperform. Conceptually, this motivates a more careful view: architectural novelty alone is not guaranteed to yield progress unless it is paired with representations and training protocols that reflect time-series structure.
+
+\paragraph{Takeaway for subsequent foundation models.}
+The Transformer forecasting literature thus converged toward two main lessons. First, scaling to long contexts requires either efficiency mechanisms (sparse / structured attention) or representations that shorten the effective sequence (patching). Second, injecting time-series inductive bias---through decomposition, frequency features, or normalization---can be more impactful than purely architectural changes. These lessons directly influenced how later generalist and foundation-style forecasting models were designed: instead of only inventing new attention mechanisms, they focus on representations and training setups that make cross-domain generalization and variable-length forecasting practical.
+
+\subsection{Foundation models for time series forecasting}
+
+After foundation models, which could generalize to a variety of differing tasks without explicit prior training, became a subject of intensive research and began showing success within the field of NLP, the same idea started to be explored for time series problems. This came with many challenges absent in text or image based models. Time series lack a unified vocabulary or structure, and the relevant patterns that the foundation model would need to learn to generalize can vary greatly across domains. Furthermore, large public time series corpora are not as readily available as text corpora, especially with the possibility of scraping the entire internet for the purpose of training. Despite the difficulty, time series foundation models have eventually begun to be developed.
+
+One of first concrete attempts to address these challenges was TimeGPT, introduced by Nixtla as a large-scale pretrained Transformer model for time series forecasting. TimeGPT operationalizes the foundation model concept by training a single model on a heterogeneous collection of publicly available time series, with the goal of learning broadly transferable temporal representations. In contrast to traditional forecasting pipelines, which require training or calibration on each new set of circumstances, TimeGPT is primarily evaluated in a zero-shot setting, where the pretrained model is directly applied to previously unseen series without additional fine tuning. Architecturally, the model follows a standard encoder-decoder Transformer design and treats forecasting as a sequence-to-sequence problem, mapping a historical context window to a fixed-length future horizon. The model is trained on time series originating from multiple domains, including economics, energy, and web activity, in order to expose it to a wide range of seasonal, trend-based, and irregular temporal patterns. Empirical results presented by the authors suggest that this large-scale pretraining strategy enables competitive performance across a number of standard forecasting benchmarks when compared to classical statistical models and supervised deep learning approaches.
+
+However, TimeGPT also illustrates several practical and methodological limitations of early large-scale forecasting models. The composition of the training corpus is not fully disclosed, which complicates both the assessment of the degree of domain shift between the training and evaluation data and the reproduction of the pretraining procedure or controlled ablation studies. In addition, the absence of publicly released model weights or training code restricts reproducibility and limits the feasibility of modifying or extending the original architecture and training strategy. Regardless of these constraints, TimeGPT represents an important early milestone in time series foundation modeling, providing empirical evidence that large-scale pretraining on varied datasets can enable meaningful zero-shot generalization.
+
+Building on these early results, TimesFM, proposed by Das et al. \todo[inline]{should this be stated here?}, represents a subsequent and more research-oriented foundation model for time series forecasting. While sharing the general objective of large-scale pretraining and zero-shot generalization, TimesFM differs from TimeGPT in several important design and methodological choices. Most notably, it adopts a decoder-only Transformer architecture, aligning the forecasting task with autoregressive sequence modeling paradigms commonly used in large language models. This approach enables flexible handling of variable context lengths and prediction horizons, which are both treated as the primary objectives during training and inference.
+
+Rather than operating on individual time steps, TimesFM employs a patch-based representation of time series, reducing effective sequence length while preserving the local temporal structure. This choice reflects insights from prior long-horizon forecasting research and improves scalability for long context lengths. Additionally, TimesFM is trained on a mixture of real-world and synthetic time series spanning multiple domains and granularities, explicitly targeting broad pattern coverage rather than dataset-specific optimization.
+
+Empirical evaluations demonstrate that TimesFM achieves competitive or state-of-the-art performance in zero-shot settings across multiple benchmark datasets, often matching or outperforming models that are trained directly on the target data. This positions TimesFM as a practical alternative to traditional forecasting pipelines that require dataset-specific model training.
+
+Importantly for this thesis, TimesFM is released as a research model with publicly available pretrained weights and a well-documented architecture, making it suitable for reproducible experimentation and methodological extension. These characteristics distinguish it from the earlier proprietary foundation-style approach and motivate its selection as the base model for the experiments conducted in this work. A detailed architectural and training description of TimesFM is provided in Chapter 3. \todo[inline]{maybe change chapter number if necessary, add link to chapter number.}
+
+\paragraph{Other emerging foundation-style forecasting models.}
+Although this thesis focuses on TimesFM, it is useful to briefly situate it within a broader set of recent ``pretrain once, forecast many'' approaches. Beyond proprietary offerings such as TimeGPT, open research efforts have proposed pretrained models that emphasize different tokenization and training philosophies. For example, some approaches recast time series forecasting as language modeling by discretizing or tokenizing numerical values and training decoder-only models on large corpora of series. Others keep the continuous-valued forecasting objective but change the representation and context scaling strategy. These alternative designs highlight that ``foundation model'' is not a single architecture, but a training paradigm that can be instantiated with different representations and inductive biases.
+
+\paragraph{Language-model-based forecasting as an alternative perspective.}
+A closely related line of work investigates whether general-purpose large language models can be adapted for forecasting by representing time series as token sequences, or by reprogramming the input into a form compatible with a frozen LLM. Approaches such as Time-LLM propose to align patched time series with language model embeddings via prompt-like mechanisms, aiming to benefit from the LLM’s sequence modeling capacity without retraining the backbone. Similarly, work on zero-shot LLM forecasting suggests that, with careful tokenization, pretrained LLMs can extrapolate certain types of series reasonably well. While these approaches are not the focus of this thesis, they serve as a useful counterpoint: they raise the question of which parts of forecasting capability come from generic sequence modeling versus time-series-specific pretraining and representation choices. In practice, time-series-native foundation models (such as TimesFM) remain appealing for controlled experimentation, since their objectives, inductive biases, and training corpora are designed explicitly for forecasting rather than inherited from text-only pretraining.
+
+
+\subsection{Comparing Model Architectures and Forecasting Strategies}
+
+Recent time series forecasting literature explores a wide design space spanning model architecture, output strategy, and input representation. For the purposes of this thesis, the key point is not that any single design is universally superior, but that certain choices align better with the goals of cross-domain generalization, reproducibility, and flexible inference (variable context and horizon).
+
+\subsubsection{Encoder--decoder vs.\ decoder-only Transformers}
+Many forecasting Transformers adopt an encoder--decoder structure: an encoder ingests the historical window and produces latent representations, while a decoder produces a forecast for a fixed horizon. This is natural when the forecasting task is framed as sequence-to-sequence prediction with a predetermined output length, and it can be convenient for incorporating covariates or known future features.
+
+However, a decoder-only formulation (GPT-like causal modeling) offers a practical advantage for generalist or foundation-style forecasting: it does not require committing to one specific context/horizon configuration during training. Instead, the model can be trained to continue sequences, and at inference it can be applied to variable input lengths and horizons using the same mechanism. This becomes especially relevant when the goal is to evaluate a single pretrained model across datasets with different frequencies, history lengths, and forecasting requirements.
+
+The literature thus reflects a trade-off. Encoder--decoder models can be structurally convenient for multi-input forecasting pipelines, but decoder-only designs align well with variable-length forecasting and autoregressive continuation---a property that is useful when prioritizing cross-dataset reuse.
+
+\subsubsection{Autoregressive vs.\ direct multi-step forecasting}
+A second axis of variation concerns whether the model predicts one step at a time (autoregressive roll-out) or predicts the full horizon in one forward pass. Autoregressive forecasting is conceptually simple and mirrors language generation, but it can accumulate errors over long horizons and increase inference cost. Direct multi-horizon forecasting reduces the number of roll-out steps and often improves accuracy in long-range settings because the model learns the joint structure of the future trajectory.
+
+In practice, many modern Transformer forecasters (and increasingly, foundation-style models) blend these ideas by predicting future values in blocks (e.g., patches or chunks) to reduce roll-out length while retaining horizon flexibility. This strategy is particularly relevant for long-horizon experiments in this thesis, where inference speed and stability across multiple datasets matter.
+
+\subsubsection{Input representation: point-wise tokens vs.\ patches}
+Transformer forecasting performance depends strongly on how the input is tokenized. Earlier works treated each time step as one token, which maximizes temporal resolution but leads to long sequences and high attention cost. Patching groups contiguous time steps into a single token, reducing effective length by a factor of the patch size. This representation is increasingly common because it (i) makes attention computation cheaper, and (ii) encourages the model to learn local sub-series motifs (short patterns within a patch) while using attention to relate motifs across patches.
+
+The success of PatchTST illustrates that patching is not merely an optimization trick but a modeling choice: by defining the token as a short subsequence rather than a single point, the model is given a more meaningful unit of temporal context. This observation later becomes important for foundation models, which must operate across many domains where the ``right'' temporal granularity differs.
+
+\subsubsection{Zero-shot generalization vs.\ fine-tuning}
+Finally, the recent shift toward pretrained models introduces a new practical distinction: whether a model is used in strict zero-shot mode, or adapted via fine-tuning on a target domain. Zero-shot forecasting is attractive because it eliminates per-dataset training and enables immediate application. Yet, for many real datasets, fine-tuning a strong pretrained model can yield additional gains, particularly when the target domain contains recurring patterns (calendars, operational cycles, instrumentation artifacts) that are unlikely to be fully captured by generic pretraining.
+
+This thesis evaluates pretrained inference and inference-setting sensitivity. Fine-tuning is relevant background and a possible extension, but no fine-tuned model is evaluated in the completed benchmark.
+
+\subsection{Motivation for Selecting TimesFM for the thesis} \todo[inline]{perhaps change the name}
+
+Given the diversity of forecasting architectures, this thesis centers on TimesFM as the baseline foundation model for two reasons: (i) it provides a strong pretrained starting point for cross-domain evaluation, and (ii) it is suitable for reproducible experimentation and methodological extension.
+
+TimesFM supports the heterogeneous context and horizon requirements of the completed benchmark. Its role here is to provide pretrained forecasts under documented inference settings, rather than to reproduce a paper-specific ranking.
+
+An open implementation and named checkpoint make it possible to inspect the forecast path and retain predictions for audit. Exact historical reconstruction still requires source and checkpoint provenance beyond the recorded package versions.
+
+The selected TimesFM 2.5 checkpoint has 200 million parameters. Its practical use in this thesis is documented in Section~\ref{sec:protocol}; no measured fine-tuning cost or benefit is claimed.
+
+The focused TimesFM sensitivity study complements the nine-model comparison. It quantifies changes in saved point forecasts under inference settings; targeted weight fine-tuning is outside the completed scope.
+
+\subsection{Transfer Learning and Adaptation in Time Series Forecasting}
+
+Transfer learning is well established in vision and NLP, but in forecasting it only recently became a central design principle. Historically, the standard workflow assumed that a model must be fit to the target series or dataset. Even ``global'' forecasting models trained across many series were typically confined to a single dataset or domain, with the implicit assumption that training and deployment distributions were similar.
+
+\subsubsection{From representation learning to forecasting transfer}
+A precursor to foundation models is the literature on self-supervised representation learning for time series. Methods such as TS2Vec and Temporal Neighborhood Coding learn embeddings from unlabeled series using contrastive objectives, where the model is trained to map related views or neighborhoods of the same signal closer than unrelated segments. The downstream use case is often classification or anomaly detection, but these representations can also benefit forecasting when a lightweight predictor is trained on top of the learned features. The importance of this line of work is conceptual: it demonstrates that time series contain reusable structure that can be learned without task-specific labels.
+
+However, representation learning alone does not solve forecasting transfer in the operational sense. A forecasting foundation model must produce competitive forecasts directly, and it must support practical constraints such as variable context/horizon lengths and domain heterogeneity. Thus, foundation models can be seen as a shift from ``learn representations, then attach a head'' toward ``pretrain the forecasting model itself'' so that zero-shot use becomes viable.
+
+\subsubsection{Fine-tuning as controlled specialization}
+Even with strong zero-shot performance, fine-tuning remains valuable because time series often contain domain-specific regularities. Fine-tuning can be interpreted as controlled specialization: the pretrained model provides generic temporal motifs (trend, seasonality, mean reversion, event-like spikes), while fine-tuning adjusts the model to match the idiosyncrasies of a target domain (for example, retail promotion patterns or sensor calibration effects). The literature suggests that this can yield meaningful gains, but it also raises practical questions about stability, overfitting, and the amount of target data required.
+
+A future specialization study would need separate training, validation and test data and a comparison with the unchanged pretrained model. That experiment is outside the completed scope.
+
+\subsubsection{How to fine-tune in practice: full vs.\ parameter-efficient adaptation}
+A practical challenge is that foundation models are often too large to fully retrain per domain. This has motivated parameter-efficient adaptation strategies in broader deep learning, including freezing most of the backbone and only training a small number of additional parameters (e.g., lightweight adapters). In time series forecasting, parameter-efficient fine-tuning is appealing because many datasets are small and fine-tuning a large model end-to-end risks overfitting or catastrophic forgetting. Although the strongest empirical results in forecasting typically come from time-series-native pretraining, the emerging methodology from the broader transfer learning literature provides useful tools for designing fine-tuning experiments that are feasible under academic compute constraints.
+
+\subsubsection{Implication for this thesis}
+The completed study examines pretrained forecasting across the specified panels and TimesFM inference sensitivity. Weight adaptation is future work; no gains from fine-tuning are claimed.
+
+\subsection{Benchmark Datasets and Evaluation Practices}
+
+A recurring difficulty in forecasting research is that ``SOTA'' is sensitive to dataset choice, evaluation protocol, and metric selection. This becomes even more pronounced for foundation models, whose intended use is cross-domain application rather than optimization for a single benchmark.
+
+\subsubsection{Why diverse benchmarks matter}
+Single-dataset evaluations can overstate progress because models may overfit to the dominant characteristics of one domain (e.g., electricity demand with strong daily/weekly seasonality). As a result, the community has increasingly relied on benchmark suites that span multiple domains and sampling frequencies. Such suites are especially relevant for foundation models, where the key claim is generalization rather than dataset specialization.
+
+\subsubsection{Monash Time Series Forecasting Archive}
+The Monash archive was created to support broad and standardized comparison. It aggregates many datasets across domains (energy, economics, tourism, traffic, weather, etc.) and across frequencies (yearly through sub-daily). Because of this breadth, it is often used as a stress test for generalist models: a method must handle scale differences, frequency differences, and diverse horizon requirements. The present benchmark uses a narrower task collection; it does not reproduce a complete Monash evaluation or select a fine-tuning domain.
+
+\subsubsection{Competition datasets: M4 and M5}
+Forecasting competitions such as M4 and M5 play a dual role in the literature: they provide large datasets and they shape evaluation culture. M4 introduced a massive collection of 100{,}000 series across categories, emphasizing that strong performance must be robust across many heterogeneous cases. M5, centered on hierarchical retail demand, highlighted the practical complexity of forecasting in operational pipelines and the value of scalable approaches. While foundation models were not the focus of those competitions historically, these datasets remain important reference points because they motivated many deep forecasting baselines and revealed common failure modes of naive modeling assumptions.
+
+\subsubsection{Long-horizon benchmarks: ETT and related datasets}
+Another widely used benchmark family is long-horizon forecasting datasets such as ETT (with hourly and minute-level variants). These datasets became popular partly because they create a challenging ``long context, long horizon'' setting that stresses model capacity and computational efficiency. Transformer papers often report results on ETT under fixed lookback/horizon settings, which makes them useful for controlled comparisons of architectures. Here the ETT variants provide related hourly and quarter-hourly tasks, including a context-sensitivity comparison. No fine-tuning is evaluated.
+
+\subsubsection{Metrics and practical evaluation choices}
+Forecasting accuracy can be measured in many ways, and metric choice matters. Absolute metrics such as MAE and RMSE are sensitive to scale, making them hard to compare across heterogeneous datasets. Scale-free metrics (e.g., relative or scaled errors) are often preferred when aggregating results across datasets with different magnitudes. Another practical issue is evaluation protocol: rolling-origin evaluation and proper train/validation/test splits are needed to avoid optimistic bias, especially when comparing fine-tuned models to zero-shot baselines.
+
+For foundation models, absence of target-data weight updates is distinct from absence of pretraining exposure. Section~\ref{sec:limitations} assesses the available version-specific evidence. The final-horizon holdout protects the implemented target-data fitting procedure, but does not independently establish checkpoint-level exclusion.
+
+\subsection{Open Gaps and Thesis Positioning}
+
+Despite rapid progress, several gaps remain in the forecasting literature that are particularly relevant for an experimental thesis centered on reproducibility and extension.
+
+\paragraph{Reproducibility and controllable baselines.}
+A significant portion of recent progress is driven by large-scale pretraining, yet not all models are released with sufficient detail to reproduce results or test hypotheses via controlled modifications. This limits the ability of the research community to understand which components are responsible for performance improvements (architecture vs.\ data mixture vs.\ preprocessing vs.\ training objective). The availability of an open TimesFM implementation and checkpoints makes it a suitable baseline for systematic study.
+
+\paragraph{Standardized protocols for transfer learning evaluation.}
+Although many papers report strong results, there is still no universally adopted protocol for measuring dataset-to-dataset transfer in forecasting. Works vary in their choice of target datasets, in their split strategy, and in the amount of fine-tuning data used. This makes it hard to compare claims about transfer efficiency. A thesis can contribute here by clearly documenting the experimental pipeline and reporting results across multiple domains under a consistent protocol.
+
+\paragraph{The role of representation and preprocessing.}
+The literature increasingly suggests that representation choices (patching vs.\ point-wise tokens), normalization, and data preprocessing can be as important as architectural novelty. This creates a methodological requirement: reproducing a model’s performance is not only about matching network depth and hidden size, but also about faithfully recreating preprocessing, context/horizon handling, and evaluation details. This motivates the emphasis of the thesis on building environments and pipelines that allow controlled experimentation.
+
+\paragraph{Positioning of the thesis contributions.}
+The completed contribution comprises a project-specific nine-model benchmark, training-feature/error analysis and TimesFM inference sensitivity. It does not claim paper-aligned replication or cross-dataset weight adaptation. Section~\ref{sec:experiments} defines the procedure and its limits.
+
+
+% \subsection{TimesFM}
+
+% \url{https://arxiv.org/pdf/2310.10688}
+
+% \subsection{Transformers for time-series forecasting}
+% \begin{itemize}
+%     \item A time-series is worth 64 words: long-term forecasting with
+%         transformers -- A model competitive to TimesFM, PatchTST. Uses similar techniques
+%         to TimesFM, such as patching, however, it's encoder-based instead of
+%         decoder-based. \url{https://arxiv.org/pdf/2211.14730}
+
+%     \item Informer: Beyond Efficient Transformer for Long Sequence Time-Series
+%         Forecasting -- A encoder-decoder model also used for long-term forecasting.
+%         Its focus is put on efficiency and reducing time/memory complexities. \url{https://ojs.aaai.org/index.php/AAAI/article/view/17325}
+
+%     \item Time-Series Representation Learning via Temporal and Contextual Contrasting
+%         -- describes the TS-TCC model, which uses both temporal and contextual modules
+%         to learn the time-series' representation. It's based on the contrastive approach.
+%         Though it's not specifically used for time-series forecasting, learning time-series
+%         representations could be very useful for predicting their continuations.
+%         \url{https://www.ijcai.org/proceedings/2021/0324.pdf}
+% \end{itemize}
+
+% \subsection{Transfer Learning}
+
+% \subsubsection{General}
+
+% \begin{itemize}
+%     \item Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer
+%         \url{https://www.jmlr.org/papers/volume21/20-074/20-074.pdf}
+
+%     \item Deep Transfer Learning \& Beyond: Transformer Language Models in
+%         Information Systems Research
+%         \url{https://dl.acm.org/doi/pdf/10.1145/3505245}
+% \end{itemize}
+
+% \subsubsection{Transfer learning for time-series forecasting}
+
+% \begin{itemize}
+%     \item Implementing transfer learning across different datasets for time series
+%         forecasting -- Tackling the problem of time-series forecasting using
+%         RNNs and CNNs. \url{https://doi.org/10.1016/j.patcog.2020.107617}
+
+%     \item A novel transfer learning framework for time series forecasting --
+%         Presents a model based around the concept of Extreme Learning Machines
+%         combined with Transfer Learning. \url{https://doi.org/10.1016/j.knosys.2018.05.021}
+% \end{itemize}
+
+% \subsection{Benchmarking datasets}
+
+% For evaluating the model's performance, several benchmarking datasets can be used.
+% I have divided the benchmarks into two categories: used/not used by TimesFM.
+
+% Benchmarks that come from TimesFM:
+% \begin{itemize}
+%     \item Monash archive -- The Monash archive consists of different forecasting
+%         datasets pertaining to various fields, such as tourism, transport, health,
+%         or banking. The different fields' data are further divided by time
+%         granularities.
+
+%     \item Darts --
+
+%     \item Informer --
+% \end{itemize}
+
+% Other possible to use benchmarks:
+% \begin{itemize}
+%     \item Weather2K -- Meteorological time series forecasting. \url{https://arxiv.org/pdf/2302.10493v1}
+
+%     \item Beijing Traffic -- \url{https://arxiv.org/pdf/2309.14216v1}
+
+%     \item VISUELLE2.0 -- Fast fashion clothing brand dataset, can be used for
+%         forecasting new product sales. \url{https://arxiv.org/pdf/2204.06972v2}
+% \end{itemize}
