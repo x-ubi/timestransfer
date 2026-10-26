@@ -107,7 +107,7 @@ These numbers use squared scaled error, which the theory works with; the benchma
 
 | # | Step | Content | Compute | When |
 |---|---|---|---|---|
-| 1 | Close the combination study | Shared-error split and bound (done), pools with AutoETS/AutoTheta (running), figure of tasks on the correlation/accuracy plane | CPU, minutes | this week |
+| 1 | Close the combination study | **Done 2026-10-26:** shared-error split, ideal-weight bound, two-model theory, pools with AutoETS/AutoTheta. The figure of tasks on the correlation/accuracy plane moves to step 6 (thesis artifact pipeline) | CPU, minutes | done |
 | 2 | TimesFM configuration study | Context {512, 1,024, 2,048, 4,096, 8,192, 16,256} × flip invariance on/off on all 11 tasks, 20 origins. Setting chosen per task from past windows via the combination module. Chronos-2 context grid as a fairness control | ~3–10 GPU h (A5000) | from Oct 27 |
 | 3 | Fine-tuning | TimesFM 2.5 LoRA in a separate environment (HF `TimesFm2_5ModelForPrediction` + `peft`; first check the HF checkpoint matches ours). One fine-tune per task on data before the evaluation windows. Chronos-2 LoRA via `fit()` as fallback and second model | ~6–18 GPU h | early November |
 | 4 | Three-way comparison | Zero-shot vs configured vs fine-tuned vs combined, and their combinations; DM tests, bootstrap CIs, regret, compute cost | CPU | early November |

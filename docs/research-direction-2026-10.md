@@ -39,7 +39,7 @@ Recent related work to track: ECHO (arXiv 2610.16433, TSFM error correction), Ch
 
 ## Next steps
 
-1. Close the combination study: commit Phase B/C code; rerun `scripts/run_combination_analysis.py` with the statistical pools; add the shared/specific error decomposition and the per-task optimal-weight bound to `combination_analysis.py` with tests.
+1. Close the combination study: commit Phase B/C code; rerun `scripts/run_combination_analysis.py` with the statistical pools; add the shared/specific error decomposition and the per-task optimal-weight bound to `combination_analysis.py` with tests. **Done 2026-10-26** (results in `docs/thesis-status-2026-10-26.md`, §1.3).
 2. TimesFM configuration study: context {512, …, 16256} × flip invariance on/off, 20 origins, all tasks; small Chronos-2 context grid as a fairness control; selection and weighting through the existing combination module.
 3. TimesFM 2.5 LoRA fine-tuning in a separate environment (`transformers` with `TimesFm2_5ModelForPrediction`, `peft`; checkpoint `google/timesfm-2.5-200m-transformers`, checked against the pinned PyTorch checkpoint first). One fine-tune per task on data before the earliest evaluation window. Fallback: `Chronos2Pipeline.fit`.
 4. Three-way comparison with DM tests, bootstrap CIs, regret and compute cost.
