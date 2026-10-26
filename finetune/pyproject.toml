@@ -1,13 +1,14 @@
 [project]
 name = "timestransfer-finetune"
 version = "0.1.0"
-description = "Step 3 of the thesis study: LoRA fine-tuning of TimesFM 2.5 via HF Transformers + PEFT, isolated from the benchmark environment."
+description = "Step 3 of the thesis study: LoRA fine-tuning of TimesFM 2.5 (HF Transformers + PEFT) and Chronos-2 (Chronos2Pipeline.fit), isolated from the benchmark environment."
 requires-python = ">=3.12,<3.13"
 # torch matches the benchmark environment; transformers is newer than the benchmark's
 # 4.57.6 because TimesFm2_5ModelForPrediction is not in that release. The benchmark code in
 # ../src (data loading, splits, metrics) needs numpy, pandas, pyyaml and datasetsforecast (dataset loaders).
 dependencies = [
   "torch==2.12.1",
+  "chronos-forecasting==2.3.2",
   "datasetsforecast>=1.0.0,<2.0.0",
   "transformers>=5,<6",
   "peft>=0.15,<1",

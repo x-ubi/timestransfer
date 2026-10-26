@@ -131,9 +131,16 @@ def validation_loss(model, windows: list[tuple[list[np.ndarray], np.ndarray]], c
 
 
 def long_forecasts(
-    dataset: str, model_name: str, split, horizon: int, full: np.ndarray, window: int
+    dataset: str,
+    model_name: str,
+    split,
+    horizon: int,
+    point: np.ndarray,
+    quantiles: np.ndarray,
+    window: int,
 ) -> pd.DataFrame:
-    """Benchmark long format for one window (rows ordered like the sorted test frame)."""
+    """Benchmark long format for one window from (n_series, horizon) point forecasts and
+    (n_series, horizon, 9) deciles, series in sorted-id order."""
     test = split.test.sort_values(["unique_id", "ds"]).reset_index(drop=True)
     ids = sorted(test["unique_id"].unique())
     frame = pd.DataFrame(
@@ -144,12 +151,12 @@ def long_forecasts(
             "horizon": np.tile(np.arange(1, horizon + 1), len(ids)),
             "ds": test["ds"].astype(str).to_numpy(),
             "y_true": test["y"].to_numpy(dtype=float),
-            "y_pred": full[:, :, MEDIAN].reshape(-1),
+            "y_pred": point.reshape(-1),
             "window": window,
             "forecast_horizon": horizon,
         }
     )
-    for column, values in zip(QUANTILES, np.moveaxis(full[:, :, 1:10], -1, 0), strict=True):
+    for column, values in zip(QUANTILES, np.moveaxis(quantiles, -1, 0), strict=True):
         frame[column] = values.reshape(-1)
     return frame
 
@@ -229,7 +236,11 @@ def run_task(args, config, dataset: dict, model_name: str) -> tuple[pd.DataFrame
     for k in evaluated:
         _, histories = histories_of(splits[k])
         full = forecast(model, histories, horizon, args.context)
-        frames.append(long_forecasts(dataset["name"], model_name, splits[k], horizon, full, k))
+        frames.append(
+            long_forecasts(
+                dataset["name"], model_name, splits[k], horizon, full[:, :, MEDIAN], full[:, :, 1:10], k
+            )
+        )
     record["inference_seconds"] = round(time.monotonic() - start, 1)
     return pd.concat(frames, ignore_index=True), record
 
