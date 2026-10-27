@@ -23,9 +23,9 @@ All metrics are MASE relative to SeasonalNaive, aggregated over the 11 tasks by 
 | + combined with Chronos-2 and TabPFN-TS (task-level weights) | 0.633 | −4.5% |
 | Context 16,256 (one setting for all tasks) | 0.639 | −3.5% |
 | Context 16,256 + LoRA fine-tuning (adapter per task) | 0.632 | −4.6% |
-| Context 16,256 + LoRA, combined with Chronos-2 | 0.621 | −6.3% |
+| Context 16,256 + LoRA, combined with Chronos-2 | 0.621 | −6.3% (slightly optimistic, see §1.5 caveats) |
 
-1. **Zero-shot foundation models make largely the same errors** (85–94% of error shared on 9 of 11 tasks). This caps what combining them can achieve, and classical combination theory predicts the cap (§1.2–1.3).
+1. **Zero-shot foundation models make largely the same errors** (85–94% of error shared on 10 of 11 tasks). This caps what combining them can achieve, and classical combination theory predicts the cap (§1.2–1.3).
 2. **Context length is the largest cheap lever.** One long context gives −3.5% overall (−11.5% Traffic, −10% Weather). Choosing the context per task from past windows does no better than that single setting (§1.4).
 3. **LoRA fine-tuning adds a small, significant gain on top** (−1.1%, CI 0.980–0.998), on different tasks than context does (ECL, ETTh1, M4). It costs about 6 GPU minutes per task (§1.5).
 4. **The more TimesFM itself is improved, the less combination adds:** 4.3% → 2.4% → 1.8% (§1.5).
