@@ -151,11 +151,11 @@ Setup:
 | Where LoRA helps (vs zero-shot 16,256, adapter at 16,256) | ECL −4.0%, ETTh1 −3.8% (Holm p = 0.003), M4 −3.3% (Holm p = 0.02), ETTh2 −1.2% |
 | Where LoRA does nothing | ETTm1, ETTm2, ILI: early stopping kept the zero-shot model (validation loss rose from the first checkpoint). Traffic, Weather, Exchange: within ±0.5% |
 | Combination with Chronos-2 (task-level weights) | 0.621, vs 0.624 with zero-shot 16,256 and 0.634 with default TimesFM; +TabPFN-TS 0.620 |
-| Chronos-2 LoRA pilot (context 8,192, lr 1e-5, effective batch 256) | ETTm1 −1.2%, Traffic −0.7% vs zero-shot Chronos-2, at ~80 min per task |
+| Chronos-2 LoRA pilot (context 8,192, lr 1e-5, effective batch 256), corrected 2026-10-27 | ETTm1: fine-tuned model worse on validation, zero-shot kept (0%). Traffic −0.7% vs zero-shot Chronos-2. ~80 min training per task |
 
 Caveats:
 - In the combination runs, the weights for windows 14–16 are fitted partly on the early-stopping windows 17–19. There the LoRA forecasts are in-sample for model selection, so the combination numbers are slightly optimistic.
-- The Chronos-2 ETTm1 checkpoint was kept although validation loss rose after step 100. `fit()` does not score the untrained model, so its −1.2% is weak evidence.
+- **Chronos-2 pilot correction.** The first pilot forecasts came from the model returned by `Chronos2Pipeline.fit`. That model is still in training mode (dropout on), runs its forward pass under a bf16 autocast wrapper left by Accelerate, and `fit` leaves TF32 matmuls enabled. Those forecasts were therefore noisy and reduced-precision; the earlier ETTm1 −1.2% was an artifact. `finetune/chronos2_ft.py` now forecasts from the saved adapter merged into a fresh fp32 base model, and uses the fine-tuned model only if it beats the zero-shot model on the validation windows. The corrected numbers are in the row above. A smoke test confirms that the reloaded model and the zero-shot forecasts reproduce exactly (difference 0.0).
 
 Interpretation:
 - **Fine-tuning and long context are complementary.** LoRA helps where the long context does not (ECL, ETTh1, M4), and vice versa (Traffic, Weather). An adapter trained at 1,024 transfers to inference at 16,256 without loss.
