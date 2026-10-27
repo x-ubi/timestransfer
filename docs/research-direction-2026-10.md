@@ -46,6 +46,9 @@ Recent related work to track: ECHO (arXiv 2610.16433, TSFM error correction), Ch
    - Combination adds 2.4% on top of it.
    - Step 3 must report against TimesFM at 16,256 as well as at 1,024.
 3. TimesFM 2.5 LoRA fine-tuning in a separate environment (`transformers` with `TimesFm2_5ModelForPrediction`, `peft`; checkpoint `google/timesfm-2.5-200m-transformers`, checked against the pinned PyTorch checkpoint first). One fine-tune per task on data before the earliest evaluation window. Fallback: `Chronos2Pipeline.fit`.
+   **TimesFM done 2026-10-27** (`docs/thesis-status-2026-10-26.md` §1.5).
+   - Adapter trained at 1,024 and used at 16,256: 0.632, ratio 0.989 (CI 0.980–0.998) to zero-shot 16,256.
+   - Open: Chronos-2 LoRA on all tasks (pilot: −0.7% to −1.2% at ~80 min per task at context 8,192).
 4. Three-way comparison with DM tests, bootstrap CIs, regret and compute cost.
 5. Literature re-check.
 6. Writing, including the deferred introduction and summary.
