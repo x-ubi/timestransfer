@@ -9,6 +9,22 @@ nonnegative. `fit` keeps the checkpoint with the lowest validation loss (evaluat
 100 steps); it trains with bf16/TF32 autocast on Ampere or newer GPUs, while inference
 runs in float32 as in the benchmark.
 
+`fit` never scores the untrained model, so after training the fine-tuned and the zero-shot
+model are compared on the validation windows with the pinball loss used by train_lora.py
+(nine deciles, per-sample normalised by the context mean and std, at the training
+context); the fine-tuned model is used only if it is better, as with step-0 early stopping
+in train_lora.py. Forecasts cover all windows (score only windows 0..K-4) at each
+``--inference-contexts`` value (model name suffix ``_inf<context>`` for contexts other
+than ``--context``); `fit` keeps the model's maximum context, so a model fine-tuned at a
+short context can forecast at a longer one. ``--load-finetuned`` reuses saved models.
+
+The pipeline returned by `fit` is not used for forecasting: its model is still in
+training mode (dropout 0.1 active), Accelerate leaves a bf16 autocast wrapper on its
+forward, and `fit` leaves TF32 matmuls enabled for the rest of the process. Instead, the
+precision settings are restored and the saved adapter is applied to a freshly loaded
+pinned base model (saved adapters reference the base model without a revision), in fp32
+and eval mode, exactly as ``--load-finetuned`` does.
+
     finetune/.venv/bin/python finetune/chronos2_ft.py --datasets ett_h1_h48 --zero-shot-only
 """
 
@@ -56,6 +72,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--zero-shot-only", action="store_true", help="Score the base model; no training."
     )
+    parser.add_argument(
+        "--inference-contexts", nargs="+", type=int,
+        help="Contexts to forecast at (default: --context only).",
+    )
+    parser.add_argument(
+        "--load-finetuned",
+        help="Trainer directory of an earlier run (<dir>/<dataset>/finetuned-ckpt); skips training.",
+    )
     return parser.parse_args()
 
 
@@ -63,6 +87,21 @@ def load_pipeline(device: str):
     from chronos import Chronos2Pipeline
 
     return Chronos2Pipeline.from_pretrained(MODEL_ID, revision=REVISION, device_map=device)
+
+
+def load_finetuned(path: Path, device: str):
+    """Saved LoRA adapter merged into the pinned base model, fp32, eval mode."""
+    from chronos import Chronos2Pipeline
+    from peft import PeftModel
+
+    base = load_pipeline(device).model
+    model = PeftModel.from_pretrained(base, path).merge_and_unload()
+    return Chronos2Pipeline(model=model.eval())
+
+
+def _restore_fp32_matmul() -> None:
+    """Undo fit()'s TF32: "none" would defer to the legacy flag fit() leaves set."""
+    torch.backends.cuda.matmul.fp32_precision = "ieee"
 
 
 def chronos_forecast(
@@ -87,6 +126,26 @@ def chronos_forecast(
     return point, deciles
 
 
+def validation_loss(
+    pipeline, windows: list[tuple[list[np.ndarray], np.ndarray]], horizon: int, context: int
+) -> float:
+    """train_lora.pinball_loss in numpy: deciles vs targets, per-sample normalised by the
+    mean and std of the context the model sees."""
+    levels = np.array(DECILES)
+    total, count = 0.0, 0
+    for histories, targets in windows:
+        _, deciles = chronos_forecast(pipeline, histories, horizon, context)
+        contexts = [h[-context:] for h in histories]
+        location = np.array([c.mean() for c in contexts])[:, None]
+        spread = np.array([c.std(ddof=1) if len(c) > 1 else 1.0 for c in contexts])
+        spread = np.where(spread > 1e-6, spread, 1.0)[:, None]
+        errors = ((targets - location) / spread)[..., None] - (deciles - location[..., None]) / spread[..., None]
+        loss = np.maximum(levels * errors, (levels - 1) * errors)
+        total += float(loss.mean(axis=(1, 2)).sum())
+        count += len(histories)
+    return total / count
+
+
 def run_task(args, config, dataset: dict, model_name: str, out: Path) -> tuple[pd.DataFrame, dict]:
     horizon = int(dataset["horizon"])
     n_windows = int(dataset.get("n_windows", config["project"]["n_windows"]))
@@ -103,6 +162,17 @@ def run_task(args, config, dataset: dict, model_name: str, out: Path) -> tuple[p
                     "validation_windows": validation}
     pipeline = load_pipeline(args.device)
     if not args.zero_shot_only:
+        val_windows = [
+            (series_of(splits[k].train),
+             np.stack(series_of(splits[k].test)).astype(float))
+            for k in validation
+        ]
+        record["zero_shot_val_loss"] = validation_loss(pipeline, val_windows, horizon, args.context)
+    if args.load_finetuned:
+        path = Path(args.load_finetuned) / dataset["name"] / "finetuned-ckpt"
+        finetuned = load_finetuned(path, args.device)
+        record["finetuned_from"] = str(path)
+    elif not args.zero_shot_only:
         train_inputs = series_of(splits[validation[-1]].train)
         # Validation series end with their window's test span; fit() scores the last
         # `horizon` points of each.
@@ -114,7 +184,7 @@ def run_task(args, config, dataset: dict, model_name: str, out: Path) -> tuple[p
             )
         ]
         start = time.monotonic()
-        pipeline = pipeline.fit(
+        pipeline.fit(
             train_inputs,
             prediction_length=horizon,
             validation_inputs=validation_inputs,
@@ -128,14 +198,28 @@ def run_task(args, config, dataset: dict, model_name: str, out: Path) -> tuple[p
             remove_printer_callback=True,
         )
         record["train_seconds"] = round(time.monotonic() - start, 1)
+        _restore_fp32_matmul()
+        finetuned = load_finetuned(out / "trainer" / dataset["name"] / "finetuned-ckpt", args.device)
+    if not args.zero_shot_only:
+        record["finetuned_val_loss"] = validation_loss(finetuned, val_windows, horizon, args.context)
+        if record["finetuned_val_loss"] < record["zero_shot_val_loss"]:
+            pipeline = finetuned
+            record["selected"] = "finetuned"
+        else:
+            record["selected"] = "zero_shot"
 
-    start = time.monotonic()
     frames = []
-    for k in evaluated:
-        histories = series_of(splits[k].train)
-        point, deciles = chronos_forecast(pipeline, histories, horizon, args.context)
-        frames.append(long_forecasts(dataset["name"], model_name, splits[k], horizon, point, deciles, k))
-    record["inference_seconds"] = round(time.monotonic() - start, 1)
+    record["inference_seconds"] = {}
+    for context in args.inference_contexts or [args.context]:
+        name = model_name if context == args.context else f"{model_name}_inf{context}"
+        start = time.monotonic()
+        for k in [*evaluated, *validation]:
+            histories = series_of(splits[k].train)
+            point, deciles = chronos_forecast(pipeline, histories, horizon, context)
+            frames.append(
+                long_forecasts(dataset["name"], name, splits[k], horizon, point, deciles, k)
+            )
+        record["inference_seconds"][name] = round(time.monotonic() - start, 1)
     return pd.concat(frames, ignore_index=True), record
 
 

@@ -275,6 +275,8 @@ def main() -> None:
     config = load_config(args.config)
     datasets = [d for d in dataset_configs(config) if not args.datasets or d["name"] in args.datasets]
     model_name = "timesfm_2p5_hf_zeroshot" if args.zero_shot_only else "timesfm_2p5_lora"
+    if args.seed and not args.zero_shot_only:
+        model_name += f"_s{args.seed}"  # seed 0 keeps the original name
     out = Path(args.outputs_dir)
     (out / "forecasts").mkdir(parents=True, exist_ok=True)
     records = []

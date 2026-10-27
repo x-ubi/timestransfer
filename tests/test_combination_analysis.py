@@ -10,11 +10,14 @@ from timestransfer.combination import (
     nnls_weights,
 )
 from timestransfer.combination_analysis import (
+    _block_window_counts,
     _simplex_mse_weights,
     aggregate_relative,
     ambiguity_decomposition,
     amplitude_ratios,
     bootstrap_aggregate,
+    bootstrap_contrasts,
+    bootstrap_replicates,
     combination_bound,
     diebold_mariano,
     dm_tests,
@@ -145,13 +148,50 @@ def test_bootstrap_estimate_matches_point_aggregate_and_is_seeded():
     assert row["estimate"] == pytest.approx(point.loc["m", "geomean_relative_mase"])
     assert row["ci_low"] < row["estimate"] < row["ci_high"]
     pd.testing.assert_frame_equal(first, second)
-    for resample in ("windows", "both"):
+    for resample in ("windows", "both", "blocks", "series_blocks"):
         other = bootstrap_aggregate(table, "base", ["base"], n_boot=200, seed=3, resample=resample)
         other_row = other[(other["model"] == "m") & (other["comparison"] == "aggregate")].iloc[0]
         assert other_row["estimate"] == pytest.approx(row["estimate"])
         assert other_row["ci_low"] < other_row["estimate"] < other_row["ci_high"]
     with pytest.raises(ValueError):
         bootstrap_aggregate(table, "base", ["base"], resample="tasks")
+
+
+def test_block_window_counts_draw_consecutive_windows():
+    rng = np.random.default_rng(0)
+    counts = _block_window_counts(rng, n_windows=7, n_boot=500, block_length=3)
+    assert counts.shape == (500, 7)
+    assert (counts.sum(axis=1) == 7).all()
+    # every window is reachable, including across the circular wrap
+    assert (counts.sum(axis=0) > 0).all()
+    single = _block_window_counts(np.random.default_rng(1), n_windows=5, n_boot=50, block_length=1)
+    assert (single.sum(axis=1) == 5).all()
+    # block length 5 on 5 windows: every replicate is a rotation, so each window once
+    full = _block_window_counts(np.random.default_rng(2), n_windows=5, n_boot=50, block_length=5)
+    assert (full == 1).all()
+
+
+def test_bootstrap_contrasts_ratio_of_ratios():
+    def predict(y, rng, *_):
+        noise = rng.normal(size=y.shape)
+        return {"base": y + 2 * noise, "a": y + noise, "b": y + noise, "c": y + 0.5 * noise}
+
+    forecasts, scales = _long(predict, n_series=8)
+    table = build_combination_table(forecasts, scales, ["base", "a", "b", "c"])
+    replicates = bootstrap_replicates(table, "base", n_boot=300, seed=0, resample="both")
+    assert replicates.shape == (301, 4)
+    out = bootstrap_contrasts(
+        replicates,
+        table.members,
+        {"c_vs_a": {"c": 1, "a": -1}, "identical": {"a": 1, "b": -1}},
+    ).set_index("contrast")
+    point = aggregate_relative(relative_to_baseline(task_mase(table), "base")).set_index("model")
+    expected = point.loc["c", "geomean_relative_mase"] / point.loc["a", "geomean_relative_mase"]
+    assert out.loc["c_vs_a", "estimate"] == pytest.approx(expected)
+    assert out.loc["c_vs_a", "ci_high"] < 1
+    assert out.loc["c_vs_a", "share_below_1"] == 1.0
+    # a and b are the same forecasts: their ratio is exactly 1 in every replicate
+    assert out.loc["identical", ["estimate", "ci_low", "ci_high"]].tolist() == pytest.approx([1, 1, 1])
 
 
 def test_diversity_measures():

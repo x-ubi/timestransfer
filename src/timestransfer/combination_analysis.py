@@ -200,26 +200,42 @@ def dm_tests(
     return out
 
 
-def bootstrap_aggregate(
+RESAMPLE_SCHEMES = ("series", "windows", "both", "blocks", "series_blocks")
+
+
+def _block_window_counts(
+    rng: np.random.Generator, n_windows: int, n_boot: int, block_length: int
+) -> np.ndarray:
+    """Circular moving-block bootstrap over consecutive windows: (n_boot, n_windows) counts."""
+    length = max(1, min(block_length, n_windows))
+    n_blocks = -(-n_windows // length)
+    starts = rng.integers(0, n_windows, size=(n_boot, n_blocks))
+    drawn = (starts[..., None] + np.arange(length)).reshape(n_boot, -1)[:, :n_windows] % n_windows
+    counts = np.zeros((n_boot, n_windows))
+    np.add.at(counts, (np.arange(n_boot)[:, None], drawn), 1.0)
+    return counts
+
+
+def bootstrap_replicates(
     table: CombinationTable,
     baseline: str,
-    references: Sequence[str],
     *,
     n_boot: int = 2000,
     seed: int = 0,
-    level: float = 0.95,
     resample: str = "series",
-) -> pd.DataFrame:
-    """Bootstrap of the aggregate relative MASE, stratified by task.
+    block_length: int = 3,
+) -> np.ndarray:
+    """Aggregate relative MASE per model: row 0 is the estimate, rows 1.. the replicates.
 
-    ``resample`` picks the units drawn with replacement within each task: "series" (whole
-    series with all their windows; conditional on the observed windows), "windows" (whole
-    windows with all their series; the forecast origins are the uncertain part), or
-    "both" (independent series and window draws). Reports each model's aggregate and its
-    ratio to each reference.
+    Stratified by task. ``resample`` picks the units drawn with replacement within each
+    task: "series" (whole series with all their windows; conditional on the observed
+    windows), "windows" (whole windows with all their series; the forecast origins are the
+    uncertain part), "both" (independent series and window draws), "blocks" (circular
+    moving blocks of ``block_length`` consecutive windows, for dependence between nearby
+    origins) or "series_blocks" (series and window blocks).
     """
-    if resample not in ("series", "windows", "both"):
-        raise ValueError("resample must be 'series', 'windows' or 'both'.")
+    if resample not in RESAMPLE_SCHEMES:
+        raise ValueError(f"resample must be one of {RESAMPLE_SCHEMES}.")
     rng = np.random.default_rng(seed)
     valid = table.valid_scale
     errors = np.abs(table.scaled_predictions - table.scaled_y[:, None])[valid]
@@ -248,7 +264,7 @@ def bootstrap_aggregate(
         )
         series_weights = np.ones((n_boot + 1, n_series))
         window_weights = np.ones((n_boot + 1, n_windows))
-        if resample in ("series", "both"):
+        if resample in ("series", "both", "series_blocks"):
             series_weights[1:] = rng.multinomial(
                 n_series, np.full(n_series, 1.0 / n_series), size=n_boot
             )
@@ -256,6 +272,8 @@ def bootstrap_aggregate(
             window_weights[1:] = rng.multinomial(
                 n_windows, np.full(n_windows, 1.0 / n_windows), size=n_boot
             )
+        if resample in ("blocks", "series_blocks"):
+            window_weights[1:] = _block_window_counts(rng, n_windows, n_boot, block_length)
         weighted_sums = (series_weights @ sums.reshape(n_series, -1)).reshape(
             n_boot + 1, n_windows, n_models
         )
@@ -263,7 +281,27 @@ def bootstrap_aggregate(
         denominator = np.einsum("bw,bw->b", series_weights @ counts, window_weights)
         mase = numerator / denominator[:, None]
         log_relative += np.log(mase / mase[:, [base]])
-    aggregate = np.exp(log_relative / len(table.datasets))
+    return np.exp(log_relative / len(table.datasets))
+
+
+def bootstrap_aggregate(
+    table: CombinationTable,
+    baseline: str,
+    references: Sequence[str],
+    *,
+    n_boot: int = 2000,
+    seed: int = 0,
+    level: float = 0.95,
+    resample: str = "series",
+    block_length: int = 3,
+) -> pd.DataFrame:
+    """Bootstrap of the aggregate relative MASE (see ``bootstrap_replicates``).
+
+    Reports each model's aggregate and its ratio to each reference.
+    """
+    aggregate = bootstrap_replicates(
+        table, baseline, n_boot=n_boot, seed=seed, resample=resample, block_length=block_length
+    )
     alpha = (1 - level) / 2
     rows = []
     for column, model in enumerate(table.members):
@@ -292,6 +330,37 @@ def bootstrap_aggregate(
                     "share_below_1": float(np.mean(ratio[1:] < 1)),
                 }
             )
+    return pd.DataFrame(rows)
+
+
+def bootstrap_contrasts(
+    replicates: np.ndarray,
+    members: Sequence[str],
+    contrasts: dict[str, dict[str, float]],
+    level: float = 0.95,
+) -> pd.DataFrame:
+    """Intervals for products of aggregate powers, e.g. a ratio of two ratios.
+
+    ``contrasts`` maps a name to {model: exponent}; {"a": 1, "b": -1} is a / b, and
+    {"a": 1, "b": -1, "c": -1, "d": 1} compares the ratio a / b with c / d (below 1: a
+    gains more over b than c over d). ``replicates`` comes from ``bootstrap_replicates``.
+    """
+    index = {model: i for i, model in enumerate(members)}
+    log_aggregate = np.log(replicates)
+    alpha = (1 - level) / 2
+    rows = []
+    for name, terms in contrasts.items():
+        value = np.exp(sum(power * log_aggregate[:, index[m]] for m, power in terms.items()))
+        rows.append(
+            {
+                "contrast": name,
+                "terms": ", ".join(f"{m}^{p:g}" for m, p in terms.items()),
+                "estimate": value[0],
+                "ci_low": np.quantile(value[1:], alpha),
+                "ci_high": np.quantile(value[1:], 1 - alpha),
+                "share_below_1": float(np.mean(value[1:] < 1)),
+            }
+        )
     return pd.DataFrame(rows)
 
 
