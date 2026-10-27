@@ -8,6 +8,9 @@ regenerate (per-dataset forecast duplicates, combined forecasts, figures) is lef
 
     uv run python scripts/archive_results.py archive
     uv run python scripts/archive_results.py restore
+
+Runs in ``POINT_ONLY`` are archived without quantile columns. ``restore`` skips forecast
+tables that already exist in ``outputs/``.
 """
 
 from __future__ import annotations
@@ -28,6 +31,11 @@ FORECASTS = "forecasts/all_datasets_all_models.parquet"
 # Output directories (relative to outputs/) whose forecasts, metrics and metadata are kept.
 # "." is the main 5-window benchmark that the thesis chapters cite.
 RUNS = [".", "timesfm_tuning", "combination", "combination_stats", "timesfm_config"]
+
+# Runs archived without the q10..q90 columns (point forecasts and targets only), to keep
+# the repository small; their quantiles exist only in outputs/.
+POINT_ONLY = {"timesfm_config"}
+QUANTILES = [f"q{i}0" for i in range(1, 10)]
 
 # Extra files and folders (relative to outputs/) copied as they are.
 EXTRAS = [
@@ -106,11 +114,13 @@ def _copy(source: Path, target: Path) -> None:
         shutil.copy2(source, target)
 
 
-def archive() -> None:
-    for run in RUNS:
+def archive(runs: list[str]) -> None:
+    for run in runs:
         source = _run_dir(OUTPUTS, run)
         target = _results_run_dir(run)
         table = pq.read_table(source / FORECASTS)
+        if run in POINT_ONLY:
+            table = table.drop_columns([c for c in QUANTILES if c in table.column_names])
         split_dir = target / "forecasts"
         if split_dir.exists():
             shutil.rmtree(split_dir)
@@ -150,10 +160,14 @@ def _verify(original: pa.Table, split_dir: Path) -> None:
         raise RuntimeError(f"Round trip of {split_dir} does not reproduce the forecasts.")
 
 
-def restore() -> None:
-    for run in RUNS:
+def restore(runs: list[str]) -> None:
+    for run in runs:
         source = _results_run_dir(run)
         target = _run_dir(OUTPUTS, run)
+        if (target / FORECASTS).exists():
+            # Never replace a full local table (e.g. with quantiles) by a point-only archive.
+            print(f"skipped {target / FORECASTS}: already exists")
+            continue
         (target / "forecasts").mkdir(parents=True, exist_ok=True)
         pq.write_table(_read_split(source / "forecasts"), target / FORECASTS)
         for folder in ("metrics", "metadata"):
@@ -168,8 +182,9 @@ def restore() -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("action", choices=["archive", "restore"])
-    action = parser.parse_args().action
-    archive() if action == "archive" else restore()
+    parser.add_argument("--runs", nargs="+", choices=RUNS, default=RUNS)
+    args = parser.parse_args()
+    archive(args.runs) if args.action == "archive" else restore(args.runs)
 
 
 if __name__ == "__main__":
