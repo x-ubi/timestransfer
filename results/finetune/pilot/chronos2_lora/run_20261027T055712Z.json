@@ -1,0 +1,82 @@
+{
+  "generated_at_utc": "2026-10-27T05:57:12.136545+00:00",
+  "args": {
+    "config": "/home/ubuntu/timestransfer/configs/combination.yaml",
+    "datasets": [
+      "ett_m1_h48",
+      "traffic_h48"
+    ],
+    "outputs_dir": "outputs/finetune/pilot/chronos2_lora",
+    "context": 8192,
+    "steps": 1000,
+    "batch_size": 256,
+    "grad_accum": 8,
+    "lr": 1e-05,
+    "device": "cuda",
+    "zero_shot_only": false
+  },
+  "model_name": "chronos2_lora",
+  "revision": "29ec3766d36d6f73f0696f85560a422f50e8498c",
+  "torch": "2.12.1+cu130",
+  "gpu": "NVIDIA RTX A5000",
+  "tasks": [
+    {
+      "dataset": "ett_m1_h48",
+      "evaluated_windows": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "validation_windows": [
+        17,
+        18,
+        19
+      ],
+      "train_seconds": 4986.1,
+      "inference_seconds": 2.3
+    },
+    {
+      "dataset": "traffic_h48",
+      "evaluated_windows": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "validation_windows": [
+        17,
+        18,
+        19
+      ],
+      "train_seconds": 4766.3,
+      "inference_seconds": 136.1
+    }
+  ]
+}

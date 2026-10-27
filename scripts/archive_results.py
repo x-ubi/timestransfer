@@ -179,12 +179,67 @@ def restore(runs: list[str]) -> None:
             _copy(RESULTS / "extras" / extra, OUTPUTS / extra)
 
 
+# Fine-tuning runs (outputs/finetune/...): per-task forecast files are stored point-only
+# with zstd; adapters, run records and scores are copied as they are. Restoring them is
+# a plain copy back (the point-only forecasts are enough for every MASE analysis; the
+# adapters regenerate full forecasts in minutes with finetune/train_lora.py --load-adapters).
+FINETUNE_FORECASTS = ["finetune/timesfm_lora_v2/forecasts", "finetune/pilot/chronos2_lora/forecasts"]
+FINETUNE_COPIES = [
+    "finetune/timesfm_lora_v2/adapters",
+    "finetune/timesfm_lora_v2/task_scores.csv",
+    "finetune/timesfm_lora_v2/run_20261027T074055Z.json",
+    "finetune/pilot/chronos2_lora/run_20261027T055712Z.json",
+    "finetune/pilot/timesfm_lora",
+    "finetune/pilot/ettm1_lr1e-5",
+    "finetune/pilot/ettm1_lr3e-5",
+    "finetune/pilot/traffic_lr1e-4",
+    "finetune/pilot/traffic_lr1e-5",
+]
+FINETUNE_LOGS = [
+    "finetune/run_step3a.log",
+    "finetune/run_step3b.log",
+    "finetune/run_chronos_pilot.log",
+    "finetune/pilot/sweep.log",
+    "finetune/pilot/timesfm_ettm1.log",
+]
+
+
+def archive_finetune() -> None:
+    for folder in FINETUNE_FORECASTS:
+        target = RESULTS / folder
+        if target.exists():
+            shutil.rmtree(target)
+        target.mkdir(parents=True)
+        for path in sorted((OUTPUTS / folder).glob("*.parquet")):
+            table = pq.read_table(path)
+            table = table.drop_columns([c for c in QUANTILES if c in table.column_names])
+            pq.write_table(table, target / path.name, compression="zstd", compression_level=19)
+            if not pq.read_table(target / path.name).equals(table):
+                raise RuntimeError(f"Round trip of {target / path.name} failed.")
+    for item in FINETUNE_COPIES:
+        source = OUTPUTS / item
+        if source.is_dir():
+            _copy(source, RESULTS / item)
+            for forecasts in (RESULTS / item).rglob("forecasts"):
+                shutil.rmtree(forecasts)  # pilot forecasts: run records are enough
+        else:
+            _copy(source, RESULTS / item)
+    for log in FINETUNE_LOGS:
+        _copy(OUTPUTS / log, RESULTS / "logs" / (log.replace("/", "__") + ".txt"))
+    print(f"archived fine-tuning outputs -> {RESULTS / 'finetune'}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("action", choices=["archive", "restore"])
+    parser.add_argument("action", choices=["archive", "restore", "archive-finetune"])
     parser.add_argument("--runs", nargs="+", choices=RUNS, default=RUNS)
     args = parser.parse_args()
-    archive(args.runs) if args.action == "archive" else restore(args.runs)
+    if args.action == "archive-finetune":
+        archive_finetune()
+    elif args.action == "archive":
+        archive(args.runs)
+    else:
+        restore(args.runs)
 
 
 if __name__ == "__main__":

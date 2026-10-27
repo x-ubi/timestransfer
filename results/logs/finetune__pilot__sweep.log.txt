@@ -1,0 +1,9 @@
+== ettm1_lr1e-5 01:26:53
+{"dataset": "ett_m1_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 328.6, "best_step": 0, "best_val_loss": 0.15988261500994363, "zero_shot_val_loss": 0.15988261500994363, "inference_seconds": 2.6}
+== ettm1_lr3e-5 01:32:34
+{"dataset": "ett_m1_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 327.8, "best_step": 0, "best_val_loss": 0.15988261500994363, "zero_shot_val_loss": 0.15988261500994363, "inference_seconds": 2.7}
+== traffic_lr1e-4 01:38:13
+{"dataset": "traffic_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 428.0, "best_step": 200, "best_val_loss": 0.09889816949165614, "zero_shot_val_loss": 0.10759629382934113, "inference_seconds": 105.8}
+== traffic_lr1e-5 01:48:46
+{"dataset": "traffic_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 428.3, "best_step": 1000, "best_val_loss": 0.10300163449020876, "zero_shot_val_loss": 0.10759629382934113, "inference_seconds": 106.3}
+finished 2026-10-27T01:59:20Z

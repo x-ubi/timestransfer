@@ -1,0 +1,120 @@
+== timesfm_lora 2026-10-27T02:00:23Z
+{"dataset": "m4_hourly", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6], "validation_windows": [7, 8, 9], "train_seconds": 373.0, "best_step": 400, "best_val_loss": 0.07332780890034785, "zero_shot_val_loss": 0.07870519823498195, "inference_seconds": 12.3}
+{"dataset": "ett_h1_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 336.8, "best_step": 100, "best_val_loss": 0.231641615430514, "zero_shot_val_loss": 0.23393903175989786, "inference_seconds": 1.9}
+{"dataset": "ett_h1_h96", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 328.7, "best_step": 300, "best_val_loss": 0.2219476898511251, "zero_shot_val_loss": 0.22582843899726868, "inference_seconds": 1.9}
+{"dataset": "ett_h2_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 329.1, "best_step": 100, "best_val_loss": 0.24006464083989462, "zero_shot_val_loss": 0.24200009802977243, "inference_seconds": 1.9}
+{"dataset": "ett_m1_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 328.7, "best_step": 0, "best_val_loss": 0.15988261500994363, "zero_shot_val_loss": 0.15988261500994363, "inference_seconds": 2.8}
+{"dataset": "ett_m2_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 328.2, "best_step": 0, "best_val_loss": 0.092848335703214, "zero_shot_val_loss": 0.092848335703214, "inference_seconds": 2.8}
+{"dataset": "ecl_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 366.5, "best_step": 1000, "best_val_loss": 0.07704690324678351, "zero_shot_val_loss": 0.07887383277294915, "inference_seconds": 49.7}
+{"dataset": "traffic_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 429.2, "best_step": 200, "best_val_loss": 0.09889816949165614, "zero_shot_val_loss": 0.10759629382934113, "inference_seconds": 106.3}
+{"dataset": "weather_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 328.6, "best_step": 100, "best_val_loss": 0.11864683777093887, "zero_shot_val_loss": 0.12447129189968109, "inference_seconds": 4.7}
+{"dataset": "exchange_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 329.0, "best_step": 100, "best_val_loss": 0.12903032700220743, "zero_shot_val_loss": 0.13084810227155685, "inference_seconds": 1.9}
+{"dataset": "ili_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6], "validation_windows": [7, 8, 9], "train_seconds": 323.6, "best_step": 0, "best_val_loss": 0.05705273772279421, "zero_shot_val_loss": 0.05705273772279421, "inference_seconds": 0.7}
+== chronos2 pilot 2026-10-27T03:09:43Z
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING:huggingface_hub.utils._http:Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+INFO:chronos.chronos2.pipeline:Using LoRA. Number of trainable parameters: 1206912, total parameters: 120684576.
+  0%|          | 0/1000 [00:00<?, ?it/s]Traceback (most recent call last):
+  File "/home/ubuntu/timestransfer/finetune/chronos2_ft.py", line 164, in <module>
+    main()
+  File "/home/ubuntu/timestransfer/finetune/chronos2_ft.py", line 145, in main
+    forecasts, record = run_task(args, config, dataset, model_name, out)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/chronos2_ft.py", line 112, in run_task
+    pipeline = pipeline.fit(
+               ^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/chronos/chronos2/pipeline.py", line 354, in fit
+    trainer.train()
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 1559, in train
+    return inner_training_loop(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 1643, in _inner_training_loop
+    self._run_epoch(
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 1889, in _run_epoch
+    tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 2062, in training_step
+    loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 2144, in compute_loss
+    outputs = model(**inputs)
+              ^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/accelerate/utils/operations.py", line 943, in forward
+    return model_forward(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/accelerate/utils/operations.py", line 931, in __call__
+    return convert_to_fp32(self.model_forward(*args, **kwargs))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/torch/amp/autocast_mode.py", line 44, in decorate_autocast
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/peft/peft_model.py", line 1007, in forward
+    return self.get_base_model()(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/chronos/chronos2/model.py", line 716, in forward
+    encoder_outputs, loc_scale, patched_future_covariates_mask, num_context_patches = self.encode(
+                                                                                      ^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/chronos/chronos2/model.py", line 629, in encode
+    encoder_outputs: Chronos2EncoderOutput = self.encoder(
+                                             ^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/chronos/chronos2/model.py", line 173, in forward
+    layer_outputs: Chronos2EncoderBlockOutput = layer_module(
+                                                ^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/chronos/chronos2/model.py", line 68, in forward
+    time_self_attn_outputs: AttentionOutput = self.layer[0](
+                                              ^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/chronos/chronos2/layers.py", line 354, in forward
+    attention_output: AttentionOutput = self.self_attention(
+                                        ^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/chronos/chronos2/layers.py", line 334, in forward
+    attn_output = self.o(attn_output)
+                  ^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/timestransfer/finetune/.venv/lib/python3.12/site-packages/peft/tuners/lora/layer.py", line 1102, in forward
+    result = result + lora_B(lora_A(dropout(x))) * scaling
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 194.00 MiB. GPU 0 has a total capacity of 23.55 GiB of which 143.31 MiB is free. Including non-PyTorch memory, this process has 23.40 GiB memory in use. Of the allocated memory 22.87 GiB is allocated by PyTorch, and 284.85 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+  0%|          | 0/1000 [00:00<?, ?it/s]
+finished 2026-10-27T03:09:54Z

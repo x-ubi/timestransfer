@@ -112,7 +112,42 @@ Interpretation:
 - **Longer context does not make TimesFM less redundant with Chronos-2.** The shared error share of the pair is unchanged (0.94–0.99 on the long-series tasks), consistent with §1.3.
 - **The benchmark understated TimesFM.** Default-setting benchmarks partly confound model and configuration: three task rankings change, and the aggregate gap to Chronos-2 widens.
 
-### 1.5 Pilots behind the direction decision (`results/pilots_2026-10/`)
+### 1.5 Fine-tuning (step 3, 2026-10-27) — **Established for TimesFM, pilot for Chronos-2**
+
+Setup:
+- TimesFM 2.5 LoRA (rank 4, all linear layers), trained at context 1,024. One adapter per task.
+- Training data: history before the 3 oldest windows. Early stopping uses those 3 windows. Scoring uses the same evaluated windows as §1.2/§1.4.
+- Learning rate 1e-4, chosen on a Traffic/ETTm1 pilot (1e-5 and 3e-5 also tried), 1,000 steps, batch 32.
+- About 6 min per task on the A5000 (69 min for all 11).
+- Outputs, adapters and logs in `results/finetune/`.
+- The run is deterministic: a rerun reproduces the forecasts exactly.
+
+| Result | Number |
+|---|---|
+| LoRA, forecasting at 1,024 | 0.646: ratio **0.974** (CI 0.960–0.986) to TimesFM 1,024; 1.010 (CI 0.988–1.031) to zero-shot 16,256 |
+| Same adapter, forecasting at 16,256 | **0.632**: ratio **0.954** (CI 0.930–0.978) to TimesFM 1,024; **0.989** (CI 0.980–0.998) to zero-shot 16,256 |
+| Where LoRA helps (vs zero-shot 16,256, adapter at 16,256) | ECL −4.0%, ETTh1 −3.8% (Holm p = 0.003), M4 −3.3% (Holm p = 0.02), ETTh2 −1.2% |
+| Where LoRA does nothing | ETTm1, ETTm2, ILI: early stopping kept the zero-shot model (validation loss rose from the first checkpoint). Traffic, Weather, Exchange: within ±0.5% |
+| Combination with Chronos-2 (task-level weights) | 0.621, vs 0.624 with zero-shot 16,256 and 0.634 with default TimesFM; +TabPFN-TS 0.620 |
+| Chronos-2 LoRA pilot (context 8,192, lr 1e-5, effective batch 256) | ETTm1 −1.2%, Traffic −0.7% vs zero-shot Chronos-2, at ~80 min per task |
+
+Caveats:
+- In the combination runs, the weights for windows 14–16 are fitted partly on the early-stopping windows 17–19. There the LoRA forecasts are in-sample for model selection, so the combination numbers are slightly optimistic.
+- The Chronos-2 ETTm1 checkpoint was kept although validation loss rose after step 100. `fit()` does not score the untrained model, so its −1.2% is weak evidence.
+
+Interpretation:
+- **Fine-tuning and long context are complementary.** LoRA helps where the long context does not (ECL, ETTh1, M4), and vice versa (Traffic, Weather). An adapter trained at 1,024 transfers to inference at 16,256 without loss.
+- **Each improvement of the TimesFM member shrinks the gain from combination with Chronos-2:**
+
+  | TimesFM member | Gain from combining |
+  |---|---|
+  | default | 4.3% |
+  | long context | 2.4% |
+  | long context + LoRA | 1.8% |
+
+- **Fine-tuning is cheap for TimesFM** (6 min per task), but its gains are small (~1–4%) and limited to some tasks.
+
+### 1.6 Pilots behind the direction decision (`results/pilots_2026-10/`)
 
 | Pilot | Result | Label |
 |---|---|---|
@@ -121,7 +156,7 @@ Interpretation:
 | Probabilistic combination | Mixing the three predictive distributions (1.043× best single model's quantile loss) beats averaging their quantiles (1.082×), the method used by leaderboard ensembles | Pilot |
 | Damaged inputs (20% missing, missing block, outliers) | The models do **not** become more complementary; TabPFN-TS suffers most from missing data. The rerun with a deterministic seed is in progress | Pilot |
 
-### 1.6 Takeaways
+### 1.7 Takeaways
 
 1. Zero-shot foundation models are **largely redundant forecasters**: most of their error is shared. That caps what combining them can achieve, and the cap matches classical combination theory.
 2. In practice, combining them amounts to **choosing the right model per task**. That has real value as insurance (worst case 1.03 vs up to 2.9), but no accuracy gain beyond the best model.
@@ -129,7 +164,7 @@ Interpretation:
    - Configuration (§1.4) gives −3.5% from one fixed long context. Per-task tuning adds nothing to that.
 4. Part of the model ranking in the benchmark reflects default settings rather than the models themselves. With a long context, TimesFM overtakes Chronos-2 on Weather and Exchange.
 
-### 1.7 Infrastructure
+### 1.8 Infrastructure
 
 - **Code:** `src/timestransfer/combination.py` (combiners, rolling protocol) and `combination_analysis.py` (diversity, shared-error split, ideal-weight bound, DM tests, bootstrap, regret, learning curves, failure modes), with tests (all passing).
 - **Archive:** all expensive outputs are on GitHub (`results/`, branch `ensemble_research`), verified to restore exactly.
@@ -144,7 +179,7 @@ Interpretation:
 |---|---|---|---|---|
 | 1 | Close the combination study | **Done 2026-10-26:** shared-error split, ideal-weight bound, two-model theory, pools with AutoETS/AutoTheta. The figure of tasks on the correlation/accuracy plane moves to step 6 (thesis artifact pipeline) | CPU, minutes | done |
 | 2 | TimesFM configuration study | **Done 2026-10-26** (§1.4): grid 3.1 h on the A5000; selection, combination after configuration, DM tests and bootstrap | 3.1 GPU h | done |
-| 3 | Fine-tuning | TimesFM 2.5 LoRA in a separate environment (HF `TimesFm2_5ModelForPrediction` + `peft`; first check the HF checkpoint matches ours). One fine-tune per task on data before the evaluation windows. Chronos-2 LoRA via `fit()` as fallback and second model | ~6–18 GPU h | early November |
+| 3 | Fine-tuning | **TimesFM LoRA done 2026-10-27** (§1.5). Open: full Chronos-2 LoRA (~15 GPU h at context 8,192; ~4 h at 2,048), optional long-context TimesFM LoRA on Traffic/Weather | 1.2 GPU h so far (+2.7 h pilots) | in progress |
 | 4 | Three-way comparison | Zero-shot vs configured vs fine-tuned vs combined, and their combinations; DM tests, bootstrap CIs, regret, compute cost | CPU | early November |
 | 5 | Literature re-check | Error correlation of foundation models, context selection, fine-tuning vs zero-shot, multi-strategy comparisons; follow-ups to ECHO and Chronos-2 | – | before writing |
 | 6 | Writing | Benchmark chapters as motivation → combination (redundancy) → configuration → fine-tuning → comparison → discussion; plus the deferred introduction and summary | – | November, until ~Nov 28 |
@@ -183,6 +218,6 @@ Interpretation:
 |---|---|---|---|
 | Combination | Combining ≈ per-task model selection; ~4.5% better than a single fixed model, ≈0% better than the best model per task; ideal fixed weights ≤ ~3% (median) | **Established** | Redundancy, not the weighting method, limits foundation-model ensembles |
 | Configuration | Fixed long context −3.5% (Traffic −11.5%, Weather −10%), none on short series (M4, ILI). Per-task selection from past windows no better than the fixed long context. Rankings vs Chronos-2 change on Weather and Exchange | **Established** (§1.4) | Default-setting benchmarks partly confound model and configuration. Configuration is a cheap transfer step, but its best form is a single good default, not per-task tuning |
-| Fine-tuning | Small gains (~0–5%) on long datasets, none or negative on short ones; must beat TimesFM at 16,256 to matter | **Hypothesis**, consistent with the literature | Weight adaptation helps only with enough target data |
-| Combined strategies | Combination still adds ~2.4% on top of the long-context TimesFM (CI 0.958–0.991); expected to add little on top of a fine-tuned model | **Established** for configuration; **Hypothesis** for fine-tuning | Configuration does not reduce the shared error between models; whether fine-tuning does is the open question |
+| Fine-tuning | TimesFM LoRA: −2.6% at 1,024; with the adapter at 16,256, −1.1% beyond zero-shot 16,256 (CI 0.980–0.998), on ECL, ETTh1, M4, ETTh2; nothing on ETTm1/ETTm2/ILI. Not tied to series length: M4 (short) gains, ETTm1 (long) does not | **Established** (TimesFM, §1.5); Chronos-2 **Pilot** | Weight adaptation and context are complementary levers; both are small next to the ranking noise across tasks |
+| Combined strategies | Gain from combining with Chronos-2 shrinks as TimesFM improves: 4.3% (default) → 2.4% (long context) → 1.8% (long context + LoRA) | **Established** (§1.4, §1.5) | Model-side adaptation absorbs part of what combination provides; the redundancy result (§1.3) still caps the rest |
 | Cost-effectiveness | configuration > fine-tuning > combination in gain per GPU hour | **Hypothesis** | A practical recommendation order |

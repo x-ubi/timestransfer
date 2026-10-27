@@ -13,7 +13,12 @@ Protocol (one adapter per task):
   each sample's context-normalised units. The built-in HF loss is not used: it applies MSE
   to the median channel and pairs the mean head and q0.1..q0.4 with the wrong levels.
 - Inference matches the benchmark (all flags on, crossing repair, nonnegative clipping) via
-  timesfm_hf.forecast; the adapter with the lowest validation pinball loss is kept.
+  timesfm_hf.forecast; the adapter with the lowest validation pinball loss is kept and saved
+  to <outputs-dir>/adapters/<dataset>.pt.
+- Forecasts cover all windows, including the validation windows (needed by rolling-protocol
+  combiners; their forecasts are in-sample for early stopping). Score only the evaluated
+  windows 0..K-4. ``--inference-contexts`` adds forecasts at other contexts with the same
+  adapter (model name suffix ``_inf<context>``); ``--load-adapters`` skips training.
 
     finetune/.venv/bin/python finetune/train_lora.py --datasets ett_h1_h48 --device cuda
 """
@@ -64,6 +69,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--zero-shot-only", action="store_true", help="Score the base model; no training."
     )
+    parser.add_argument(
+        "--inference-contexts", nargs="+", type=int,
+        help="Contexts to forecast at (default: --context only).",
+    )
+    parser.add_argument("--load-adapters", help="Directory of saved adapters; skips training.")
     return parser.parse_args()
 
 
@@ -180,7 +190,18 @@ def run_task(args, config, dataset: dict, model_name: str) -> tuple[pd.DataFrame
     record: dict = {"dataset": dataset["name"], "evaluated_windows": evaluated,
                     "validation_windows": validation}
     model = load_model(args.device)
-    if not args.zero_shot_only:
+    lora = LoraConfig(r=args.lora_r, lora_alpha=args.lora_alpha, target_modules="all-linear",
+                      lora_dropout=args.lora_dropout, bias="none")
+    if args.load_adapters:
+        model = get_peft_model(model, lora)
+        state = torch.load(Path(args.load_adapters) / f"{dataset['name']}.pt", map_location=args.device)
+        missing = set(state) - set(model.state_dict())
+        if missing:
+            raise ValueError(f"Adapter keys not in the model: {sorted(missing)[:3]}")
+        model.load_state_dict(state, strict=False)
+        model.eval()
+        record["adapter"] = str(Path(args.load_adapters) / f"{dataset['name']}.pt")
+    elif not args.zero_shot_only:
         torch.manual_seed(args.seed)
         rng = np.random.default_rng(args.seed)
         _, train_histories = histories_of(splits[validation[-1]])
@@ -190,8 +211,6 @@ def run_task(args, config, dataset: dict, model_name: str) -> tuple[pd.DataFrame
             targets = splits[k].test.sort_values(["unique_id", "ds"])["y"].to_numpy(np.float32)
             val_windows.append((histories, targets.reshape(len(histories), horizon)))
 
-        lora = LoraConfig(r=args.lora_r, lora_alpha=args.lora_alpha, target_modules="all-linear",
-                          lora_dropout=args.lora_dropout, bias="none")
         model = get_peft_model(model, lora)
         optimizer = torch.optim.AdamW(
             [p for p in model.parameters() if p.requires_grad], lr=args.lr,
@@ -227,21 +246,27 @@ def run_task(args, config, dataset: dict, model_name: str) -> tuple[pd.DataFrame
                                   for k, v in model.state_dict().items() if "lora_" in k}
         model.load_state_dict(best_state, strict=False)
         model.eval()
+        adapter_dir = Path(args.outputs_dir) / "adapters"
+        adapter_dir.mkdir(parents=True, exist_ok=True)
+        torch.save({k: v.cpu() for k, v in best_state.items()}, adapter_dir / f"{dataset['name']}.pt")
         record.update(train_seconds=round(time.monotonic() - start, 1), best_step=best["step"],
                       best_val_loss=best["loss"], zero_shot_val_loss=history[0]["val_loss"],
                       history=history)
 
-    start = time.monotonic()
     frames = []
-    for k in evaluated:
-        _, histories = histories_of(splits[k])
-        full = forecast(model, histories, horizon, args.context)
-        frames.append(
-            long_forecasts(
-                dataset["name"], model_name, splits[k], horizon, full[:, :, MEDIAN], full[:, :, 1:10], k
+    record["inference_seconds"] = {}
+    for context in args.inference_contexts or [args.context]:
+        name = model_name if context == args.context else f"{model_name}_inf{context}"
+        start = time.monotonic()
+        for k in [*evaluated, *validation]:
+            _, histories = histories_of(splits[k])
+            full = forecast(model, histories, horizon, context)
+            frames.append(
+                long_forecasts(
+                    dataset["name"], name, splits[k], horizon, full[:, :, MEDIAN], full[:, :, 1:10], k
+                )
             )
-        )
-    record["inference_seconds"] = round(time.monotonic() - start, 1)
+        record["inference_seconds"][name] = round(time.monotonic() - start, 1)
     return pd.concat(frames, ignore_index=True), record
 
 

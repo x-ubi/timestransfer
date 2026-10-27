@@ -45,7 +45,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--outputs-dir", default=str(ROOT / "outputs/finetune/chronos2_lora"))
     parser.add_argument("--context", type=int, default=8192)
     parser.add_argument("--steps", type=int, default=1000)
-    parser.add_argument("--batch-size", type=int, default=256)
+    parser.add_argument("--batch-size", type=int, default=256, help="Effective batch size.")
+    parser.add_argument(
+        "--grad-accum", type=int, default=8,
+        help="Gradient accumulation steps; per-step batch = batch-size / grad-accum "
+        "(256 at context 8192 does not fit in 24 GB).",
+    )
     parser.add_argument("--lr", type=float, default=1e-5, help="fit() docstring advice for LoRA.")
     parser.add_argument("--device", default="cuda")
     parser.add_argument(
@@ -117,7 +122,8 @@ def run_task(args, config, dataset: dict, model_name: str, out: Path) -> tuple[p
             context_length=args.context,
             learning_rate=args.lr,
             num_steps=args.steps,
-            batch_size=args.batch_size,
+            batch_size=args.batch_size // args.grad_accum,
+            gradient_accumulation_steps=args.grad_accum,
             output_dir=out / "trainer" / dataset["name"],
             remove_printer_callback=True,
         )

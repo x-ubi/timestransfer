@@ -1,0 +1,117 @@
+{
+  "generated_at_utc": "2026-10-27T01:38:12.727108+00:00",
+  "args": {
+    "config": "/home/ubuntu/timestransfer/configs/combination.yaml",
+    "datasets": [
+      "ett_m1_h48"
+    ],
+    "outputs_dir": "outputs/finetune/pilot/ettm1_lr3e-5",
+    "context": 1024,
+    "steps": 1000,
+    "batch_size": 32,
+    "lr": 3e-05,
+    "weight_decay": 0.01,
+    "lora_r": 4,
+    "lora_alpha": 8,
+    "lora_dropout": 0.05,
+    "eval_every": 100,
+    "min_context": 64,
+    "seed": 0,
+    "device": "cuda",
+    "zero_shot_only": false
+  },
+  "model_name": "timesfm_2p5_lora",
+  "hf_revision": "5a9806b9b291fad9233b5249d88263f1846304d3",
+  "torch": "2.12.1+cu130",
+  "gpu": "NVIDIA RTX A5000",
+  "tasks": [
+    {
+      "dataset": "ett_m1_h48",
+      "evaluated_windows": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "validation_windows": [
+        17,
+        18,
+        19
+      ],
+      "train_seconds": 327.8,
+      "best_step": 0,
+      "best_val_loss": 0.15988261500994363,
+      "zero_shot_val_loss": 0.15988261500994363,
+      "history": [
+        {
+          "step": 0,
+          "val_loss": 0.15988261500994363
+        },
+        {
+          "step": 100,
+          "train_loss": 0.1705925613641739,
+          "val_loss": 0.16044924159844717
+        },
+        {
+          "step": 200,
+          "train_loss": 0.20679444074630737,
+          "val_loss": 0.1611067404349645
+        },
+        {
+          "step": 300,
+          "train_loss": 0.18860682845115662,
+          "val_loss": 0.16263557970523834
+        },
+        {
+          "step": 400,
+          "train_loss": 0.17776723206043243,
+          "val_loss": 0.16270221769809723
+        },
+        {
+          "step": 500,
+          "train_loss": 0.2137795388698578,
+          "val_loss": 0.16289863487084708
+        },
+        {
+          "step": 600,
+          "train_loss": 0.17263244092464447,
+          "val_loss": 0.16344743967056274
+        },
+        {
+          "step": 700,
+          "train_loss": 0.19513098895549774,
+          "val_loss": 0.16463496287663779
+        },
+        {
+          "step": 800,
+          "train_loss": 0.16220273077487946,
+          "val_loss": 0.16466993590195975
+        },
+        {
+          "step": 900,
+          "train_loss": 0.19962641596794128,
+          "val_loss": 0.1647620548804601
+        },
+        {
+          "step": 1000,
+          "train_loss": 0.23085777461528778,
+          "val_loss": 0.1647575298945109
+        }
+      ],
+      "inference_seconds": 2.7
+    }
+  ]
+}
