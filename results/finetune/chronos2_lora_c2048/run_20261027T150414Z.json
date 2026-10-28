@@ -1,0 +1,391 @@
+{
+  "generated_at_utc": "2026-10-27T15:04:14.595259+00:00",
+  "args": {
+    "config": "/home/ubuntu/timestransfer/configs/combination.yaml",
+    "datasets": null,
+    "outputs_dir": "outputs/finetune/chronos2_lora_c2048",
+    "context": 2048,
+    "steps": 1000,
+    "batch_size": 256,
+    "grad_accum": 2,
+    "lr": 1e-05,
+    "device": "cuda",
+    "zero_shot_only": false,
+    "inference_contexts": [
+      2048,
+      8192
+    ],
+    "load_finetuned": null
+  },
+  "model_name": "chronos2_lora",
+  "revision": "29ec3766d36d6f73f0696f85560a422f50e8498c",
+  "torch": "2.12.1+cu130",
+  "gpu": "NVIDIA RTX A5000",
+  "tasks": [
+    {
+      "dataset": "m4_hourly",
+      "evaluated_windows": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "validation_windows": [
+        7,
+        8,
+        9
+      ],
+      "zero_shot_val_loss": 0.07385634780297795,
+      "train_seconds": 328.2,
+      "finetuned_val_loss": 0.07051813307416838,
+      "selected": "finetuned",
+      "inference_seconds": {
+        "chronos2_lora": 6.2,
+        "chronos2_lora_inf8192": 6.2
+      }
+    },
+    {
+      "dataset": "ett_h1_h48",
+      "evaluated_windows": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "validation_windows": [
+        17,
+        18,
+        19
+      ],
+      "zero_shot_val_loss": 0.24560027677936974,
+      "train_seconds": 1088.8,
+      "finetuned_val_loss": 0.2336246516731329,
+      "selected": "finetuned",
+      "inference_seconds": {
+        "chronos2_lora": 1.3,
+        "chronos2_lora_inf8192": 3.7
+      }
+    },
+    {
+      "dataset": "ett_h1_h96",
+      "evaluated_windows": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "validation_windows": [
+        17,
+        18,
+        19
+      ],
+      "zero_shot_val_loss": 0.16687600280369055,
+      "train_seconds": 1111.0,
+      "finetuned_val_loss": 0.16394363049696242,
+      "selected": "finetuned",
+      "inference_seconds": {
+        "chronos2_lora": 1.3,
+        "chronos2_lora_inf8192": 3.7
+      }
+    },
+    {
+      "dataset": "ett_h2_h48",
+      "evaluated_windows": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "validation_windows": [
+        17,
+        18,
+        19
+      ],
+      "zero_shot_val_loss": 0.26306365456304326,
+      "train_seconds": 1088.6,
+      "finetuned_val_loss": 0.2637409085337794,
+      "selected": "zero_shot",
+      "inference_seconds": {
+        "chronos2_lora": 0.9,
+        "chronos2_lora_inf8192": 2.3
+      }
+    },
+    {
+      "dataset": "ett_m1_h48",
+      "evaluated_windows": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "validation_windows": [
+        17,
+        18,
+        19
+      ],
+      "zero_shot_val_loss": 0.14415219383696817,
+      "train_seconds": 1096.8,
+      "finetuned_val_loss": 0.1468418490688539,
+      "selected": "zero_shot",
+      "inference_seconds": {
+        "chronos2_lora": 1.7,
+        "chronos2_lora_inf8192": 3.0
+      }
+    },
+    {
+      "dataset": "ett_m2_h48",
+      "evaluated_windows": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "validation_windows": [
+        17,
+        18,
+        19
+      ],
+      "zero_shot_val_loss": 0.1012738409934761,
+      "train_seconds": 1099.2,
+      "finetuned_val_loss": 0.10196140782074371,
+      "selected": "zero_shot",
+      "inference_seconds": {
+        "chronos2_lora": 1.7,
+        "chronos2_lora_inf8192": 3.0
+      }
+    },
+    {
+      "dataset": "ecl_h48",
+      "evaluated_windows": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "validation_windows": [
+        17,
+        18,
+        19
+      ],
+      "zero_shot_val_loss": 0.071690009213119,
+      "train_seconds": 1104.4,
+      "finetuned_val_loss": 0.07163991522571414,
+      "selected": "finetuned",
+      "inference_seconds": {
+        "chronos2_lora": 54.1,
+        "chronos2_lora_inf8192": 121.4
+      }
+    },
+    {
+      "dataset": "traffic_h48",
+      "evaluated_windows": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "validation_windows": [
+        17,
+        18,
+        19
+      ],
+      "zero_shot_val_loss": 0.12943223563514014,
+      "train_seconds": 1129.4,
+      "finetuned_val_loss": 0.12582880938626428,
+      "selected": "finetuned",
+      "inference_seconds": {
+        "chronos2_lora": 116.3,
+        "chronos2_lora_inf8192": 290.9
+      }
+    },
+    {
+      "dataset": "weather_h48",
+      "evaluated_windows": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "validation_windows": [
+        17,
+        18,
+        19
+      ],
+      "zero_shot_val_loss": 0.14305497347584203,
+      "train_seconds": 1093.7,
+      "finetuned_val_loss": 0.13980868284664832,
+      "selected": "finetuned",
+      "inference_seconds": {
+        "chronos2_lora": 5.2,
+        "chronos2_lora_inf8192": 11.3
+      }
+    },
+    {
+      "dataset": "exchange_h48",
+      "evaluated_windows": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "validation_windows": [
+        17,
+        18,
+        19
+      ],
+      "zero_shot_val_loss": 0.06114655947524914,
+      "train_seconds": 1083.0,
+      "finetuned_val_loss": 0.06213687609861191,
+      "selected": "zero_shot",
+      "inference_seconds": {
+        "chronos2_lora": 0.8,
+        "chronos2_lora_inf8192": 2.1
+      }
+    },
+    {
+      "dataset": "ili_h48",
+      "evaluated_windows": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "validation_windows": [
+        7,
+        8,
+        9
+      ],
+      "zero_shot_val_loss": 0.09833915519707412,
+      "train_seconds": 305.5,
+      "finetuned_val_loss": 0.09861924850402927,
+      "selected": "zero_shot",
+      "inference_seconds": {
+        "chronos2_lora": 0.3,
+        "chronos2_lora_inf8192": 0.3
+      }
+    }
+  ]
+}

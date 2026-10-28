@@ -1,0 +1,1270 @@
+== chronos smoke 2026-10-27T11:44:44Z
+{"dataset": "ett_h1_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "zero_shot_val_loss": 0.24560027677936974, "train_seconds": 108.4, "finetuned_val_loss": 0.243724458022366, "selected": "finetuned", "inference_seconds": {"chronos2_lora": 1.2, "chronos2_lora_inf8192": 3.7}}
+{"dataset": "ett_h1_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "zero_shot_val_loss": 0.24560027677936974, "finetuned_from": "outputs/finetune/smoke_chronos/train/trainer/ett_h1_h48/finetuned-ckpt", "finetuned_val_loss": 0.243724458022366, "selected": "finetuned", "inference_seconds": {"chronos2_lora": 1.2, "chronos2_lora_inf8192": 3.7}}
+{'zero_shot_val_loss': 0.24560027677936974, 'finetuned_val_loss': 0.243724458022366, 'selected': 'finetuned'}
+rows 13440 13440 reload diff 0.0 2048 vs 8192 diff 2.5992965698242188
+2
+zero-shot vs grid rows 13440 13440 max diff 0.0
+== chronos2 pilot re-forecast in eval mode 2026-10-27T11:47:10Z
+{"dataset": "ett_m1_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "zero_shot_val_loss": 0.12384927234730818, "finetuned_from": "outputs/finetune/pilot/chronos2_lora/trainer/ett_m1_h48/finetuned-ckpt", "finetuned_val_loss": 0.1294429399484405, "selected": "zero_shot", "inference_seconds": {"chronos2_lora": 3.1}}
+{"dataset": "traffic_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "zero_shot_val_loss": 0.1340232477769145, "finetuned_from": "outputs/finetune/pilot/chronos2_lora/trainer/traffic_h48/finetuned-ckpt", "finetuned_val_loss": 0.1315402116219944, "selected": "finetuned", "inference_seconds": {"chronos2_lora": 291.4}}
+== chronos2_lora_c2048 2026-10-27T11:54:45Z
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING:huggingface_hub.utils._http:Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+INFO:chronos.chronos2.pipeline:Using LoRA. Number of trainable parameters: 1206912, total parameters: 120684576.
+
+                                                  
+
+                                                  
+
+ 10%|█         | 100/1000 [00:32<04:42,  3.18it/s]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 20%|██        | 200/1000 [01:05<04:13,  3.16it/s]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 30%|███       | 300/1000 [01:38<03:38,  3.21it/s]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 40%|████      | 400/1000 [02:10<03:09,  3.16it/s]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 50%|█████     | 500/1000 [02:43<02:39,  3.13it/s]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 60%|██████    | 600/1000 [03:15<02:04,  3.23it/s]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 70%|███████   | 700/1000 [03:48<01:33,  3.21it/s]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 80%|████████  | 800/1000 [04:20<01:03,  3.16it/s]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 90%|█████████ | 900/1000 [04:53<00:31,  3.14it/s]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                   
+
+                                                   
+
+100%|██████████| 1000/1000 [05:25<00:00,  3.22it/s]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                   
+
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+INFO:chronos.chronos2.pipeline:Finetuned model saved to outputs/finetune/chronos2_lora_c2048/trainer/m4_hourly/finetuned-ckpt
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'loss': '2.634', 'grad_norm': '0.734', 'learning_rate': '9.01e-06', 'epoch': '0.1'}
+{'eval_loss': '2.056', 'eval_runtime': '0.6369', 'eval_samples_per_second': '1950', 'eval_steps_per_second': '15.7', 'epoch': '0.1'}
+{'loss': '2.599', 'grad_norm': '0.7669', 'learning_rate': '8.01e-06', 'epoch': '0.2'}
+{'eval_loss': '2.023', 'eval_runtime': '0.6351', 'eval_samples_per_second': '1956', 'eval_steps_per_second': '15.75', 'epoch': '0.2'}
+{'loss': '2.538', 'grad_norm': '0.8246', 'learning_rate': '7.01e-06', 'epoch': '0.3'}
+{'eval_loss': '2.004', 'eval_runtime': '0.6354', 'eval_samples_per_second': '1955', 'eval_steps_per_second': '15.74', 'epoch': '0.3'}
+{'loss': '2.538', 'grad_norm': '0.8666', 'learning_rate': '6.01e-06', 'epoch': '0.4'}
+{'eval_loss': '1.995', 'eval_runtime': '0.6446', 'eval_samples_per_second': '1927', 'eval_steps_per_second': '15.51', 'epoch': '0.4'}
+{'loss': '2.489', 'grad_norm': '0.8641', 'learning_rate': '5.01e-06', 'epoch': '0.5'}
+{'eval_loss': '1.99', 'eval_runtime': '0.648', 'eval_samples_per_second': '1917', 'eval_steps_per_second': '15.43', 'epoch': '0.5'}
+{'loss': '2.471', 'grad_norm': '1.018', 'learning_rate': '4.01e-06', 'epoch': '0.6'}
+{'eval_loss': '1.986', 'eval_runtime': '0.6367', 'eval_samples_per_second': '1951', 'eval_steps_per_second': '15.71', 'epoch': '0.6'}
+{'loss': '2.466', 'grad_norm': '0.9017', 'learning_rate': '3.01e-06', 'epoch': '0.7'}
+{'eval_loss': '1.984', 'eval_runtime': '0.6357', 'eval_samples_per_second': '1954', 'eval_steps_per_second': '15.73', 'epoch': '0.7'}
+{'loss': '2.487', 'grad_norm': '1.018', 'learning_rate': '2.01e-06', 'epoch': '0.8'}
+{'eval_loss': '1.984', 'eval_runtime': '0.6345', 'eval_samples_per_second': '1957', 'eval_steps_per_second': '15.76', 'epoch': '0.8'}
+{'loss': '2.478', 'grad_norm': '1.201', 'learning_rate': '1.01e-06', 'epoch': '0.9'}
+{'eval_loss': '1.983', 'eval_runtime': '0.6456', 'eval_samples_per_second': '1924', 'eval_steps_per_second': '15.49', 'epoch': '0.9'}
+{'loss': '2.446', 'grad_norm': '0.8982', 'learning_rate': '1e-08', 'epoch': '1'}
+{'eval_loss': '1.983', 'eval_runtime': '0.6329', 'eval_samples_per_second': '1962', 'eval_steps_per_second': '15.8', 'epoch': '1'}
+{'train_runtime': '326.2', 'train_samples_per_second': '784.8', 'train_steps_per_second': '3.066', 'train_loss': '2.515', 'epoch': '1'}
+{"dataset": "m4_hourly", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6], "validation_windows": [7, 8, 9], "zero_shot_val_loss": 0.07385634780297795, "train_seconds": 328.2, "finetuned_val_loss": 0.07051813307416838, "selected": "finetuned", "inference_seconds": {"chronos2_lora": 6.2, "chronos2_lora_inf8192": 6.2}}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+INFO:chronos.chronos2.pipeline:Using LoRA. Number of trainable parameters: 1206912, total parameters: 120684576.
+
+                                                  
+
+                                                  
+
+ 10%|█         | 100/1000 [01:48<16:16,  1.09s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 20%|██        | 200/1000 [03:37<14:27,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 30%|███       | 300/1000 [05:26<12:36,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 40%|████      | 400/1000 [07:14<10:48,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 50%|█████     | 500/1000 [09:03<09:00,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 60%|██████    | 600/1000 [10:52<07:12,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 70%|███████   | 700/1000 [12:40<05:24,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 80%|████████  | 800/1000 [14:29<03:37,  1.09s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 90%|█████████ | 900/1000 [16:17<01:48,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                   
+
+                                                   
+
+100%|██████████| 1000/1000 [18:06<00:00,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                   
+
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+INFO:chronos.chronos2.pipeline:Finetuned model saved to outputs/finetune/chronos2_lora_c2048/trainer/ett_h1_h48/finetuned-ckpt
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'loss': '5.085', 'grad_norm': '0.7257', 'learning_rate': '9.01e-06', 'epoch': '0.1'}
+{'eval_loss': '6.748', 'eval_runtime': '0.0591', 'eval_samples_per_second': '355.5', 'eval_steps_per_second': '16.93', 'epoch': '0.1'}
+{'loss': '5.074', 'grad_norm': '0.8414', 'learning_rate': '8.01e-06', 'epoch': '0.2'}
+{'eval_loss': '6.655', 'eval_runtime': '0.0716', 'eval_samples_per_second': '293.5', 'eval_steps_per_second': '13.97', 'epoch': '0.2'}
+{'loss': '5.042', 'grad_norm': '1.018', 'learning_rate': '7.01e-06', 'epoch': '0.3'}
+{'eval_loss': '6.607', 'eval_runtime': '0.0549', 'eval_samples_per_second': '382.5', 'eval_steps_per_second': '18.21', 'epoch': '0.3'}
+{'loss': '5.068', 'grad_norm': '1.19', 'learning_rate': '6.01e-06', 'epoch': '0.4'}
+{'eval_loss': '6.582', 'eval_runtime': '0.0544', 'eval_samples_per_second': '386', 'eval_steps_per_second': '18.38', 'epoch': '0.4'}
+{'loss': '5.055', 'grad_norm': '1.077', 'learning_rate': '5.01e-06', 'epoch': '0.5'}
+{'eval_loss': '6.595', 'eval_runtime': '0.0581', 'eval_samples_per_second': '361.2', 'eval_steps_per_second': '17.2', 'epoch': '0.5'}
+{'loss': '5.01', 'grad_norm': '1.326', 'learning_rate': '4.01e-06', 'epoch': '0.6'}
+{'eval_loss': '6.589', 'eval_runtime': '0.0553', 'eval_samples_per_second': '379.6', 'eval_steps_per_second': '18.08', 'epoch': '0.6'}
+{'loss': '4.958', 'grad_norm': '1.087', 'learning_rate': '3.01e-06', 'epoch': '0.7'}
+{'eval_loss': '6.59', 'eval_runtime': '0.0576', 'eval_samples_per_second': '364.4', 'eval_steps_per_second': '17.35', 'epoch': '0.7'}
+{'loss': '4.987', 'grad_norm': '1.057', 'learning_rate': '2.01e-06', 'epoch': '0.8'}
+{'eval_loss': '6.576', 'eval_runtime': '0.0556', 'eval_samples_per_second': '377.7', 'eval_steps_per_second': '17.99', 'epoch': '0.8'}
+{'loss': '5.006', 'grad_norm': '1.205', 'learning_rate': '1.01e-06', 'epoch': '0.9'}
+{'eval_loss': '6.576', 'eval_runtime': '0.0557', 'eval_samples_per_second': '377.3', 'eval_steps_per_second': '17.97', 'epoch': '0.9'}
+{'loss': '4.978', 'grad_norm': '1.207', 'learning_rate': '1e-08', 'epoch': '1'}
+{'eval_loss': '6.578', 'eval_runtime': '0.0558', 'eval_samples_per_second': '376.1', 'eval_steps_per_second': '17.91', 'epoch': '1'}
+{'train_runtime': '1087', 'train_samples_per_second': '235.5', 'train_steps_per_second': '0.92', 'train_loss': '5.026', 'epoch': '1'}
+{"dataset": "ett_h1_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "zero_shot_val_loss": 0.24560027677936974, "train_seconds": 1088.8, "finetuned_val_loss": 0.2336246516731329, "selected": "finetuned", "inference_seconds": {"chronos2_lora": 1.3, "chronos2_lora_inf8192": 3.7}}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+INFO:chronos.chronos2.pipeline:Using LoRA. Number of trainable parameters: 1206912, total parameters: 120684576.
+
+                                                  
+
+                                                  
+
+ 10%|█         | 100/1000 [01:50<16:34,  1.11s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 20%|██        | 200/1000 [03:41<14:41,  1.10s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 30%|███       | 300/1000 [05:32<12:52,  1.10s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 40%|████      | 400/1000 [07:23<11:01,  1.10s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 50%|█████     | 500/1000 [09:14<09:12,  1.11s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 60%|██████    | 600/1000 [11:04<07:22,  1.11s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 70%|███████   | 700/1000 [12:55<05:32,  1.11s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 80%|████████  | 800/1000 [14:46<03:40,  1.10s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 90%|█████████ | 900/1000 [16:37<01:50,  1.11s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                   
+
+                                                   
+
+100%|██████████| 1000/1000 [18:28<00:00,  1.10s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                   
+
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+INFO:chronos.chronos2.pipeline:Finetuned model saved to outputs/finetune/chronos2_lora_c2048/trainer/ett_h1_h96/finetuned-ckpt
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'loss': '5.773', 'grad_norm': '0.8315', 'learning_rate': '9.01e-06', 'epoch': '0.1'}
+{'eval_loss': '4.254', 'eval_runtime': '0.0571', 'eval_samples_per_second': '367.5', 'eval_steps_per_second': '17.5', 'epoch': '0.1'}
+{'loss': '5.722', 'grad_norm': '0.7574', 'learning_rate': '8.01e-06', 'epoch': '0.2'}
+{'eval_loss': '4.235', 'eval_runtime': '0.056', 'eval_samples_per_second': '374.8', 'eval_steps_per_second': '17.85', 'epoch': '0.2'}
+{'loss': '5.669', 'grad_norm': '1.144', 'learning_rate': '7.01e-06', 'epoch': '0.3'}
+{'eval_loss': '4.218', 'eval_runtime': '0.0562', 'eval_samples_per_second': '373.5', 'eval_steps_per_second': '17.79', 'epoch': '0.3'}
+{'loss': '5.658', 'grad_norm': '1.527', 'learning_rate': '6.01e-06', 'epoch': '0.4'}
+{'eval_loss': '4.22', 'eval_runtime': '0.0561', 'eval_samples_per_second': '374.6', 'eval_steps_per_second': '17.84', 'epoch': '0.4'}
+{'loss': '5.582', 'grad_norm': '1.444', 'learning_rate': '5.01e-06', 'epoch': '0.5'}
+{'eval_loss': '4.216', 'eval_runtime': '0.0562', 'eval_samples_per_second': '373.5', 'eval_steps_per_second': '17.79', 'epoch': '0.5'}
+{'loss': '5.578', 'grad_norm': '1.274', 'learning_rate': '4.01e-06', 'epoch': '0.6'}
+{'eval_loss': '4.212', 'eval_runtime': '0.0568', 'eval_samples_per_second': '369.6', 'eval_steps_per_second': '17.6', 'epoch': '0.6'}
+{'loss': '5.534', 'grad_norm': '1.41', 'learning_rate': '3.01e-06', 'epoch': '0.7'}
+{'eval_loss': '4.21', 'eval_runtime': '0.0568', 'eval_samples_per_second': '369.5', 'eval_steps_per_second': '17.6', 'epoch': '0.7'}
+{'loss': '5.532', 'grad_norm': '1.89', 'learning_rate': '2.01e-06', 'epoch': '0.8'}
+{'eval_loss': '4.21', 'eval_runtime': '0.0564', 'eval_samples_per_second': '372.4', 'eval_steps_per_second': '17.73', 'epoch': '0.8'}
+{'loss': '5.519', 'grad_norm': '2.757', 'learning_rate': '1.01e-06', 'epoch': '0.9'}
+{'eval_loss': '4.209', 'eval_runtime': '0.0565', 'eval_samples_per_second': '371.6', 'eval_steps_per_second': '17.69', 'epoch': '0.9'}
+{'loss': '5.553', 'grad_norm': '2.071', 'learning_rate': '1e-08', 'epoch': '1'}
+{'eval_loss': '4.209', 'eval_runtime': '0.0562', 'eval_samples_per_second': '373.9', 'eval_steps_per_second': '17.8', 'epoch': '1'}
+{'train_runtime': '1109', 'train_samples_per_second': '230.9', 'train_steps_per_second': '0.902', 'train_loss': '5.612', 'epoch': '1'}
+{"dataset": "ett_h1_h96", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "zero_shot_val_loss": 0.16687600280369055, "train_seconds": 1111.0, "finetuned_val_loss": 0.16394363049696242, "selected": "finetuned", "inference_seconds": {"chronos2_lora": 1.3, "chronos2_lora_inf8192": 3.7}}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+INFO:chronos.chronos2.pipeline:Using LoRA. Number of trainable parameters: 1206912, total parameters: 120684576.
+
+                                                  
+
+                                                  
+
+ 10%|█         | 100/1000 [01:47<16:11,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 20%|██        | 200/1000 [03:36<14:26,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 30%|███       | 300/1000 [05:25<12:36,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 40%|████      | 400/1000 [07:13<10:48,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 50%|█████     | 500/1000 [09:02<09:01,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 60%|██████    | 600/1000 [10:51<07:13,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 70%|███████   | 700/1000 [12:39<05:24,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 80%|████████  | 800/1000 [14:28<03:36,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 90%|█████████ | 900/1000 [16:17<01:48,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                   
+
+                                                   
+
+100%|██████████| 1000/1000 [18:06<00:00,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                   
+
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+INFO:chronos.chronos2.pipeline:Finetuned model saved to outputs/finetune/chronos2_lora_c2048/trainer/ett_h2_h48/finetuned-ckpt
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'loss': '5.05', 'grad_norm': '0.789', 'learning_rate': '9.01e-06', 'epoch': '0.1'}
+{'eval_loss': '6.699', 'eval_runtime': '0.056', 'eval_samples_per_second': '375.1', 'eval_steps_per_second': '17.86', 'epoch': '0.1'}
+{'loss': '5.012', 'grad_norm': '1.133', 'learning_rate': '8.01e-06', 'epoch': '0.2'}
+{'eval_loss': '6.728', 'eval_runtime': '0.056', 'eval_samples_per_second': '374.7', 'eval_steps_per_second': '17.84', 'epoch': '0.2'}
+{'loss': '4.999', 'grad_norm': '0.7767', 'learning_rate': '7.01e-06', 'epoch': '0.3'}
+{'eval_loss': '6.75', 'eval_runtime': '0.0554', 'eval_samples_per_second': '378.7', 'eval_steps_per_second': '18.04', 'epoch': '0.3'}
+{'loss': '4.974', 'grad_norm': '0.9215', 'learning_rate': '6.01e-06', 'epoch': '0.4'}
+{'eval_loss': '6.76', 'eval_runtime': '0.0546', 'eval_samples_per_second': '384.4', 'eval_steps_per_second': '18.31', 'epoch': '0.4'}
+{'loss': '4.992', 'grad_norm': '1.089', 'learning_rate': '5.01e-06', 'epoch': '0.5'}
+{'eval_loss': '6.757', 'eval_runtime': '0.0559', 'eval_samples_per_second': '375.4', 'eval_steps_per_second': '17.88', 'epoch': '0.5'}
+{'loss': '4.941', 'grad_norm': '1.066', 'learning_rate': '4.01e-06', 'epoch': '0.6'}
+{'eval_loss': '6.758', 'eval_runtime': '0.0553', 'eval_samples_per_second': '379.9', 'eval_steps_per_second': '18.09', 'epoch': '0.6'}
+{'loss': '4.942', 'grad_norm': '1.174', 'learning_rate': '3.01e-06', 'epoch': '0.7'}
+{'eval_loss': '6.773', 'eval_runtime': '0.0559', 'eval_samples_per_second': '375.9', 'eval_steps_per_second': '17.9', 'epoch': '0.7'}
+{'loss': '4.945', 'grad_norm': '1.123', 'learning_rate': '2.01e-06', 'epoch': '0.8'}
+{'eval_loss': '6.778', 'eval_runtime': '0.0553', 'eval_samples_per_second': '379.9', 'eval_steps_per_second': '18.09', 'epoch': '0.8'}
+{'loss': '4.928', 'grad_norm': '1.086', 'learning_rate': '1.01e-06', 'epoch': '0.9'}
+{'eval_loss': '6.776', 'eval_runtime': '0.0562', 'eval_samples_per_second': '373.4', 'eval_steps_per_second': '17.78', 'epoch': '0.9'}
+{'loss': '4.919', 'grad_norm': '0.9276', 'learning_rate': '1e-08', 'epoch': '1'}
+{'eval_loss': '6.774', 'eval_runtime': '0.0555', 'eval_samples_per_second': '378.5', 'eval_steps_per_second': '18.02', 'epoch': '1'}
+{'train_runtime': '1086', 'train_samples_per_second': '235.6', 'train_steps_per_second': '0.92', 'train_loss': '4.97', 'epoch': '1'}
+{"dataset": "ett_h2_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "zero_shot_val_loss": 0.26306365456304326, "train_seconds": 1088.6, "finetuned_val_loss": 0.2637409085337794, "selected": "zero_shot", "inference_seconds": {"chronos2_lora": 0.9, "chronos2_lora_inf8192": 2.3}}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+INFO:chronos.chronos2.pipeline:Using LoRA. Number of trainable parameters: 1206912, total parameters: 120684576.
+
+                                                  
+
+                                                  
+
+ 10%|█         | 100/1000 [01:48<16:17,  1.09s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 20%|██        | 200/1000 [03:38<14:28,  1.09s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 30%|███       | 300/1000 [05:27<12:41,  1.09s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 40%|████      | 400/1000 [07:17<10:51,  1.09s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 50%|█████     | 500/1000 [09:06<09:05,  1.09s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 60%|██████    | 600/1000 [10:55<07:13,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 70%|███████   | 700/1000 [12:45<05:27,  1.09s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 80%|████████  | 800/1000 [14:34<03:37,  1.09s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 90%|█████████ | 900/1000 [16:24<01:49,  1.10s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                   
+
+                                                   
+
+100%|██████████| 1000/1000 [18:14<00:00,  1.10s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                   
+
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+INFO:chronos.chronos2.pipeline:Finetuned model saved to outputs/finetune/chronos2_lora_c2048/trainer/ett_m1_h48/finetuned-ckpt
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'loss': '4.846', 'grad_norm': '1.726', 'learning_rate': '9.01e-06', 'epoch': '0.1'}
+{'eval_loss': '4', 'eval_runtime': '0.0553', 'eval_samples_per_second': '379.5', 'eval_steps_per_second': '18.07', 'epoch': '0.1'}
+{'loss': '4.874', 'grad_norm': '1.318', 'learning_rate': '8.01e-06', 'epoch': '0.2'}
+{'eval_loss': '4.044', 'eval_runtime': '0.0591', 'eval_samples_per_second': '355.6', 'eval_steps_per_second': '16.93', 'epoch': '0.2'}
+{'loss': '4.782', 'grad_norm': '1.577', 'learning_rate': '7.01e-06', 'epoch': '0.3'}
+{'eval_loss': '4.061', 'eval_runtime': '0.0559', 'eval_samples_per_second': '375.9', 'eval_steps_per_second': '17.9', 'epoch': '0.3'}
+{'loss': '4.8', 'grad_norm': '1.508', 'learning_rate': '6.01e-06', 'epoch': '0.4'}
+{'eval_loss': '4.081', 'eval_runtime': '0.0562', 'eval_samples_per_second': '373.6', 'eval_steps_per_second': '17.79', 'epoch': '0.4'}
+{'loss': '4.761', 'grad_norm': '1.51', 'learning_rate': '5.01e-06', 'epoch': '0.5'}
+{'eval_loss': '4.096', 'eval_runtime': '0.0562', 'eval_samples_per_second': '373.4', 'eval_steps_per_second': '17.78', 'epoch': '0.5'}
+{'loss': '4.721', 'grad_norm': '1.692', 'learning_rate': '4.01e-06', 'epoch': '0.6'}
+{'eval_loss': '4.101', 'eval_runtime': '0.0553', 'eval_samples_per_second': '380.1', 'eval_steps_per_second': '18.1', 'epoch': '0.6'}
+{'loss': '4.725', 'grad_norm': '2.065', 'learning_rate': '3.01e-06', 'epoch': '0.7'}
+{'eval_loss': '4.1', 'eval_runtime': '0.0564', 'eval_samples_per_second': '372.1', 'eval_steps_per_second': '17.72', 'epoch': '0.7'}
+{'loss': '4.716', 'grad_norm': '1.611', 'learning_rate': '2.01e-06', 'epoch': '0.8'}
+{'eval_loss': '4.11', 'eval_runtime': '0.0646', 'eval_samples_per_second': '324.9', 'eval_steps_per_second': '15.47', 'epoch': '0.8'}
+{'loss': '4.713', 'grad_norm': '1.65', 'learning_rate': '1.01e-06', 'epoch': '0.9'}
+{'eval_loss': '4.114', 'eval_runtime': '0.0576', 'eval_samples_per_second': '364.4', 'eval_steps_per_second': '17.35', 'epoch': '0.9'}
+{'loss': '4.715', 'grad_norm': '1.635', 'learning_rate': '1e-08', 'epoch': '1'}
+{'eval_loss': '4.114', 'eval_runtime': '0.0606', 'eval_samples_per_second': '346.6', 'eval_steps_per_second': '16.5', 'epoch': '1'}
+{'train_runtime': '1095', 'train_samples_per_second': '233.9', 'train_steps_per_second': '0.914', 'train_loss': '4.765', 'epoch': '1'}
+{"dataset": "ett_m1_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "zero_shot_val_loss": 0.14415219383696817, "train_seconds": 1096.8, "finetuned_val_loss": 0.1468418490688539, "selected": "zero_shot", "inference_seconds": {"chronos2_lora": 1.7, "chronos2_lora_inf8192": 3.0}}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+INFO:chronos.chronos2.pipeline:Using LoRA. Number of trainable parameters: 1206912, total parameters: 120684576.
+
+                                                  
+
+                                                  
+
+ 10%|█         | 100/1000 [01:49<16:29,  1.10s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 20%|██        | 200/1000 [03:39<14:40,  1.10s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 30%|███       | 300/1000 [05:29<12:48,  1.10s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 40%|████      | 400/1000 [07:19<10:52,  1.09s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 50%|█████     | 500/1000 [09:09<09:02,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 60%|██████    | 600/1000 [10:58<07:13,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 70%|███████   | 700/1000 [12:48<05:26,  1.09s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 80%|████████  | 800/1000 [14:37<03:37,  1.09s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 90%|█████████ | 900/1000 [16:27<01:49,  1.09s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                   
+
+                                                   
+
+100%|██████████| 1000/1000 [18:16<00:00,  1.09s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                   
+
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+INFO:chronos.chronos2.pipeline:Finetuned model saved to outputs/finetune/chronos2_lora_c2048/trainer/ett_m2_h48/finetuned-ckpt
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'loss': '4.959', 'grad_norm': '0.9169', 'learning_rate': '9.01e-06', 'epoch': '0.1'}
+{'eval_loss': '2.832', 'eval_runtime': '0.0605', 'eval_samples_per_second': '346.9', 'eval_steps_per_second': '16.52', 'epoch': '0.1'}
+{'loss': '4.924', 'grad_norm': '1.129', 'learning_rate': '8.01e-06', 'epoch': '0.2'}
+{'eval_loss': '2.859', 'eval_runtime': '0.058', 'eval_samples_per_second': '362', 'eval_steps_per_second': '17.24', 'epoch': '0.2'}
+{'loss': '4.895', 'grad_norm': '0.9988', 'learning_rate': '7.01e-06', 'epoch': '0.3'}
+{'eval_loss': '2.86', 'eval_runtime': '0.0574', 'eval_samples_per_second': '366.1', 'eval_steps_per_second': '17.43', 'epoch': '0.3'}
+{'loss': '4.832', 'grad_norm': '1.152', 'learning_rate': '6.01e-06', 'epoch': '0.4'}
+{'eval_loss': '2.864', 'eval_runtime': '0.0591', 'eval_samples_per_second': '355.5', 'eval_steps_per_second': '16.93', 'epoch': '0.4'}
+{'loss': '4.876', 'grad_norm': '1.296', 'learning_rate': '5.01e-06', 'epoch': '0.5'}
+{'eval_loss': '2.88', 'eval_runtime': '0.0561', 'eval_samples_per_second': '374.4', 'eval_steps_per_second': '17.83', 'epoch': '0.5'}
+{'loss': '4.87', 'grad_norm': '1.002', 'learning_rate': '4.01e-06', 'epoch': '0.6'}
+{'eval_loss': '2.877', 'eval_runtime': '0.055', 'eval_samples_per_second': '381.5', 'eval_steps_per_second': '18.17', 'epoch': '0.6'}
+{'loss': '4.832', 'grad_norm': '1.197', 'learning_rate': '3.01e-06', 'epoch': '0.7'}
+{'eval_loss': '2.886', 'eval_runtime': '0.0589', 'eval_samples_per_second': '356.7', 'eval_steps_per_second': '16.99', 'epoch': '0.7'}
+{'loss': '4.879', 'grad_norm': '1.32', 'learning_rate': '2.01e-06', 'epoch': '0.8'}
+{'eval_loss': '2.887', 'eval_runtime': '0.0564', 'eval_samples_per_second': '372.1', 'eval_steps_per_second': '17.72', 'epoch': '0.8'}
+{'loss': '4.847', 'grad_norm': '1.536', 'learning_rate': '1.01e-06', 'epoch': '0.9'}
+{'eval_loss': '2.889', 'eval_runtime': '0.057', 'eval_samples_per_second': '368.1', 'eval_steps_per_second': '17.53', 'epoch': '0.9'}
+{'loss': '4.837', 'grad_norm': '1.344', 'learning_rate': '1e-08', 'epoch': '1'}
+{'eval_loss': '2.889', 'eval_runtime': '0.0562', 'eval_samples_per_second': '373.5', 'eval_steps_per_second': '17.79', 'epoch': '1'}
+{'train_runtime': '1097', 'train_samples_per_second': '233.3', 'train_steps_per_second': '0.912', 'train_loss': '4.875', 'epoch': '1'}
+{"dataset": "ett_m2_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "zero_shot_val_loss": 0.1012738409934761, "train_seconds": 1099.2, "finetuned_val_loss": 0.10196140782074371, "selected": "zero_shot", "inference_seconds": {"chronos2_lora": 1.7, "chronos2_lora_inf8192": 3.0}}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+INFO:chronos.chronos2.pipeline:Using LoRA. Number of trainable parameters: 1206912, total parameters: 120684576.
+
+                                                  
+
+                                                  
+
+ 10%|█         | 100/1000 [01:49<16:14,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 20%|██        | 200/1000 [03:39<14:27,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 30%|███       | 300/1000 [05:30<12:38,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 40%|████      | 400/1000 [07:20<10:49,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 50%|█████     | 500/1000 [09:10<09:01,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 60%|██████    | 600/1000 [11:00<07:12,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 70%|███████   | 700/1000 [12:50<05:24,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 80%|████████  | 800/1000 [14:41<03:36,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 90%|█████████ | 900/1000 [16:31<01:48,  1.09s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                   
+
+                                                   
+
+100%|██████████| 1000/1000 [18:21<00:00,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                   
+
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+INFO:chronos.chronos2.pipeline:Finetuned model saved to outputs/finetune/chronos2_lora_c2048/trainer/ecl_h48/finetuned-ckpt
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'loss': '2.397', 'grad_norm': '0.3667', 'learning_rate': '9.01e-06', 'epoch': '0.1'}
+{'eval_loss': '2.081', 'eval_runtime': '1.53', 'eval_samples_per_second': '629.4', 'eval_steps_per_second': '5.229', 'epoch': '0.1'}
+{'loss': '2.428', 'grad_norm': '0.3749', 'learning_rate': '8.01e-06', 'epoch': '0.2'}
+{'eval_loss': '2.078', 'eval_runtime': '1.531', 'eval_samples_per_second': '629.1', 'eval_steps_per_second': '5.227', 'epoch': '0.2'}
+{'loss': '2.426', 'grad_norm': '0.4516', 'learning_rate': '7.01e-06', 'epoch': '0.3'}
+{'eval_loss': '2.078', 'eval_runtime': '1.531', 'eval_samples_per_second': '628.9', 'eval_steps_per_second': '5.224', 'epoch': '0.3'}
+{'loss': '2.406', 'grad_norm': '0.4523', 'learning_rate': '6.01e-06', 'epoch': '0.4'}
+{'eval_loss': '2.077', 'eval_runtime': '1.53', 'eval_samples_per_second': '629.5', 'eval_steps_per_second': '5.23', 'epoch': '0.4'}
+{'loss': '2.391', 'grad_norm': '0.433', 'learning_rate': '5.01e-06', 'epoch': '0.5'}
+{'eval_loss': '2.075', 'eval_runtime': '1.53', 'eval_samples_per_second': '629.4', 'eval_steps_per_second': '5.228', 'epoch': '0.5'}
+{'loss': '2.379', 'grad_norm': '0.6304', 'learning_rate': '4.01e-06', 'epoch': '0.6'}
+{'eval_loss': '2.075', 'eval_runtime': '1.529', 'eval_samples_per_second': '629.7', 'eval_steps_per_second': '5.231', 'epoch': '0.6'}
+{'loss': '2.392', 'grad_norm': '0.6773', 'learning_rate': '3.01e-06', 'epoch': '0.7'}
+{'eval_loss': '2.076', 'eval_runtime': '1.53', 'eval_samples_per_second': '629.5', 'eval_steps_per_second': '5.23', 'epoch': '0.7'}
+{'loss': '2.397', 'grad_norm': '0.7932', 'learning_rate': '2.01e-06', 'epoch': '0.8'}
+{'eval_loss': '2.075', 'eval_runtime': '1.531', 'eval_samples_per_second': '629.1', 'eval_steps_per_second': '5.226', 'epoch': '0.8'}
+{'loss': '2.394', 'grad_norm': '0.5556', 'learning_rate': '1.01e-06', 'epoch': '0.9'}
+{'eval_loss': '2.075', 'eval_runtime': '1.536', 'eval_samples_per_second': '627', 'eval_steps_per_second': '5.209', 'epoch': '0.9'}
+{'loss': '2.397', 'grad_norm': '0.4886', 'learning_rate': '1e-08', 'epoch': '1'}
+{'eval_loss': '2.075', 'eval_runtime': '1.53', 'eval_samples_per_second': '629.6', 'eval_steps_per_second': '5.23', 'epoch': '1'}
+{'train_runtime': '1102', 'train_samples_per_second': '232.3', 'train_steps_per_second': '0.907', 'train_loss': '2.401', 'epoch': '1'}
+{"dataset": "ecl_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "zero_shot_val_loss": 0.071690009213119, "train_seconds": 1104.4, "finetuned_val_loss": 0.07163991522571414, "selected": "finetuned", "inference_seconds": {"chronos2_lora": 54.1, "chronos2_lora_inf8192": 121.4}}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+INFO:chronos.chronos2.pipeline:Using LoRA. Number of trainable parameters: 1206912, total parameters: 120684576.
+
+                                                  
+
+                                                  
+
+ 10%|█         | 100/1000 [01:51<16:12,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 20%|██        | 200/1000 [03:44<14:26,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 30%|███       | 300/1000 [05:37<12:38,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 40%|████      | 400/1000 [07:30<10:50,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 50%|█████     | 500/1000 [09:23<09:09,  1.10s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 60%|██████    | 600/1000 [11:16<07:12,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 70%|███████   | 700/1000 [13:08<05:24,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 80%|████████  | 800/1000 [15:01<03:36,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 90%|█████████ | 900/1000 [16:54<01:48,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                   
+
+                                                   
+
+100%|██████████| 1000/1000 [18:46<00:00,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                   
+
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+INFO:chronos.chronos2.pipeline:Finetuned model saved to outputs/finetune/chronos2_lora_c2048/trainer/traffic_h48/finetuned-ckpt
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'loss': '2.021', 'grad_norm': '0.4132', 'learning_rate': '9.01e-06', 'epoch': '0.1'}
+{'eval_loss': '3.746', 'eval_runtime': '4.078', 'eval_samples_per_second': '634.1', 'eval_steps_per_second': '5.15', 'epoch': '0.1'}
+{'loss': '2.013', 'grad_norm': '0.4214', 'learning_rate': '8.01e-06', 'epoch': '0.2'}
+{'eval_loss': '3.722', 'eval_runtime': '4.079', 'eval_samples_per_second': '633.9', 'eval_steps_per_second': '5.148', 'epoch': '0.2'}
+{'loss': '2.01', 'grad_norm': '0.5306', 'learning_rate': '7.01e-06', 'epoch': '0.3'}
+{'eval_loss': '3.693', 'eval_runtime': '4.084', 'eval_samples_per_second': '633.2', 'eval_steps_per_second': '5.142', 'epoch': '0.3'}
+{'loss': '2.008', 'grad_norm': '0.4924', 'learning_rate': '6.01e-06', 'epoch': '0.4'}
+{'eval_loss': '3.655', 'eval_runtime': '4.081', 'eval_samples_per_second': '633.7', 'eval_steps_per_second': '5.146', 'epoch': '0.4'}
+{'loss': '2.018', 'grad_norm': '0.5415', 'learning_rate': '5.01e-06', 'epoch': '0.5'}
+{'eval_loss': '3.641', 'eval_runtime': '4.083', 'eval_samples_per_second': '633.4', 'eval_steps_per_second': '5.144', 'epoch': '0.5'}
+{'loss': '1.986', 'grad_norm': '0.6053', 'learning_rate': '4.01e-06', 'epoch': '0.6'}
+{'eval_loss': '3.654', 'eval_runtime': '4.078', 'eval_samples_per_second': '634.1', 'eval_steps_per_second': '5.15', 'epoch': '0.6'}
+{'loss': '1.997', 'grad_norm': '0.6514', 'learning_rate': '3.01e-06', 'epoch': '0.7'}
+{'eval_loss': '3.625', 'eval_runtime': '4.079', 'eval_samples_per_second': '633.9', 'eval_steps_per_second': '5.148', 'epoch': '0.7'}
+{'loss': '1.987', 'grad_norm': '0.5885', 'learning_rate': '2.01e-06', 'epoch': '0.8'}
+{'eval_loss': '3.627', 'eval_runtime': '4.078', 'eval_samples_per_second': '634.2', 'eval_steps_per_second': '5.15', 'epoch': '0.8'}
+{'loss': '2.002', 'grad_norm': '0.7091', 'learning_rate': '1.01e-06', 'epoch': '0.9'}
+{'eval_loss': '3.628', 'eval_runtime': '4.081', 'eval_samples_per_second': '633.6', 'eval_steps_per_second': '5.146', 'epoch': '0.9'}
+{'loss': '2.009', 'grad_norm': '0.6609', 'learning_rate': '1e-08', 'epoch': '1'}
+{'eval_loss': '3.624', 'eval_runtime': '4.083', 'eval_samples_per_second': '633.3', 'eval_steps_per_second': '5.143', 'epoch': '1'}
+{'train_runtime': '1127', 'train_samples_per_second': '227.1', 'train_steps_per_second': '0.887', 'train_loss': '2.005', 'epoch': '1'}
+{"dataset": "traffic_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "zero_shot_val_loss": 0.12943223563514014, "train_seconds": 1129.4, "finetuned_val_loss": 0.12582880938626428, "selected": "finetuned", "inference_seconds": {"chronos2_lora": 116.3, "chronos2_lora_inf8192": 290.9}}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+INFO:chronos.chronos2.pipeline:Using LoRA. Number of trainable parameters: 1206912, total parameters: 120684576.
+
+                                                  
+
+                                                  
+
+ 10%|█         | 100/1000 [01:49<16:32,  1.10s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 20%|██        | 200/1000 [03:38<14:28,  1.09s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 30%|███       | 300/1000 [05:27<12:37,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 40%|████      | 400/1000 [07:16<10:54,  1.09s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 50%|█████     | 500/1000 [09:05<09:01,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 60%|██████    | 600/1000 [10:55<07:15,  1.09s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 70%|███████   | 700/1000 [12:44<05:32,  1.11s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 80%|████████  | 800/1000 [14:33<03:38,  1.09s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 90%|█████████ | 900/1000 [16:22<01:48,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                   
+
+                                                   
+
+100%|██████████| 1000/1000 [18:11<00:00,  1.09s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                   
+
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+INFO:chronos.chronos2.pipeline:Finetuned model saved to outputs/finetune/chronos2_lora_c2048/trainer/weather_h48/finetuned-ckpt
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'loss': '3.569', 'grad_norm': '0.8836', 'learning_rate': '9.01e-06', 'epoch': '0.1'}
+{'eval_loss': '3.632', 'eval_runtime': '0.1153', 'eval_samples_per_second': '546.5', 'eval_steps_per_second': '8.675', 'epoch': '0.1'}
+{'loss': '3.54', 'grad_norm': '1.199', 'learning_rate': '8.01e-06', 'epoch': '0.2'}
+{'eval_loss': '3.6', 'eval_runtime': '0.1136', 'eval_samples_per_second': '554.6', 'eval_steps_per_second': '8.803', 'epoch': '0.2'}
+{'loss': '3.496', 'grad_norm': '1.101', 'learning_rate': '7.01e-06', 'epoch': '0.3'}
+{'eval_loss': '3.569', 'eval_runtime': '0.1129', 'eval_samples_per_second': '557.9', 'eval_steps_per_second': '8.856', 'epoch': '0.3'}
+{'loss': '3.489', 'grad_norm': '1.232', 'learning_rate': '6.01e-06', 'epoch': '0.4'}
+{'eval_loss': '3.582', 'eval_runtime': '0.1209', 'eval_samples_per_second': '521', 'eval_steps_per_second': '8.27', 'epoch': '0.4'}
+{'loss': '3.475', 'grad_norm': '1.363', 'learning_rate': '5.01e-06', 'epoch': '0.5'}
+{'eval_loss': '3.593', 'eval_runtime': '0.1134', 'eval_samples_per_second': '555.5', 'eval_steps_per_second': '8.818', 'epoch': '0.5'}
+{'loss': '3.502', 'grad_norm': '1.246', 'learning_rate': '4.01e-06', 'epoch': '0.6'}
+{'eval_loss': '3.575', 'eval_runtime': '0.1195', 'eval_samples_per_second': '527.1', 'eval_steps_per_second': '8.366', 'epoch': '0.6'}
+{'loss': '3.498', 'grad_norm': '1.383', 'learning_rate': '3.01e-06', 'epoch': '0.7'}
+{'eval_loss': '3.57', 'eval_runtime': '0.119', 'eval_samples_per_second': '529.3', 'eval_steps_per_second': '8.402', 'epoch': '0.7'}
+{'loss': '3.479', 'grad_norm': '1.338', 'learning_rate': '2.01e-06', 'epoch': '0.8'}
+{'eval_loss': '3.566', 'eval_runtime': '0.113', 'eval_samples_per_second': '557.5', 'eval_steps_per_second': '8.848', 'epoch': '0.8'}
+{'loss': '3.47', 'grad_norm': '1.123', 'learning_rate': '1.01e-06', 'epoch': '0.9'}
+{'eval_loss': '3.568', 'eval_runtime': '0.1182', 'eval_samples_per_second': '532.9', 'eval_steps_per_second': '8.458', 'epoch': '0.9'}
+{'loss': '3.482', 'grad_norm': '1.381', 'learning_rate': '1e-08', 'epoch': '1'}
+{'eval_loss': '3.57', 'eval_runtime': '0.1228', 'eval_samples_per_second': '513', 'eval_steps_per_second': '8.142', 'epoch': '1'}
+{'train_runtime': '1092', 'train_samples_per_second': '234.5', 'train_steps_per_second': '0.916', 'train_loss': '3.5', 'epoch': '1'}
+{"dataset": "weather_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "zero_shot_val_loss": 0.14305497347584203, "train_seconds": 1093.7, "finetuned_val_loss": 0.13980868284664832, "selected": "finetuned", "inference_seconds": {"chronos2_lora": 5.2, "chronos2_lora_inf8192": 11.3}}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+INFO:chronos.chronos2.pipeline:Using LoRA. Number of trainable parameters: 1206912, total parameters: 120684576.
+
+                                                  
+
+                                                  
+
+ 10%|█         | 100/1000 [01:47<16:10,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 20%|██        | 200/1000 [03:35<14:20,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 30%|███       | 300/1000 [05:23<12:33,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 40%|████      | 400/1000 [07:12<10:47,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 50%|█████     | 500/1000 [09:00<08:56,  1.07s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 60%|██████    | 600/1000 [10:48<07:10,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 70%|███████   | 700/1000 [12:36<05:23,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 80%|████████  | 800/1000 [14:24<03:35,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 90%|█████████ | 900/1000 [16:12<01:47,  1.07s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                   
+
+                                                   
+
+100%|██████████| 1000/1000 [18:00<00:00,  1.08s/it]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                   
+
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+INFO:chronos.chronos2.pipeline:Finetuned model saved to outputs/finetune/chronos2_lora_c2048/trainer/exchange_h48/finetuned-ckpt
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'loss': '2.425', 'grad_norm': '0.4981', 'learning_rate': '9.01e-06', 'epoch': '0.1'}
+{'eval_loss': '1.703', 'eval_runtime': '0.0592', 'eval_samples_per_second': '405.6', 'eval_steps_per_second': '16.9', 'epoch': '0.1'}
+{'loss': '2.465', 'grad_norm': '0.7455', 'learning_rate': '8.01e-06', 'epoch': '0.2'}
+{'eval_loss': '1.726', 'eval_runtime': '0.0579', 'eval_samples_per_second': '414.7', 'eval_steps_per_second': '17.28', 'epoch': '0.2'}
+{'loss': '2.401', 'grad_norm': '0.6435', 'learning_rate': '7.01e-06', 'epoch': '0.3'}
+{'eval_loss': '1.751', 'eval_runtime': '0.058', 'eval_samples_per_second': '414', 'eval_steps_per_second': '17.25', 'epoch': '0.3'}
+{'loss': '2.387', 'grad_norm': '0.5448', 'learning_rate': '6.01e-06', 'epoch': '0.4'}
+{'eval_loss': '1.77', 'eval_runtime': '0.0581', 'eval_samples_per_second': '413.3', 'eval_steps_per_second': '17.22', 'epoch': '0.4'}
+{'loss': '2.366', 'grad_norm': '0.6709', 'learning_rate': '5.01e-06', 'epoch': '0.5'}
+{'eval_loss': '1.77', 'eval_runtime': '0.0583', 'eval_samples_per_second': '411.9', 'eval_steps_per_second': '17.16', 'epoch': '0.5'}
+{'loss': '2.355', 'grad_norm': '0.6204', 'learning_rate': '4.01e-06', 'epoch': '0.6'}
+{'eval_loss': '1.781', 'eval_runtime': '0.058', 'eval_samples_per_second': '413.9', 'eval_steps_per_second': '17.24', 'epoch': '0.6'}
+{'loss': '2.346', 'grad_norm': '0.653', 'learning_rate': '3.01e-06', 'epoch': '0.7'}
+{'eval_loss': '1.787', 'eval_runtime': '0.058', 'eval_samples_per_second': '413.7', 'eval_steps_per_second': '17.24', 'epoch': '0.7'}
+{'loss': '2.36', 'grad_norm': '0.584', 'learning_rate': '2.01e-06', 'epoch': '0.8'}
+{'eval_loss': '1.78', 'eval_runtime': '0.0578', 'eval_samples_per_second': '415.1', 'eval_steps_per_second': '17.3', 'epoch': '0.8'}
+{'loss': '2.39', 'grad_norm': '0.7569', 'learning_rate': '1.01e-06', 'epoch': '0.9'}
+{'eval_loss': '1.792', 'eval_runtime': '0.0592', 'eval_samples_per_second': '405.3', 'eval_steps_per_second': '16.89', 'epoch': '0.9'}
+{'loss': '2.336', 'grad_norm': '0.7284', 'learning_rate': '1e-08', 'epoch': '1'}
+{'eval_loss': '1.794', 'eval_runtime': '0.0589', 'eval_samples_per_second': '407.2', 'eval_steps_per_second': '16.97', 'epoch': '1'}
+{'train_runtime': '1081', 'train_samples_per_second': '236.8', 'train_steps_per_second': '0.925', 'train_loss': '2.383', 'epoch': '1'}
+{"dataset": "exchange_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "zero_shot_val_loss": 0.06114655947524914, "train_seconds": 1083.0, "finetuned_val_loss": 0.06213687609861191, "selected": "zero_shot", "inference_seconds": {"chronos2_lora": 0.8, "chronos2_lora_inf8192": 2.1}}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+INFO:chronos.chronos2.pipeline:Using LoRA. Number of trainable parameters: 1206912, total parameters: 120684576.
+
+                                                  
+
+                                                  
+
+ 10%|█         | 100/1000 [00:29<04:27,  3.37it/s]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 20%|██        | 200/1000 [00:59<03:57,  3.37it/s]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 30%|███       | 300/1000 [01:30<03:29,  3.35it/s]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 40%|████      | 400/1000 [02:00<03:00,  3.32it/s]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 50%|█████     | 500/1000 [02:31<02:30,  3.32it/s]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 60%|██████    | 600/1000 [03:01<02:00,  3.32it/s]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 70%|███████   | 700/1000 [03:31<01:29,  3.34it/s]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 80%|████████  | 800/1000 [04:02<00:59,  3.36it/s]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                  
+
+                                                  
+
+ 90%|█████████ | 900/1000 [04:32<00:29,  3.35it/s]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                   
+
+                                                   
+
+100%|██████████| 1000/1000 [05:02<00:00,  3.34it/s]INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+
+                                                   
+
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/amazon/chronos-2/29ec3766d36d6f73f0696f85560a422f50e8498c/config.json?%2Famazon%2Fchronos-2%2Fresolve%2Fmain%2Fconfig.json=&etag=%22f3207394965100a2aa18820b87da3d2bbad3b1f0%22 "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/models/amazon/chronos-2/revision/main "HTTP/1.1 200 OK"
+INFO:chronos.chronos2.pipeline:Finetuned model saved to outputs/finetune/chronos2_lora_c2048/trainer/ili_h48/finetuned-ckpt
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'loss': '5.526', 'grad_norm': '1.979', 'learning_rate': '9.01e-06', 'epoch': '0.1'}
+{'eval_loss': '2.536', 'eval_runtime': '0.0505', 'eval_samples_per_second': '416', 'eval_steps_per_second': '19.81', 'epoch': '0.1'}
+{'loss': '4.869', 'grad_norm': '1.983', 'learning_rate': '8.01e-06', 'epoch': '0.2'}
+{'eval_loss': '2.66', 'eval_runtime': '0.0491', 'eval_samples_per_second': '427.3', 'eval_steps_per_second': '20.35', 'epoch': '0.2'}
+{'loss': '4.358', 'grad_norm': '1.759', 'learning_rate': '7.01e-06', 'epoch': '0.3'}
+{'eval_loss': '2.87', 'eval_runtime': '0.0519', 'eval_samples_per_second': '404.7', 'eval_steps_per_second': '19.27', 'epoch': '0.3'}
+{'loss': '3.973', 'grad_norm': '2.725', 'learning_rate': '6.01e-06', 'epoch': '0.4'}
+{'eval_loss': '3.029', 'eval_runtime': '0.0509', 'eval_samples_per_second': '412.3', 'eval_steps_per_second': '19.63', 'epoch': '0.4'}
+{'loss': '3.471', 'grad_norm': '2.733', 'learning_rate': '5.01e-06', 'epoch': '0.5'}
+{'eval_loss': '2.944', 'eval_runtime': '0.0502', 'eval_samples_per_second': '417.9', 'eval_steps_per_second': '19.9', 'epoch': '0.5'}
+{'loss': '3.111', 'grad_norm': '2.381', 'learning_rate': '4.01e-06', 'epoch': '0.6'}
+{'eval_loss': '2.914', 'eval_runtime': '0.0521', 'eval_samples_per_second': '403.4', 'eval_steps_per_second': '19.21', 'epoch': '0.6'}
+{'loss': '2.905', 'grad_norm': '2.632', 'learning_rate': '3.01e-06', 'epoch': '0.7'}
+{'eval_loss': '2.943', 'eval_runtime': '0.0497', 'eval_samples_per_second': '422.3', 'eval_steps_per_second': '20.11', 'epoch': '0.7'}
+{'loss': '2.755', 'grad_norm': '2.713', 'learning_rate': '2.01e-06', 'epoch': '0.8'}
+{'eval_loss': '2.973', 'eval_runtime': '0.0501', 'eval_samples_per_second': '418.8', 'eval_steps_per_second': '19.94', 'epoch': '0.8'}
+{'loss': '2.677', 'grad_norm': '2.787', 'learning_rate': '1.01e-06', 'epoch': '0.9'}
+{'eval_loss': '2.982', 'eval_runtime': '0.0501', 'eval_samples_per_second': '419.1', 'eval_steps_per_second': '19.96', 'epoch': '0.9'}
+{'loss': '2.61', 'grad_norm': '2.855', 'learning_rate': '1e-08', 'epoch': '1'}
+{'eval_loss': '2.989', 'eval_runtime': '0.0728', 'eval_samples_per_second': '288.5', 'eval_steps_per_second': '13.74', 'epoch': '1'}
+{'train_runtime': '303.3', 'train_samples_per_second': '843.9', 'train_steps_per_second': '3.297', 'train_loss': '3.625', 'epoch': '1'}
+{"dataset": "ili_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6], "validation_windows": [7, 8, 9], "zero_shot_val_loss": 0.09833915519707412, "train_seconds": 305.5, "finetuned_val_loss": 0.09861924850402927, "selected": "zero_shot", "inference_seconds": {"chronos2_lora": 0.3, "chronos2_lora_inf8192": 0.3}}
+== timesfm_lora seed 1 2026-10-27T15:04:15Z
+{"dataset": "m4_hourly", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6], "validation_windows": [7, 8, 9], "train_seconds": 369.9, "best_step": 400, "best_val_loss": 0.073620588115256, "zero_shot_val_loss": 0.07870519823498195, "inference_seconds": {"timesfm_2p5_lora_s1": 17.4, "timesfm_2p5_lora_s1_inf16256": 268.2}}
+{"dataset": "ett_h1_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 330.3, "best_step": 0, "best_val_loss": 0.23393903175989786, "zero_shot_val_loss": 0.23393903175989786, "inference_seconds": {"timesfm_2p5_lora_s1": 2.2, "timesfm_2p5_lora_s1_inf16256": 17.8}}
+{"dataset": "ett_h1_h96", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 328.1, "best_step": 200, "best_val_loss": 0.22365722060203552, "zero_shot_val_loss": 0.22582843899726868, "inference_seconds": {"timesfm_2p5_lora_s1": 2.2, "timesfm_2p5_lora_s1_inf16256": 17.8}}
+{"dataset": "ett_h2_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 328.2, "best_step": 100, "best_val_loss": 0.23941722015539804, "zero_shot_val_loss": 0.24200009802977243, "inference_seconds": {"timesfm_2p5_lora_s1": 2.2, "timesfm_2p5_lora_s1_inf16256": 17.8}}
+{"dataset": "ett_m1_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 328.0, "best_step": 0, "best_val_loss": 0.15988261500994363, "zero_shot_val_loss": 0.15988261500994363, "inference_seconds": {"timesfm_2p5_lora_s1": 3.2, "timesfm_2p5_lora_s1_inf16256": 18.4}}
+{"dataset": "ett_m2_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 327.7, "best_step": 0, "best_val_loss": 0.092848335703214, "zero_shot_val_loss": 0.092848335703214, "inference_seconds": {"timesfm_2p5_lora_s1": 3.2, "timesfm_2p5_lora_s1_inf16256": 18.3}}
+{"dataset": "ecl_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 366.5, "best_step": 1000, "best_val_loss": 0.07710429863580662, "zero_shot_val_loss": 0.07887383277294915, "inference_seconds": {"timesfm_2p5_lora_s1": 58.3, "timesfm_2p5_lora_s1_inf16256": 441.4}}
+{"dataset": "traffic_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 428.0, "best_step": 500, "best_val_loss": 0.09652110840332942, "zero_shot_val_loss": 0.10759629382934113, "inference_seconds": {"timesfm_2p5_lora_s1": 124.9, "timesfm_2p5_lora_s1_inf16256": 1140.6}}
+{"dataset": "weather_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 329.7, "best_step": 100, "best_val_loss": 0.1186104267835617, "zero_shot_val_loss": 0.12447129189968109, "inference_seconds": {"timesfm_2p5_lora_s1": 5.1, "timesfm_2p5_lora_s1_inf16256": 36.1}}
+{"dataset": "exchange_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 329.9, "best_step": 100, "best_val_loss": 0.1291357676188151, "zero_shot_val_loss": 0.13084810227155685, "inference_seconds": {"timesfm_2p5_lora_s1": 2.1, "timesfm_2p5_lora_s1_inf16256": 18.7}}
+{"dataset": "ili_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6], "validation_windows": [7, 8, 9], "train_seconds": 325.9, "best_step": 0, "best_val_loss": 0.05705273772279421, "zero_shot_val_loss": 0.05705273772279421, "inference_seconds": {"timesfm_2p5_lora_s1": 1.0, "timesfm_2p5_lora_s1_inf16256": 8.7}}
+== timesfm_lora seed 2 2026-10-27T16:47:27Z
+{"dataset": "m4_hourly", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6], "validation_windows": [7, 8, 9], "train_seconds": 369.4, "best_step": 100, "best_val_loss": 0.07346455236947863, "zero_shot_val_loss": 0.07870519823498195, "inference_seconds": {"timesfm_2p5_lora_s2": 17.4, "timesfm_2p5_lora_s2_inf16256": 268.4}}
+{"dataset": "ett_h1_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 329.4, "best_step": 0, "best_val_loss": 0.23393903175989786, "zero_shot_val_loss": 0.23393903175989786, "inference_seconds": {"timesfm_2p5_lora_s2": 2.3, "timesfm_2p5_lora_s2_inf16256": 17.9}}
+{"dataset": "ett_h1_h96", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 330.2, "best_step": 200, "best_val_loss": 0.22324650486310324, "zero_shot_val_loss": 0.22582843899726868, "inference_seconds": {"timesfm_2p5_lora_s2": 2.3, "timesfm_2p5_lora_s2_inf16256": 18.0}}
+{"dataset": "ett_h2_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 329.0, "best_step": 100, "best_val_loss": 0.23970204095045725, "zero_shot_val_loss": 0.24200009802977243, "inference_seconds": {"timesfm_2p5_lora_s2": 2.3, "timesfm_2p5_lora_s2_inf16256": 17.9}}
+{"dataset": "ett_m1_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 329.0, "best_step": 100, "best_val_loss": 0.15984485546747842, "zero_shot_val_loss": 0.15988261500994363, "inference_seconds": {"timesfm_2p5_lora_s2": 3.3, "timesfm_2p5_lora_s2_inf16256": 18.5}}
+{"dataset": "ett_m2_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 329.4, "best_step": 0, "best_val_loss": 0.092848335703214, "zero_shot_val_loss": 0.092848335703214, "inference_seconds": {"timesfm_2p5_lora_s2": 3.4, "timesfm_2p5_lora_s2_inf16256": 18.4}}
+{"dataset": "ecl_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 367.6, "best_step": 1000, "best_val_loss": 0.07715336675151238, "zero_shot_val_loss": 0.07887383277294915, "inference_seconds": {"timesfm_2p5_lora_s2": 58.3, "timesfm_2p5_lora_s2_inf16256": 442.2}}
+{"dataset": "traffic_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 427.8, "best_step": 100, "best_val_loss": 0.09974283105005889, "zero_shot_val_loss": 0.10759629382934113, "inference_seconds": {"timesfm_2p5_lora_s2": 123.8, "timesfm_2p5_lora_s2_inf16256": 1141.4}}
+{"dataset": "weather_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 327.9, "best_step": 100, "best_val_loss": 0.11700319995482762, "zero_shot_val_loss": 0.12447129189968109, "inference_seconds": {"timesfm_2p5_lora_s2": 5.5, "timesfm_2p5_lora_s2_inf16256": 36.5}}
+{"dataset": "exchange_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "validation_windows": [17, 18, 19], "train_seconds": 329.2, "best_step": 100, "best_val_loss": 0.13014690826336542, "zero_shot_val_loss": 0.13084810227155685, "inference_seconds": {"timesfm_2p5_lora_s2": 2.1, "timesfm_2p5_lora_s2_inf16256": 18.9}}
+{"dataset": "ili_h48", "evaluated_windows": [0, 1, 2, 3, 4, 5, 6], "validation_windows": [7, 8, 9], "train_seconds": 324.6, "best_step": 0, "best_val_loss": 0.05705273772279421, "zero_shot_val_loss": 0.05705273772279421, "inference_seconds": {"timesfm_2p5_lora_s2": 1.0, "timesfm_2p5_lora_s2_inf16256": 8.8}}
+finished 2026-10-27T18:30:44Z

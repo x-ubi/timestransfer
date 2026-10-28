@@ -1,0 +1,148 @@
+{'strategy': 'tfm_default', 'dataset': 'm4_hourly', 'seconds_per_window': 1.4147449096587177, 'n_series': 414, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_ctx8192', 'dataset': 'm4_hourly', 'seconds_per_window': 11.314328049697602, 'n_series': 414, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_long', 'dataset': 'm4_hourly', 'seconds_per_window': 23.627365606604144, 'n_series': 414, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_lora', 'dataset': 'm4_hourly', 'seconds_per_window': 1.4549794742682327, 'n_series': 414, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_lora_long', 'dataset': 'm4_hourly', 'seconds_per_window': 23.67261727297834, 'n_series': 414, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: GET https://huggingface.co/api/agent-harnesses "HTTP/1.1 200 OK"
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_ctx2048', 'dataset': 'm4_hourly', 'seconds_per_window': 0.572707314354678, 'n_series': 414, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING:huggingface_hub.utils._http:Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+{'strategy': 'chr_default', 'dataset': 'm4_hourly', 'seconds_per_window': 0.5705951336227978, 'n_series': 414, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_lora_c2048', 'dataset': 'm4_hourly', 'seconds_per_window': 0.5958662699752798, 'n_series': 414, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_lora_long', 'dataset': 'm4_hourly', 'seconds_per_window': 0.5888385826256126, 'n_series': 414, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_default', 'dataset': 'ett_h1_h48', 'seconds_per_window': 0.06993934931233525, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_ctx8192', 'dataset': 'ett_h1_h48', 'seconds_per_window': 0.39399366034194827, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_long', 'dataset': 'ett_h1_h48', 'seconds_per_window': 0.8196141963514189, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_lora', 'dataset': 'ett_h1_h48', 'seconds_per_window': 0.06999902194365859, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_lora_long', 'dataset': 'ett_h1_h48', 'seconds_per_window': 0.8192914219883581, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_ctx2048', 'dataset': 'ett_h1_h48', 'seconds_per_window': 0.0264446569684272, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_default', 'dataset': 'ett_h1_h48', 'seconds_per_window': 0.0960598833238085, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_lora_c2048', 'dataset': 'ett_h1_h48', 'seconds_per_window': 0.04505966002276788, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_lora_long', 'dataset': 'ett_h1_h48', 'seconds_per_window': 0.1679650633207833, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_default', 'dataset': 'ett_h1_h96', 'seconds_per_window': 0.06901136933205028, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_ctx8192', 'dataset': 'ett_h1_h96', 'seconds_per_window': 0.38931152534981567, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_long', 'dataset': 'ett_h1_h96', 'seconds_per_window': 0.8183935566727693, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_lora', 'dataset': 'ett_h1_h96', 'seconds_per_window': 0.06944941869005561, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_lora_long', 'dataset': 'ett_h1_h96', 'seconds_per_window': 0.8156612503031889, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_ctx2048', 'dataset': 'ett_h1_h96', 'seconds_per_window': 0.02674433736441036, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_default', 'dataset': 'ett_h1_h96', 'seconds_per_window': 0.09615184036859621, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_lora_c2048', 'dataset': 'ett_h1_h96', 'seconds_per_window': 0.04550884896889329, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_lora_long', 'dataset': 'ett_h1_h96', 'seconds_per_window': 0.1678270126770561, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_default', 'dataset': 'ett_h2_h48', 'seconds_per_window': 0.06951331801246852, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_ctx8192', 'dataset': 'ett_h2_h48', 'seconds_per_window': 0.3899277523159981, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_long', 'dataset': 'ett_h2_h48', 'seconds_per_window': 0.8160777776890124, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_lora', 'dataset': 'ett_h2_h48', 'seconds_per_window': 0.06980316162419815, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_lora_long', 'dataset': 'ett_h2_h48', 'seconds_per_window': 0.8139996813066924, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_ctx2048', 'dataset': 'ett_h2_h48', 'seconds_per_window': 0.026218139605286222, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_default', 'dataset': 'ett_h2_h48', 'seconds_per_window': 0.09582408063579351, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_lora_c2048', 'dataset': 'ett_h2_h48', 'seconds_per_window': 0.044873546614932515, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_lora_long', 'dataset': 'ett_h2_h48', 'seconds_per_window': 0.1668530903213347, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_default', 'dataset': 'ett_m1_h48', 'seconds_per_window': 0.070368710362042, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_ctx8192', 'dataset': 'ett_m1_h48', 'seconds_per_window': 0.39024904964026064, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_long', 'dataset': 'ett_m1_h48', 'seconds_per_window': 0.7913847833794231, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_lora', 'dataset': 'ett_m1_h48', 'seconds_per_window': 0.07040610001422465, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_lora_long', 'dataset': 'ett_m1_h48', 'seconds_per_window': 0.7949488963543748, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_ctx2048', 'dataset': 'ett_m1_h48', 'seconds_per_window': 0.026298925707427163, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_default', 'dataset': 'ett_m1_h48', 'seconds_per_window': 0.09558041436442484, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_lora_c2048', 'dataset': 'ett_m1_h48', 'seconds_per_window': 0.04467278493878742, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_lora_long', 'dataset': 'ett_m1_h48', 'seconds_per_window': 0.16592500529562434, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_default', 'dataset': 'ett_m2_h48', 'seconds_per_window': 0.07350227527786046, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_ctx8192', 'dataset': 'ett_m2_h48', 'seconds_per_window': 0.38948118162807077, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_long', 'dataset': 'ett_m2_h48', 'seconds_per_window': 0.7898368569634234, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_lora', 'dataset': 'ett_m2_h48', 'seconds_per_window': 0.0703013453554983, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_lora_long', 'dataset': 'ett_m2_h48', 'seconds_per_window': 0.7936974106511722, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_ctx2048', 'dataset': 'ett_m2_h48', 'seconds_per_window': 0.02612946097118159, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_default', 'dataset': 'ett_m2_h48', 'seconds_per_window': 0.09530739396965753, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_lora_c2048', 'dataset': 'ett_m2_h48', 'seconds_per_window': 0.044662739033810794, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_lora_long', 'dataset': 'ett_m2_h48', 'seconds_per_window': 0.16603494567486146, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_default', 'dataset': 'ecl_h48', 'seconds_per_window': 1.1490974156574036, 'n_series': 321, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_ctx8192', 'dataset': 'ecl_h48', 'seconds_per_window': 9.054909063968807, 'n_series': 321, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_long', 'dataset': 'ecl_h48', 'seconds_per_window': 18.112497302005067, 'n_series': 321, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_lora', 'dataset': 'ecl_h48', 'seconds_per_window': 1.169089157988007, 'n_series': 321, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_lora_long', 'dataset': 'ecl_h48', 'seconds_per_window': 18.102451102652896, 'n_series': 321, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_ctx2048', 'dataset': 'ecl_h48', 'seconds_per_window': 1.061412306657682, 'n_series': 321, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_default', 'dataset': 'ecl_h48', 'seconds_per_window': 4.257554403700245, 'n_series': 321, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_lora_c2048', 'dataset': 'ecl_h48', 'seconds_per_window': 1.1032591933229317, 'n_series': 321, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_lora_long', 'dataset': 'ecl_h48', 'seconds_per_window': 4.475333502322125, 'n_series': 321, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_default', 'dataset': 'traffic_h48', 'seconds_per_window': 2.952830050334645, 'n_series': 862, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_ctx8192', 'dataset': 'traffic_h48', 'seconds_per_window': 24.021613272023387, 'n_series': 862, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_long', 'dataset': 'traffic_h48', 'seconds_per_window': 47.83411312227448, 'n_series': 862, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_lora', 'dataset': 'traffic_h48', 'seconds_per_window': 2.9893688899464905, 'n_series': 862, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_lora_long', 'dataset': 'traffic_h48', 'seconds_per_window': 47.88210491533391, 'n_series': 862, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_ctx2048', 'dataset': 'traffic_h48', 'seconds_per_window': 2.809985896650081, 'n_series': 862, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_default', 'dataset': 'traffic_h48', 'seconds_per_window': 11.418089256350262, 'n_series': 862, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_lora_c2048', 'dataset': 'traffic_h48', 'seconds_per_window': 2.8683451886754483, 'n_series': 862, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_lora_long', 'dataset': 'traffic_h48', 'seconds_per_window': 11.688093552637534, 'n_series': 862, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_default', 'dataset': 'weather_h48', 'seconds_per_window': 0.09133235935587436, 'n_series': 21, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_ctx8192', 'dataset': 'weather_h48', 'seconds_per_window': 0.7383986653682465, 'n_series': 21, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_long', 'dataset': 'weather_h48', 'seconds_per_window': 1.4837154612954084, 'n_series': 21, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_lora', 'dataset': 'weather_h48', 'seconds_per_window': 0.09009784297086298, 'n_series': 21, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_lora_long', 'dataset': 'weather_h48', 'seconds_per_window': 1.4826493326885004, 'n_series': 21, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_ctx2048', 'dataset': 'weather_h48', 'seconds_per_window': 0.07530335034243762, 'n_series': 21, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_default', 'dataset': 'weather_h48', 'seconds_per_window': 0.28127667668741196, 'n_series': 21, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_lora_c2048', 'dataset': 'weather_h48', 'seconds_per_window': 0.11050792535146077, 'n_series': 21, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_lora_long', 'dataset': 'weather_h48', 'seconds_per_window': 0.4172939736551295, 'n_series': 21, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_default', 'dataset': 'exchange_h48', 'seconds_per_window': 0.07053899404127151, 'n_series': 8, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_ctx8192', 'dataset': 'exchange_h48', 'seconds_per_window': 0.4212474573481207, 'n_series': 8, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_long', 'dataset': 'exchange_h48', 'seconds_per_window': 0.8548634313046932, 'n_series': 8, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_lora', 'dataset': 'exchange_h48', 'seconds_per_window': 0.06998716667294502, 'n_series': 8, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_lora_long', 'dataset': 'exchange_h48', 'seconds_per_window': 0.8502433563116938, 'n_series': 8, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_ctx2048', 'dataset': 'exchange_h48', 'seconds_per_window': 0.02926196934034427, 'n_series': 8, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_default', 'dataset': 'exchange_h48', 'seconds_per_window': 0.09782857133541256, 'n_series': 8, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_lora_c2048', 'dataset': 'exchange_h48', 'seconds_per_window': 0.04741458466742188, 'n_series': 8, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_lora_long', 'dataset': 'exchange_h48', 'seconds_per_window': 0.16179209435358644, 'n_series': 8, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_default', 'dataset': 'ili_h48', 'seconds_per_window': 0.07080528531999637, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_ctx8192', 'dataset': 'ili_h48', 'seconds_per_window': 0.3861197130366539, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_long', 'dataset': 'ili_h48', 'seconds_per_window': 0.7983922309940681, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_lora', 'dataset': 'ili_h48', 'seconds_per_window': 0.07139809934111933, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+{'strategy': 'tfm_lora_long', 'dataset': 'ili_h48', 'seconds_per_window': 0.8001750983530656, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_ctx2048', 'dataset': 'ili_h48', 'seconds_per_window': 0.023444440332241356, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_default', 'dataset': 'ili_h48', 'seconds_per_window': 0.02319699269719422, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_lora_c2048', 'dataset': 'ili_h48', 'seconds_per_window': 0.02275574366406848, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+INFO:httpx2:HTTP Request: HEAD https://huggingface.co/amazon/chronos-2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+{'strategy': 'chr_lora_long', 'dataset': 'ili_h48', 'seconds_per_window': 0.023160396609455347, 'n_series': 7, 'windows_timed': 3, 'gpu': 'NVIDIA RTX A5000'}
+wrote outputs/strategy_comparison/timings.csv
+finished 2026-10-27T21:33:24Z

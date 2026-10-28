@@ -183,17 +183,43 @@ def restore(runs: list[str]) -> None:
 # with zstd; adapters, run records and scores are copied as they are. Restoring them is
 # a plain copy back (the point-only forecasts are enough for every MASE analysis; the
 # adapters regenerate full forecasts in minutes with finetune/train_lora.py --load-adapters).
-FINETUNE_FORECASTS = ["finetune/timesfm_lora_v2/forecasts", "finetune/pilot/chronos2_lora/forecasts"]
+FINETUNE_FORECASTS = [
+    "finetune/timesfm_lora_v2/forecasts",
+    "finetune/timesfm_lora_seed1/forecasts",
+    "finetune/timesfm_lora_seed2/forecasts",
+    "finetune/chronos2_lora_c2048/forecasts",
+    "finetune/pilot/chronos2_lora_eval/forecasts",
+]
 FINETUNE_COPIES = [
     "finetune/timesfm_lora_v2/adapters",
     "finetune/timesfm_lora_v2/task_scores.csv",
     "finetune/timesfm_lora_v2/run_20261027T074055Z.json",
     "finetune/pilot/chronos2_lora/run_20261027T055712Z.json",
+    "finetune/chronos2_lora_c2048/run_20261027T150414Z.json",
+    "finetune/pilot/chronos2_lora_eval/run_20261027T115444Z.json",
+    "finetune/timesfm_lora_seed1/run_20261027T164726Z.json",
+    "finetune/timesfm_lora_seed2/run_20261027T183043Z.json",
+    # Chronos-2 adapters (fit() is not bit-reproducible; TimesFM seeds are, so their
+    # adapters are not archived)
+    "finetune/chronos2_lora_c2048/trainer/ecl_h48/finetuned-ckpt",
+    "finetune/chronos2_lora_c2048/trainer/ett_h1_h48/finetuned-ckpt",
+    "finetune/chronos2_lora_c2048/trainer/ett_h1_h96/finetuned-ckpt",
+    "finetune/chronos2_lora_c2048/trainer/ett_h2_h48/finetuned-ckpt",
+    "finetune/chronos2_lora_c2048/trainer/ett_m1_h48/finetuned-ckpt",
+    "finetune/chronos2_lora_c2048/trainer/ett_m2_h48/finetuned-ckpt",
+    "finetune/chronos2_lora_c2048/trainer/exchange_h48/finetuned-ckpt",
+    "finetune/chronos2_lora_c2048/trainer/ili_h48/finetuned-ckpt",
+    "finetune/chronos2_lora_c2048/trainer/m4_hourly/finetuned-ckpt",
+    "finetune/chronos2_lora_c2048/trainer/traffic_h48/finetuned-ckpt",
+    "finetune/chronos2_lora_c2048/trainer/weather_h48/finetuned-ckpt",
+    "finetune/pilot/chronos2_lora/trainer/ett_m1_h48/finetuned-ckpt",
+    "finetune/pilot/chronos2_lora/trainer/traffic_h48/finetuned-ckpt",
     "finetune/pilot/timesfm_lora",
     "finetune/pilot/ettm1_lr1e-5",
     "finetune/pilot/ettm1_lr3e-5",
     "finetune/pilot/traffic_lr1e-4",
     "finetune/pilot/traffic_lr1e-5",
+    "strategy_comparison",  # step 4 tables and timings -> results/strategy_comparison
 ]
 FINETUNE_LOGS = [
     "finetune/run_step3a.log",
@@ -201,6 +227,9 @@ FINETUNE_LOGS = [
     "finetune/run_chronos_pilot.log",
     "finetune/pilot/sweep.log",
     "finetune/pilot/timesfm_ettm1.log",
+    "finetune/run_step3c.log",
+    "strategy_comparison/timings.log",
+    "strategy_comparison/timings_capped.log",
 ]
 
 

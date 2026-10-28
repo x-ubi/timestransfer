@@ -8,6 +8,12 @@ timed after one warm-up window, with CUDA synchronisation; the mean is reported 
 seconds per window (one forecast origin, all series of the task). Run with the GPU
 otherwise idle.
 
+The HF TimesFM pads every input to the requested context, so a context longer than the
+longest history only adds padding (forecasts agree to ~1e-5 relative, checked on M4, ILI
+and Exchange). TimesFM contexts are therefore capped at the longest history in the call,
+rounded up to the 32-step patch, as a deployment would do. Chronos-2 pads only to the
+longest input already.
+
     finetune/.venv/bin/python finetune/measure_inference.py --out outputs/strategy_comparison/timings.csv
 """
 
@@ -56,6 +62,10 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def capped_context(histories: list[np.ndarray], context: int, patch: int = 32) -> int:
+    return min(context, -(-max(len(h) for h in histories) // patch) * patch)
+
+
 def timesfm_with_adapter(adapter: Path, device: str, lora_r: int = 4, lora_alpha: int = 8):
     from peft import LoraConfig, get_peft_model
 
@@ -93,7 +103,7 @@ def main() -> None:
                     timesfm_with_adapter(ROOT / adapters / f"{dataset['name']}.pt", args.device)
                     if adapters else load_model(args.device)
                 )
-                run = lambda h: forecast(model, h, horizon, context)  # noqa: E731
+                run = lambda h: forecast(model, h, horizon, capped_context(h, context))  # noqa: E731
             else:
                 model = (
                     load_finetuned(ROOT / adapters / dataset["name"] / "finetuned-ckpt", args.device)

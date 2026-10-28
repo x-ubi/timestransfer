@@ -1,0 +1,155 @@
+strategy,dataset,train_seconds,inference_seconds_per_origin,timing_source
+chr_ctx2048,m4_hourly,0.0,0.572707314354678,measured
+chr_ctx2048,ett_h1_h48,0.0,0.0264446569684272,measured
+chr_ctx2048,ett_h1_h96,0.0,0.0267443373644103,measured
+chr_ctx2048,ett_h2_h48,0.0,0.0262181396052862,measured
+chr_ctx2048,ett_m1_h48,0.0,0.0262989257074271,measured
+chr_ctx2048,ett_m2_h48,0.0,0.0261294609711815,measured
+chr_ctx2048,ecl_h48,0.0,1.061412306657682,measured
+chr_ctx2048,traffic_h48,0.0,2.809985896650081,measured
+chr_ctx2048,weather_h48,0.0,0.0753033503424376,measured
+chr_ctx2048,exchange_h48,0.0,0.0292619693403442,measured
+chr_ctx2048,ili_h48,0.0,0.0234444403322413,measured
+chr_default,m4_hourly,0.0,0.5705951336227978,measured
+chr_default,ett_h1_h48,0.0,0.0960598833238085,measured
+chr_default,ett_h1_h96,0.0,0.0961518403685962,measured
+chr_default,ett_h2_h48,0.0,0.0958240806357935,measured
+chr_default,ett_m1_h48,0.0,0.0955804143644248,measured
+chr_default,ett_m2_h48,0.0,0.0953073939696575,measured
+chr_default,ecl_h48,0.0,4.257554403700245,measured
+chr_default,traffic_h48,0.0,11.418089256350262,measured
+chr_default,weather_h48,0.0,0.2812766766874119,measured
+chr_default,exchange_h48,0.0,0.0978285713354125,measured
+chr_default,ili_h48,0.0,0.0231969926971942,measured
+chr_lora_c2048,m4_hourly,328.2,0.5958662699752798,measured
+chr_lora_c2048,ett_h1_h48,1088.8,0.0450596600227678,measured
+chr_lora_c2048,ett_h1_h96,1111.0,0.0455088489688932,measured
+chr_lora_c2048,ett_h2_h48,1088.6,0.0448735466149325,measured
+chr_lora_c2048,ett_m1_h48,1096.8,0.0446727849387874,measured
+chr_lora_c2048,ett_m2_h48,1099.2,0.0446627390338107,measured
+chr_lora_c2048,ecl_h48,1104.4,1.1032591933229317,measured
+chr_lora_c2048,traffic_h48,1129.4,2.8683451886754483,measured
+chr_lora_c2048,weather_h48,1093.7,0.1105079253514607,measured
+chr_lora_c2048,exchange_h48,1083.0,0.0474145846674218,measured
+chr_lora_c2048,ili_h48,305.5,0.0227557436640684,measured
+chr_lora_long,m4_hourly,328.2,0.5888385826256126,measured
+chr_lora_long,ett_h1_h48,1088.8,0.1679650633207833,measured
+chr_lora_long,ett_h1_h96,1111.0,0.1678270126770561,measured
+chr_lora_long,ett_h2_h48,1088.6,0.1668530903213347,measured
+chr_lora_long,ett_m1_h48,1096.8,0.1659250052956243,measured
+chr_lora_long,ett_m2_h48,1099.2,0.1660349456748614,measured
+chr_lora_long,ecl_h48,1104.4,4.475333502322125,measured
+chr_lora_long,traffic_h48,1129.4,11.688093552637534,measured
+chr_lora_long,weather_h48,1093.7,0.4172939736551295,measured
+chr_lora_long,exchange_h48,1083.0,0.1617920943535864,measured
+chr_lora_long,ili_h48,305.5,0.0231603966094553,measured
+seasonal_naive,ecl_h48,0.0,3.045,progress log (includes data handling)
+seasonal_naive,ett_h1_h48,0.0,0.43,progress log (includes data handling)
+seasonal_naive,ett_h1_h96,0.0,0.42000000000000004,progress log (includes data handling)
+seasonal_naive,ett_h2_h48,0.0,0.41500000000000004,progress log (includes data handling)
+seasonal_naive,ett_m1_h48,0.0,0.44000000000000006,progress log (includes data handling)
+seasonal_naive,ett_m2_h48,0.0,0.53,progress log (includes data handling)
+seasonal_naive,exchange_h48,0.0,0.65,progress log (includes data handling)
+seasonal_naive,ili_h48,0.0,0.5700000000000001,progress log (includes data handling)
+seasonal_naive,m4_hourly,0.0,0.93,progress log (includes data handling)
+seasonal_naive,traffic_h48,0.0,5.175,progress log (includes data handling)
+seasonal_naive,weather_h48,0.0,1.455,progress log (includes data handling)
+tabpfn,ecl_h48,0.0,984.7450000000001,progress log (includes data handling)
+tabpfn,ett_h1_h48,0.0,22.05,progress log (includes data handling)
+tabpfn,ett_h1_h96,0.0,22.305,progress log (includes data handling)
+tabpfn,ett_h2_h48,0.0,22.9,progress log (includes data handling)
+tabpfn,ett_m1_h48,0.0,23.055,progress log (includes data handling)
+tabpfn,ett_m2_h48,0.0,23.21,progress log (includes data handling)
+tabpfn,exchange_h48,0.0,21.869999999999997,progress log (includes data handling)
+tabpfn,ili_h48,0.0,4.88,progress log (includes data handling)
+tabpfn,m4_hourly,0.0,248.44,progress log (includes data handling)
+tabpfn,traffic_h48,0.0,2640.8849999999998,progress log (includes data handling)
+tabpfn,weather_h48,0.0,65.155,progress log (includes data handling)
+tfm_ctx2048,ecl_h48,0.0,5.205,progress log (includes data handling)
+tfm_ctx2048,ett_h1_h48,0.0,0.5,progress log (includes data handling)
+tfm_ctx2048,ett_h1_h96,0.0,0.5,progress log (includes data handling)
+tfm_ctx2048,ett_h2_h48,0.0,0.5,progress log (includes data handling)
+tfm_ctx2048,ett_m1_h48,0.0,0.5,progress log (includes data handling)
+tfm_ctx2048,ett_m2_h48,0.0,0.505,progress log (includes data handling)
+tfm_ctx2048,exchange_h48,0.0,0.5,progress log (includes data handling)
+tfm_ctx2048,ili_h48,0.0,0.5,progress log (includes data handling)
+tfm_ctx2048,m4_hourly,0.0,4.2299999999999995,progress log (includes data handling)
+tfm_ctx2048,traffic_h48,0.0,11.82,progress log (includes data handling)
+tfm_ctx2048,weather_h48,0.0,0.675,progress log (includes data handling)
+tfm_ctx4096,ecl_h48,0.0,7.805,progress log (includes data handling)
+tfm_ctx4096,ett_h1_h48,0.0,0.9,progress log (includes data handling)
+tfm_ctx4096,ett_h1_h96,0.0,0.945,progress log (includes data handling)
+tfm_ctx4096,ett_h2_h48,0.0,0.9,progress log (includes data handling)
+tfm_ctx4096,ett_m1_h48,0.0,0.915,progress log (includes data handling)
+tfm_ctx4096,ett_m2_h48,0.0,0.95,progress log (includes data handling)
+tfm_ctx4096,exchange_h48,0.0,0.9,progress log (includes data handling)
+tfm_ctx4096,ili_h48,0.0,0.9,progress log (includes data handling)
+tfm_ctx4096,m4_hourly,0.0,7.209999999999999,progress log (includes data handling)
+tfm_ctx4096,traffic_h48,0.0,17.94,progress log (includes data handling)
+tfm_ctx4096,weather_h48,0.0,1.1,progress log (includes data handling)
+tfm_ctx512,ecl_h48,0.0,3.3850000000000002,progress log (includes data handling)
+tfm_ctx512,ett_h1_h48,0.0,0.2,progress log (includes data handling)
+tfm_ctx512,ett_h1_h96,0.0,0.2,progress log (includes data handling)
+tfm_ctx512,ett_h2_h48,0.0,0.2,progress log (includes data handling)
+tfm_ctx512,ett_m1_h48,0.0,0.2,progress log (includes data handling)
+tfm_ctx512,ett_m2_h48,0.0,0.20500000000000002,progress log (includes data handling)
+tfm_ctx512,exchange_h48,0.0,0.2,progress log (includes data handling)
+tfm_ctx512,ili_h48,0.0,0.2,progress log (includes data handling)
+tfm_ctx512,m4_hourly,0.0,2.46,progress log (includes data handling)
+tfm_ctx512,traffic_h48,0.0,7.709999999999999,progress log (includes data handling)
+tfm_ctx512,weather_h48,0.0,0.4,progress log (includes data handling)
+tfm_ctx8192,m4_hourly,0.0,1.1941894226474687,measured
+tfm_ctx8192,ett_h1_h48,0.0,0.3907497743299852,measured
+tfm_ctx8192,ett_h1_h96,0.0,0.3928333272924647,measured
+tfm_ctx8192,ett_h2_h48,0.0,0.3972392469877377,measured
+tfm_ctx8192,ett_m1_h48,0.0,0.3914340366609394,measured
+tfm_ctx8192,ett_m2_h48,0.0,0.3916425006852175,measured
+tfm_ctx8192,ecl_h48,0.0,9.100050503349244,measured
+tfm_ctx8192,traffic_h48,0.0,23.91972425498534,measured
+tfm_ctx8192,weather_h48,0.0,0.7385948837036267,measured
+tfm_ctx8192,exchange_h48,0.0,0.3830336039730658,measured
+tfm_ctx8192,ili_h48,0.0,0.0632449939536551,measured
+tfm_default,m4_hourly,0.0,1.1877396260000144,measured
+tfm_default,ett_h1_h48,0.0,0.0685129596774156,measured
+tfm_default,ett_h1_h96,0.0,0.0681258199814086,measured
+tfm_default,ett_h2_h48,0.0,0.0682450043580805,measured
+tfm_default,ett_m1_h48,0.0,0.0686684800311923,measured
+tfm_default,ett_m2_h48,0.0,0.0687312883480141,measured
+tfm_default,ecl_h48,0.0,1.152510930667631,measured
+tfm_default,traffic_h48,0.0,2.936388056996899,measured
+tfm_default,weather_h48,0.0,0.090058692653353,measured
+tfm_default,exchange_h48,0.0,0.0690099876374006,measured
+tfm_default,ili_h48,0.0,0.0631650016875937,measured
+tfm_long,m4_hourly,0.0,1.1981344653759152,measured
+tfm_long,ett_h1_h48,0.0,0.6960513659675295,measured
+tfm_long,ett_h1_h96,0.0,0.680680746678263,measured
+tfm_long,ett_h2_h48,0.0,0.6982271243274832,measured
+tfm_long,ett_m1_h48,0.0,0.7962040227139369,measured
+tfm_long,ett_m2_h48,0.0,0.7913949213301142,measured
+tfm_long,ecl_h48,0.0,18.10803358629346,measured
+tfm_long,traffic_h48,0.0,47.773881411956005,measured
+tfm_long,weather_h48,0.0,1.493101845961064,measured
+tfm_long,exchange_h48,0.0,0.3834344126516953,measured
+tfm_long,ili_h48,0.0,0.0635410239531969,measured
+tfm_lora,m4_hourly,369.8,1.1991795806291825,measured
+tfm_lora,ett_h1_h48,332.2,0.0684621530041719,measured
+tfm_lora,ett_h1_h96,329.3,0.0724123826948925,measured
+tfm_lora,ett_h2_h48,330.1,0.0687398359877988,measured
+tfm_lora,ett_m1_h48,330.3,0.0688835440281157,measured
+tfm_lora,ett_m2_h48,328.6,0.068538516992703,measured
+tfm_lora,ecl_h48,366.6,1.1646936756636326,measured
+tfm_lora,traffic_h48,426.7,2.977350214961916,measured
+tfm_lora,weather_h48,328.4,0.090174178010784,measured
+tfm_lora,exchange_h48,328.0,0.0689737776604791,measured
+tfm_lora,ili_h48,323.0,0.0629865299755086,measured
+tfm_lora_long,m4_hourly,369.8,1.2065792750023927,measured
+tfm_lora_long,ett_h1_h48,332.2,0.7245451100170612,measured
+tfm_lora_long,ett_h1_h96,329.3,0.6820991970210647,measured
+tfm_lora_long,ett_h2_h48,330.1,0.7019917743358141,measured
+tfm_lora_long,ett_m1_h48,330.3,0.7925133042735979,measured
+tfm_lora_long,ett_m2_h48,328.6,0.790832911656859,measured
+tfm_lora_long,ecl_h48,366.6,18.106758163310587,measured
+tfm_lora_long,traffic_h48,426.7,47.74752178167304,measured
+tfm_lora_long,weather_h48,328.4,1.493013908659729,measured
+tfm_lora_long,exchange_h48,328.0,0.3843275366428618,measured
+tfm_lora_long,ili_h48,323.0,0.0632808903465047,measured

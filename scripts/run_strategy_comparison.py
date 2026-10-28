@@ -91,6 +91,7 @@ OPTIONAL_SOURCES = [
 ]
 POOLS = {
     "default_pair": ["tfm_default", "chr_default"],
+    "cheap_pair": ["tfm_default", "chr_ctx2048"],
     "default_trio": ["tfm_default", "chr_default", "tabpfn"],
     "long_pair": ["tfm_long", "chr_default"],
     "long_trio": ["tfm_long", "chr_default", "tabpfn"],

@@ -48,7 +48,11 @@ Recent related work to track: ECHO (arXiv 2610.16433, TSFM error correction), Ch
 3. TimesFM 2.5 LoRA fine-tuning in a separate environment (`transformers` with `TimesFm2_5ModelForPrediction`, `peft`; checkpoint `google/timesfm-2.5-200m-transformers`, checked against the pinned PyTorch checkpoint first). One fine-tune per task on data before the earliest evaluation window. Fallback: `Chronos2Pipeline.fit`.
    **TimesFM done 2026-10-27** (`docs/thesis-status-2026-10-26.md` §1.5).
    - Adapter trained at 1,024 and used at 16,256: 0.632, ratio 0.989 (CI 0.980–0.998) to zero-shot 16,256.
-   - Running: Chronos-2 LoRA on all tasks at context 2,048, forecasting at 2,048 and 8,192. Corrected pilot at 8,192: ETTm1 0% (zero-shot kept), Traffic −0.7%; the first pilot forecasts were invalid (training-mode inference, see status §1.5).
-4. Three-way comparison with DM tests, bootstrap CIs, regret and compute cost.
+   - Done: Chronos-2 LoRA on all tasks at context 2,048, forecasting at 2,048 and 8,192 (no effect, §1.6). Corrected pilot at 8,192: ETTm1 0% (zero-shot kept), Traffic −0.7%; the first pilot forecasts were invalid (training-mode inference, see status §1.5).
+4. Three-way comparison with DM tests, bootstrap CIs, regret and compute cost. **Done 2026-10-28** (`docs/thesis-status-2026-10-26.md` §1.6, `scripts/run_strategy_comparison.py`). Findings on a common evaluation set without the fine-tuning validation windows:
+   - TimesFM LoRA adds −0.9% over zero-shot 16,256 (3 seeds, CI 0.981–0.999).
+   - Chronos-2 LoRA adds nothing.
+   - The combination gain shrinks from 4.0% to 1.8% to 1.25% as TimesFM improves (first drop clear, second borderline).
+   - TimesFM + zero-shot Chronos-2 reaches long-context accuracy at 1/7–1/3 of its inference cost.
 5. Literature re-check.
 6. Writing, including the deferred introduction and summary.
