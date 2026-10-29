@@ -269,6 +269,9 @@ Interpretation:
 
 - **Code:** `src/timestransfer/combination.py` (combiners, rolling protocol) and `combination_analysis.py` (diversity, shared-error split, ideal-weight bound, DM tests, bootstrap, regret, learning curves, failure modes), with tests (all passing).
 - **Archive:** all expensive outputs are on GitHub (`results/`, branch `ensemble_research`), verified to restore exactly.
+- **Thesis artifacts for the transfer studies:**
+  - `scripts/build_transfer_artifacts.py` writes 10 tables to `thesis/tables/transfer/` and 7 figures to `thesis/img/transfer/`, from the archived CSVs and run records only.
+  - `--preview` compiles all of them into `docs/transfer-results-preview.pdf`.
 
 ---
 
