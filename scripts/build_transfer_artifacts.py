@@ -467,6 +467,31 @@ def columns_header(columns: list[str]) -> list[str]:
     return [r"\rotatebox{75}{" + SHORT[c] + "}" for c in columns]
 
 
+def table_tabpfn(out: Path) -> None:
+    aggregate = pd.read_csv(STRATEGY / "aggregate.csv").set_index("model")["geomean_relative_mase"]
+    contrasts = pd.read_csv(STRATEGY / "gain_contrasts.csv")
+    labels = [("default", "TimesFM ctx 1024 + Chronos-2"), ("long", "TimesFM ctx 16256 + Chronos-2"),
+              ("lora_long", "TimesFM LoRA@16256 + Chronos-2")]
+    rows = []
+    for key, label in labels:
+        trio, pair = f"{key}_trio:nnls_task", f"{key}_pair:nnls_task"
+        cells = []
+        for resample in ("both", "series_blocks"):
+            row = contrasts[(contrasts["contrast"] == f"tabpfn_added_{key}") & (contrasts["resample"] == resample)]
+            cells.append(pct_ci(*row[["estimate", "ci_low", "ci_high"]].iloc[0]))
+        rows.append([label, f"{aggregate[pair]:.3f}", f"{aggregate[trio]:.3f}", *cells])
+    footnotesize_table(
+        out / "tabpfn_added.tex",
+        "Adding TabPFN-TS as a third member: aggregate relative MASE ($\\downarrow$) of the TimesFM + Chronos-2 "
+        "pair and of the pair plus TabPFN-TS (task-level NNLS weights), and the change from adding TabPFN-TS "
+        "(\\% [95\\% CI]). " + COMMON_NOTE,
+        "tab:transfer-tabpfn",
+        ["Combination", "Pair", "+ TabPFN-TS", "Change, series $\\times$ windows", "Change, series $\\times$ blocks"],
+        rows,
+        spec="lrrrr",
+    )
+
+
 def table_dm(out: Path) -> None:
     summary = pd.read_csv(STRATEGY / "dm_summary.csv")
     models = [m for m in SHORT if m not in ("tfm_default", "tfm_long", "tfm_ctx8192")]
@@ -691,7 +716,7 @@ def preview(tables: Path, figures: Path, target: Path) -> None:
         r"\begin{document}\maketitle",
     ]
     for name in ["combiners", "redundancy", "context_grid", "flip_grid", "chronos_context", "finetune",
-                 "final", "contrasts", "final_tasks", "dm_summary"]:
+                 "final", "contrasts", "tabpfn_added", "final_tasks", "dm_summary"]:
         body.append(r"\input{" + str(tables / name) + "}")
         body.append(r"\clearpage" if name in ("redundancy", "finetune", "final_tasks") else "")
     for name, caption in [
@@ -725,7 +750,7 @@ def main() -> None:
     tables.mkdir(parents=True, exist_ok=True)
     figures.mkdir(parents=True, exist_ok=True)
     for build in (table_combiners, table_redundancy, table_context, table_flip, table_chronos_context,
-                  table_finetune, table_final, table_contrasts, table_final_tasks, table_dm):
+                  table_finetune, table_final, table_contrasts, table_tabpfn, table_final_tasks, table_dm):
         build(tables)
     for build in (figure_correlation_plane, figure_accuracy_cost, figure_context_curves, figure_learning_curves,
                   figure_gain_shrinkage, figure_task_heatmap, figure_lora_seeds):

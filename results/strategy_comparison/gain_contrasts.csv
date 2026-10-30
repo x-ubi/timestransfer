@@ -7,6 +7,9 @@ gain_long_vs_default,"long_pair:nnls_task^1, tfm_long^-1, default_pair:nnls_task
 gain_lora_long_vs_long,"lora_long_pair:nnls_task^1, tfm_lora_long^-1, long_pair:nnls_task^-1, tfm_long^1",1.00547268943832,1.0031369616386363,1.007806809296991,0.0,series
 gain_lora_long_vs_default,"lora_long_pair:nnls_task^1, tfm_lora_long^-1, default_pair:nnls_task^-1, tfm_default^1",1.0282037433046374,1.017495913655513,1.036372892106381,0.0,series
 gain_both_ft_vs_lora_long,"both_ft_pair:nnls_task^1, lora_long_pair:nnls_task^-1",1.0008144818582625,0.9989055911559005,1.0032025642287796,0.212,series
+tabpfn_added_default,"default_trio:nnls_task^1, default_pair:nnls_task^-1",0.9990736296559255,0.9941458619400196,1.00517924472361,0.557,series
+tabpfn_added_long,"long_trio:nnls_task^1, long_pair:nnls_task^-1",1.0007892702528653,0.9967486584230304,1.0064209074707378,0.2965,series
+tabpfn_added_lora_long,"lora_long_trio:nnls_task^1, lora_long_pair:nnls_task^-1",1.0006689227190149,0.9969755554950641,1.0054242135168006,0.302,series
 gain_default,"default_pair:nnls_task^1, tfm_default^-1",0.9603897348839623,0.9426968921023678,0.9770103772992987,1.0,windows
 gain_long,"long_pair:nnls_task^1, tfm_long^-1",0.9821015834757931,0.9692541205076327,0.9935245377165609,0.998,windows
 gain_lora_long,"lora_long_pair:nnls_task^1, tfm_lora_long^-1",0.9874763204390384,0.9756703023629832,0.9981427561540402,0.989,windows
@@ -15,6 +18,9 @@ gain_long_vs_default,"long_pair:nnls_task^1, tfm_long^-1, default_pair:nnls_task
 gain_lora_long_vs_long,"lora_long_pair:nnls_task^1, tfm_lora_long^-1, long_pair:nnls_task^-1, tfm_long^1",1.00547268943832,1.0007944465135372,1.01062304015571,0.013,windows
 gain_lora_long_vs_default,"lora_long_pair:nnls_task^1, tfm_lora_long^-1, default_pair:nnls_task^-1, tfm_default^1",1.0282037433046374,1.0137056259578612,1.0439599541414473,0.0,windows
 gain_both_ft_vs_lora_long,"both_ft_pair:nnls_task^1, lora_long_pair:nnls_task^-1",1.0008144818582625,0.9968202981396911,1.0052265846720942,0.3815,windows
+tabpfn_added_default,"default_trio:nnls_task^1, default_pair:nnls_task^-1",0.9990736296559255,0.991514112718557,1.0056681402395315,0.621,windows
+tabpfn_added_long,"long_trio:nnls_task^1, long_pair:nnls_task^-1",1.0007892702528653,0.9943777543173699,1.0066273789483424,0.426,windows
+tabpfn_added_lora_long,"lora_long_trio:nnls_task^1, lora_long_pair:nnls_task^-1",1.0006689227190149,0.9945777801559408,1.0064071811406243,0.432,windows
 gain_default,"default_pair:nnls_task^1, tfm_default^-1",0.9603897348839623,0.937632575686102,0.9820609883013371,1.0,both
 gain_long,"long_pair:nnls_task^1, tfm_long^-1",0.9821015834757931,0.9620374278317202,1.000472767887457,0.972,both
 gain_lora_long,"lora_long_pair:nnls_task^1, tfm_lora_long^-1",0.9874763204390384,0.96827838974816,1.0050693059792224,0.931,both
@@ -23,6 +29,9 @@ gain_long_vs_default,"long_pair:nnls_task^1, tfm_long^-1, default_pair:nnls_task
 gain_lora_long_vs_long,"lora_long_pair:nnls_task^1, tfm_lora_long^-1, long_pair:nnls_task^-1, tfm_long^1",1.00547268943832,0.9997587440249568,1.0114972577110428,0.0305,both
 gain_lora_long_vs_default,"lora_long_pair:nnls_task^1, tfm_lora_long^-1, default_pair:nnls_task^-1, tfm_default^1",1.0282037433046374,1.008464192844818,1.0471784323299838,0.004,both
 gain_both_ft_vs_lora_long,"both_ft_pair:nnls_task^1, lora_long_pair:nnls_task^-1",1.0008144818582625,0.9963273124120765,1.0064133874347572,0.4005,both
+tabpfn_added_default,"default_trio:nnls_task^1, default_pair:nnls_task^-1",0.9990736296559255,0.9894182781756534,1.0098266216382168,0.566,both
+tabpfn_added_long,"long_trio:nnls_task^1, long_pair:nnls_task^-1",1.0007892702528653,0.9928768450271898,1.010289857653379,0.416,both
+tabpfn_added_lora_long,"lora_long_trio:nnls_task^1, lora_long_pair:nnls_task^-1",1.0006689227190149,0.99335757116409,1.0098714273117047,0.439,both
 gain_default,"default_pair:nnls_task^1, tfm_default^-1",0.9603897348839623,0.941695230408586,0.9773830976034831,1.0,blocks
 gain_long,"long_pair:nnls_task^1, tfm_long^-1",0.9821015834757931,0.9713377510258275,0.9916994624708465,1.0,blocks
 gain_lora_long,"lora_long_pair:nnls_task^1, tfm_lora_long^-1",0.9874763204390384,0.9778137867075433,0.9963681773344395,0.998,blocks
@@ -31,6 +40,9 @@ gain_long_vs_default,"long_pair:nnls_task^1, tfm_long^-1, default_pair:nnls_task
 gain_lora_long_vs_long,"lora_long_pair:nnls_task^1, tfm_lora_long^-1, long_pair:nnls_task^-1, tfm_long^1",1.00547268943832,1.0017919962015787,1.0095605298343966,0.0015,blocks
 gain_lora_long_vs_default,"lora_long_pair:nnls_task^1, tfm_lora_long^-1, default_pair:nnls_task^-1, tfm_default^1",1.0282037433046374,1.0124710094306975,1.0444845669601583,0.0,blocks
 gain_both_ft_vs_lora_long,"both_ft_pair:nnls_task^1, lora_long_pair:nnls_task^-1",1.0008144818582625,0.9975292974399195,1.00471248409763,0.377,blocks
+tabpfn_added_default,"default_trio:nnls_task^1, default_pair:nnls_task^-1",0.9990736296559255,0.9931449114327454,1.0043295487479371,0.662,blocks
+tabpfn_added_long,"long_trio:nnls_task^1, long_pair:nnls_task^-1",1.0007892702528653,0.9955591962415922,1.0058603648843332,0.3955,blocks
+tabpfn_added_lora_long,"lora_long_trio:nnls_task^1, lora_long_pair:nnls_task^-1",1.0006689227190149,0.9957130650097469,1.0053077418410385,0.4095,blocks
 gain_default,"default_pair:nnls_task^1, tfm_default^-1",0.9603897348839623,0.9377152364194676,0.9804674869004192,1.0,series_blocks
 gain_long,"long_pair:nnls_task^1, tfm_long^-1",0.9821015834757931,0.963542172058673,0.9967260818624141,0.991,series_blocks
 gain_lora_long,"lora_long_pair:nnls_task^1, tfm_lora_long^-1",0.9874763204390384,0.9699163689639368,1.0014848006935537,0.959,series_blocks
@@ -39,3 +51,6 @@ gain_long_vs_default,"long_pair:nnls_task^1, tfm_long^-1, default_pair:nnls_task
 gain_lora_long_vs_long,"lora_long_pair:nnls_task^1, tfm_lora_long^-1, long_pair:nnls_task^-1, tfm_long^1",1.00547268943832,1.0010075785952046,1.0105831529254288,0.008,series_blocks
 gain_lora_long_vs_default,"lora_long_pair:nnls_task^1, tfm_lora_long^-1, default_pair:nnls_task^-1, tfm_default^1",1.0282037433046374,1.0073948607040406,1.048932430866571,0.002,series_blocks
 gain_both_ft_vs_lora_long,"both_ft_pair:nnls_task^1, lora_long_pair:nnls_task^-1",1.0008144818582625,0.996559114770606,1.0062009089319515,0.3915,series_blocks
+tabpfn_added_default,"default_trio:nnls_task^1, default_pair:nnls_task^-1",0.9990736296559255,0.9911624388100602,1.0085660005007782,0.566,series_blocks
+tabpfn_added_long,"long_trio:nnls_task^1, long_pair:nnls_task^-1",1.0007892702528653,0.9938648005464936,1.0098339395872913,0.3815,series_blocks
+tabpfn_added_lora_long,"lora_long_trio:nnls_task^1, lora_long_pair:nnls_task^-1",1.0006689227190149,0.9944181990840356,1.0087876794259445,0.3905,series_blocks

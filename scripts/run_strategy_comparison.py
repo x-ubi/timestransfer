@@ -115,6 +115,12 @@ GAIN_DIFFERENCES = {
     "gain_lora_long_vs_default": ("gain_lora_long", "gain_default"),
     "gain_both_ft_vs_lora_long": ("gain_both_ft", "gain_lora_long"),
 }
+# Adding TabPFN-TS to a TimesFM + Chronos-2 pair: trio / pair (below 1: TabPFN-TS helps).
+TABPFN_ADDED = {
+    "tabpfn_added_default": ("default_trio", "default_pair"),
+    "tabpfn_added_long": ("long_trio", "long_pair"),
+    "tabpfn_added_lora_long": ("lora_long_trio", "lora_long_pair"),
+}
 # Fine-tuned strategy -> (training run records, the run's model name for its inference time)
 TRAINING_RUNS = {
     "tfm_lora": ("outputs/finetune/timesfm_lora_v2/run_*.json", "timesfm_2p5_lora"),
@@ -368,6 +374,9 @@ def main() -> None:
             for model, power in [*gains[a].items(), *((m, -p) for m, p in gains[b].items())]:
                 terms[model] = terms.get(model, 0) + power
             contrasts[name] = {m: p for m, p in terms.items() if p}
+    for name, (trio, pair) in TABPFN_ADDED.items():
+        if trio in record["pools"] and pair in record["pools"]:
+            contrasts[name] = {f"{trio}:{PRIMARY}": 1, f"{pair}:{PRIMARY}": -1}
     boot_frames, contrast_frames = [], []
     for resample in RESAMPLE_SCHEMES:
         replicates = bootstrap_replicates(

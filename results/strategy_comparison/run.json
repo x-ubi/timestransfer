@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-28T01:58:16.004000+00:00",
+  "generated_at_utc": "2026-10-30T02:23:20.564097+00:00",
   "args": {
     "mase_scales": "outputs/timesfm_config/metrics/mase_scales.csv",
     "outputs_dir": "outputs/strategy_comparison",
@@ -214,7 +214,7 @@
     ]
   },
   "git": {
-    "commit": "a0c678be31d2e9661b978e198e30ea2e900c4ef2",
-    "status_short": "M docs/thesis-status-2026-10-26.md\n M finetune/measure_inference.py\nD  results/finetune/pilot/chronos2_lora/forecasts/ett_m1_h48.parquet\nD  results/finetune/pilot/chronos2_lora/forecasts/traffic_h48.parquet\n M scripts/archive_results.py\n M scripts/run_strategy_comparison.py\n?? exports/\n?? outputs_archive_pre_rolling_origin/\n?? results/pilots_2026-10/out/.corrupt.err\n?? results/pilots_2026-10/out/.mv.err"
+    "commit": "b295fc9d130c089fe6bd875dd12b0baf13fbbd47",
+    "status_short": "M scripts/run_strategy_comparison.py\n?? exports/\n?? outputs_archive_pre_rolling_origin/"
   }
 }
