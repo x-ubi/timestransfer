@@ -217,6 +217,37 @@ def table_redundancy(out: Path) -> None:
     )
 
 
+def table_residuals(out: Path) -> None:
+    corr = pd.read_csv(COMBINATION / "residual_correlations.csv")
+    summary = pd.read_csv(COMBINATION / "residual_summary.csv").pivot(index="dataset", columns="model", values="bias")
+    pairs = [("timesfm_2p5", "chronos2"), ("timesfm_2p5", "tabpfn_ts"), ("chronos2", "tabpfn_ts")]
+    rows = []
+    for task in TASKS:
+        part = corr[corr["dataset"] == task].set_index(["member_a", "member_b"])
+        cells = []
+        for pair in pairs:
+            cells += [f"{part.loc[pair, c]:.2f}".replace("-", "$-$") for c in ("pearson", "series_median")]
+        rows.append([NAMES[task], *cells, *[f"{summary.loc[task, m]:+.2f}".replace("+", "$+$").replace("-", "$-$")
+                                          for m in ("timesfm_2p5", "chronos2", "tabpfn_ts")]])
+    medians = []
+    for pair in pairs:
+        part = corr.set_index(["member_a", "member_b"]).loc[pair]
+        medians += [f"{part['pearson'].median():.2f}", f"{part['series_median'].median():.2f}"]
+    rows.append(["Median", *medians, "", "", ""])
+    footnotesize_table(
+        out / "residual_correlations.tex",
+        "Residuals $e=(\\hat y-y)/s$ of the zero-shot models at every forecast point ($s$: the series' MASE scale). "
+        "Pairwise Pearson correlation of residuals, pooled over the task's points (all) and the median over series "
+        "of within-series correlations (ser.); mean residual (bias; positive: over-forecasting). " + STUDY_NOTE,
+        "tab:transfer-residuals",
+        ["Task", "TFM--Chr all", "ser.", "TFM--TabPFN all", "ser.", "Chr--TabPFN all", "ser.",
+         "Bias TFM", "Bias Chr", "Bias TabPFN"],
+        rows,
+        spec="l" + "r" * 9,
+        sep="2.5pt",
+    )
+
+
 def table_context(out: Path) -> None:
     profile = pd.read_csv(CONFIG / "context_profile.csv").set_index("dataset")
     scores = pd.read_csv(CONFIG / "task_scores.csv").pivot(index="dataset", columns="model", values="relative_mase")
@@ -562,6 +593,29 @@ def figure_correlation_plane(out: Path) -> None:
     save(fig, out, "correlation_plane")
 
 
+def figure_residual_scatter(out: Path) -> None:
+    sample = pd.read_csv(COMBINATION / "residual_sample.csv")
+    corr = pd.read_csv(COMBINATION / "residual_correlations.csv")
+    corr = corr[(corr["member_a"] == "timesfm_2p5") & (corr["member_b"] == "chronos2")].set_index("dataset")["pearson"]
+    tasks = ["ecl_h48", "traffic_h48", "weather_h48", "ett_m1_h48", "m4_hourly", "ili_h48"]
+    fig, axes = plt.subplots(2, 3, figsize=(8.4, 5.4))
+    for ax, task in zip(axes.flat, tasks):
+        part = sample[sample["dataset"] == task]
+        lim = np.quantile(np.abs(part[["timesfm_2p5", "chronos2"]].to_numpy()), 0.99)
+        ax.scatter(part["timesfm_2p5"], part["chronos2"], s=2, alpha=0.25, color="#0072B2", rasterized=True)
+        ax.plot([-lim, lim], [-lim, lim], color="#999999", lw=0.7, ls="--")
+        ax.axhline(0, color="#cccccc", lw=0.5)
+        ax.axvline(0, color="#cccccc", lw=0.5)
+        ax.set_xlim(-lim, lim)
+        ax.set_ylim(-lim, lim)
+        ax.set_title(f"{NAMES[task]}  (r = {corr[task]:.2f})", fontsize=8.5)
+        ax.tick_params(labelsize=7)
+    fig.supxlabel("TimesFM residual (MASE-scaled)", fontsize=8.5)
+    fig.supylabel("Chronos-2 residual (MASE-scaled)", fontsize=8.5)
+    fig.tight_layout()
+    save(fig, out, "residual_scatter")
+
+
 def figure_accuracy_cost(out: Path) -> None:
     accuracy = pd.read_csv(STRATEGY / "accuracy_cost.csv").set_index("strategy")
     offsets = {
@@ -715,11 +769,12 @@ def preview(tables: Path, figures: Path, target: Path) -> None:
         r"\title{Transfer-strategy results: thesis tables and figures}\date{\today}",
         r"\begin{document}\maketitle",
     ]
-    for name in ["combiners", "redundancy", "context_grid", "flip_grid", "chronos_context", "finetune",
+    for name in ["combiners", "residual_correlations", "redundancy", "context_grid", "flip_grid", "chronos_context", "finetune",
                  "final", "contrasts", "tabpfn_added", "final_tasks", "dm_summary"]:
         body.append(r"\input{" + str(tables / name) + "}")
         body.append(r"\clearpage" if name in ("redundancy", "finetune", "final_tasks") else "")
     for name, caption in [
+        ("residual_scatter", "TimesFM vs Chronos-2 residuals at individual forecast points (random sample of 4,000 per task)."),
         ("correlation_plane", "Task pairs on the correlation--accuracy plane with Bates--Granger iso-gain curves."),
         ("learning_curves", "Combiner learning curves over the number of past windows used for fitting."),
         ("context_curves", "TimesFM context-length curves per task (\\% change vs ctx 1024), flip invariance on and off."),
@@ -749,10 +804,10 @@ def main() -> None:
     figures = Path(args.thesis) / "img/transfer"
     tables.mkdir(parents=True, exist_ok=True)
     figures.mkdir(parents=True, exist_ok=True)
-    for build in (table_combiners, table_redundancy, table_context, table_flip, table_chronos_context,
+    for build in (table_combiners, table_residuals, table_redundancy, table_context, table_flip, table_chronos_context,
                   table_finetune, table_final, table_contrasts, table_tabpfn, table_final_tasks, table_dm):
         build(tables)
-    for build in (figure_correlation_plane, figure_accuracy_cost, figure_context_curves, figure_learning_curves,
+    for build in (figure_residual_scatter, figure_correlation_plane, figure_accuracy_cost, figure_context_curves, figure_learning_curves,
                   figure_gain_shrinkage, figure_task_heatmap, figure_lora_seeds):
         build(figures)
     print(f"tables: {tables}\nfigures: {figures}")

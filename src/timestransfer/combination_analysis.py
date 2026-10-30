@@ -388,6 +388,75 @@ def error_correlations(table: CombinationTable, mask: np.ndarray | None = None) 
     return pd.DataFrame(rows)
 
 
+def residual_summary(table: CombinationTable, mask: np.ndarray | None = None) -> pd.DataFrame:
+    """Per task and member, residuals e = (forecast - actual) / MASE scale over all points.
+
+    ``bias`` is the mean residual (positive: over-forecasting), ``sd`` its standard
+    deviation, ``mae`` the mean absolute residual (the task's pooled MASE) and ``rmse``.
+    """
+    use = table.valid_scale if mask is None else table.valid_scale & mask
+    signed = table.scaled_predictions - table.scaled_y[:, None]
+    rows = []
+    for code, dataset in enumerate(table.datasets):
+        errors = signed[use & (table.dataset_codes == code)]
+        for column, model in enumerate(table.members):
+            e = errors[:, column]
+            rows.append(
+                {
+                    "dataset": dataset,
+                    "model": model,
+                    "n_points": len(e),
+                    "bias": float(e.mean()),
+                    "sd": float(e.std()),
+                    "mae": float(np.abs(e).mean()),
+                    "rmse": float(np.sqrt(np.mean(e**2))),
+                }
+            )
+    return pd.DataFrame(rows)
+
+
+def residual_correlations(table: CombinationTable, mask: np.ndarray | None = None) -> pd.DataFrame:
+    """Pairwise correlation of member residuals per task, three ways.
+
+    ``pearson`` and ``spearman`` pool all points of the task (scaled residuals);
+    ``series_median`` is the median over series of the Pearson correlation computed within
+    each series, so differences between series cannot drive it. Series where a member's
+    residuals are constant are skipped for that pair.
+    """
+    use = table.valid_scale if mask is None else table.valid_scale & mask
+    signed = table.scaled_predictions - table.scaled_y[:, None]
+    rows = []
+    for code, dataset in enumerate(table.datasets):
+        in_task = use & (table.dataset_codes == code)
+        errors = signed[in_task]
+        series = table.series_codes[in_task]
+        order = np.argsort(series, kind="stable")
+        bounds = np.flatnonzero(np.diff(series[order])) + 1
+        groups = np.split(order, bounds)
+        for i, a in enumerate(table.members):
+            for j in range(i + 1, len(table.members)):
+                x, y = errors[:, i], errors[:, j]
+                within = []
+                for g in groups:
+                    xs, ys = x[g], y[g]
+                    if len(g) > 2 and xs.std() > 0 and ys.std() > 0:
+                        within.append(np.corrcoef(xs, ys)[0, 1])
+                rows.append(
+                    {
+                        "dataset": dataset,
+                        "member_a": a,
+                        "member_b": table.members[j],
+                        "pearson": float(np.corrcoef(x, y)[0, 1]),
+                        "spearman": float(stats.spearmanr(x, y).statistic),
+                        "series_median": float(np.median(within)) if within else np.nan,
+                        "series_q25": float(np.quantile(within, 0.25)) if within else np.nan,
+                        "series_q75": float(np.quantile(within, 0.75)) if within else np.nan,
+                        "n_series": len(within),
+                    }
+                )
+    return pd.DataFrame(rows)
+
+
 def ambiguity_decomposition(
     table: CombinationTable, mask: np.ndarray | None = None
 ) -> pd.DataFrame:

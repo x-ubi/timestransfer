@@ -29,6 +29,8 @@ from timestransfer.combination_analysis import (
     regret_summary,
     regret_table,
     relative_to_baseline,
+    residual_correlations,
+    residual_summary,
     shared_error_decomposition,
     task_mase,
     task_mase_long,
@@ -210,6 +212,29 @@ def test_diversity_measures():
     assert np.allclose(
         ambiguity["ensemble_mse"], ambiguity["mean_member_mse"] - ambiguity["ambiguity"]
     )
+
+
+def test_residual_summary_and_correlations():
+    def predict(y, rng, *_):
+        noise = rng.normal(size=y.shape)
+        return {"a": y + noise, "b": y + 2 * noise, "c": y - noise, "d": y + rng.normal(size=y.shape)}
+
+    forecasts, scales = _long(predict, n_series=6)
+    table = build_combination_table(forecasts, scales, ["a", "b", "c", "d"])
+
+    summary = residual_summary(table).set_index(["dataset", "model"])
+    mase = task_mase(table).set_index(["dataset", "model"])["mase"]
+    assert np.allclose(summary["mae"], mase.loc[summary.index])
+    assert np.allclose(summary["rmse"] ** 2, summary["bias"] ** 2 + summary["sd"] ** 2)
+
+    corr = residual_correlations(table).set_index(["dataset", "member_a", "member_b"])
+    for column in ("pearson", "spearman", "series_median"):
+        assert corr.loc[("d1", "a", "b"), column] == pytest.approx(1.0)
+        assert corr.loc[("d1", "a", "c"), column] == pytest.approx(-1.0)
+    assert abs(corr.loc[("d1", "a", "d"), "pearson"]) < 0.3  # independent noise
+    assert corr.loc[("d1", "a", "b"), "n_series"] == 6
+    pooled = error_correlations(table).set_index(["dataset", "member_a", "member_b"])["corr"]
+    assert np.allclose(corr["pearson"], pooled.loc[corr.index])
 
 
 def test_shared_error_decomposition_is_exact_and_matches_ambiguity():
